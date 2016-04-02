@@ -2,11 +2,8 @@ package depton.trailme.activities;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,12 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import depton.net.trailme.R;
+import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.MapFragment;
+import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.dummy.DummyContent;
 
 public class MapActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,MapFragment.OnFragmentInteractionListener,HikersFragment.OnListFragmentInteractionListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        MapFragment.OnFragmentInteractionListener,
+        HikersFragment.OnListFragmentInteractionListener,
+        TracksFragment.OnListFragmentInteractionListener,
+        GroupFragment.OnListFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,7 @@ public class MapActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_tracks) {
+            fragmentClass = TracksFragment.class;
             // Handle the camera action
         } else if (id == R.id.nav_groups) {
             fragmentClass = MapFragment.class;
