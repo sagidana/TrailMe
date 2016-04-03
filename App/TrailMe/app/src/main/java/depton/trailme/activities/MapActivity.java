@@ -43,6 +43,10 @@ public class MapActivity extends AppCompatActivity
             }
         });*/
 
+        Fragment fragment = (Fragment) MapFragment.newInstance("place","holder");
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -108,7 +112,7 @@ public class MapActivity extends AppCompatActivity
             fragmentClass = TracksFragment.class;
             // Handle the camera action
         } else if (id == R.id.nav_groups) {
-            fragmentClass = MapFragment.class;
+            fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
             fragmentClass = HikersFragment.class;
 
