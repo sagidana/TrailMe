@@ -17,11 +17,15 @@ namespace TrailMeServer
         {
             if (Environment.UserInteractive)
             {
-                TrailMeManager manager = new TrailMeManager();
-                manager.Start();
+                //TrailMeManager manager = new TrailMeManager();
+                //manager.Start();
+                
+                TrailMeManager.Start();
                 Console.WriteLine("Press any key to stop the service");
                 Console.ReadLine();
-                manager.Stop();
+                TrailMeManager.Stop();
+
+                //manager.Stop();
             }
             else
             {
