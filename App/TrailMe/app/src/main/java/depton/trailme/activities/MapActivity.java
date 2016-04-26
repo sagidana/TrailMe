@@ -23,6 +23,7 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
@@ -38,7 +39,8 @@ public class MapActivity extends AppCompatActivity
         MapFragment.OnFragmentInteractionListener,
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
-        GroupFragment.OnListFragmentInteractionListener{
+        GroupFragment.OnListFragmentInteractionListener
+{
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
