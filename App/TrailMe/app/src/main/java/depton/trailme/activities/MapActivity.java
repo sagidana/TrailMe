@@ -35,7 +35,6 @@ import depton.trailme.fragments.dummy.DummyContent;
 
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MapFragment.OnFragmentInteractionListener,
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
         GroupFragment.OnListFragmentInteractionListener{
@@ -63,7 +62,7 @@ public class MapActivity extends AppCompatActivity
             }
         });*/
 
-        Fragment fragment = (Fragment) MapFragment.newInstance("place","holder");
+        Fragment fragment = (Fragment) MapFragment.newInstance(1);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 

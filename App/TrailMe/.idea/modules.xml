@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ClientSide/ClientSide.iml" filepath="$PROJECT_DIR$/ClientSide/ClientSide.iml" />
       <module fileurl="file://$PROJECT_DIR$/TrailMe.iml" filepath="$PROJECT_DIR$/TrailMe.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/volley/volley.iml" filepath="$PROJECT_DIR$/volley/volley.iml" />
     </modules>
   </component>
 </project>
