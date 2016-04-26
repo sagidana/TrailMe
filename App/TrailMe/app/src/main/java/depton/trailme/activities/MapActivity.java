@@ -23,20 +23,23 @@ import android.view.MenuItem;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
-import depton.trailme.fragments.MapFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.dummy.DummyContent;
 
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        MapFragment.OnFragmentInteractionListener,
+        OnMapReadyCallback,
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
         GroupFragment.OnListFragmentInteractionListener
@@ -46,6 +49,12 @@ public class MapActivity extends AppCompatActivity
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
+    @Override
+    public void onMapReady(GoogleMap map) {
+        map.addMarker(new MarkerOptions()
+                .position(new LatLng(0, 0))
+                .title("Marker"));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +73,14 @@ public class MapActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+//
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -143,7 +160,7 @@ public class MapActivity extends AppCompatActivity
             fragmentClass = TracksFragment.class;
             // Handle the camera action
         } else if (id == R.id.nav_groups) {
-            fragmentClass = MapFragment.class;
+            fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
             fragmentClass = HikersFragment.class;
 
