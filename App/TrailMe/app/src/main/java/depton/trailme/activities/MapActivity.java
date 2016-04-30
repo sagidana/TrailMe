@@ -74,9 +74,11 @@ public class MapActivity extends AppCompatActivity
             }
         });*/
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        // This line loads the actual map (looks for the map )
+        // We want to load the fragment of the map over here.
+       // MapFragment mapFragment = (MapFragment) getFragmentManager()
+               // .findFragmentById(R.id.map);
+       // mapFragment.getMapAsync(this);
 
 //        FragmentManager fragmentManager = getSupportFragmentManager();
 //        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -123,6 +125,10 @@ public class MapActivity extends AppCompatActivity
     {
 
     }
+    public void onListFragmentInteraction(DummyContent.DummyTrack item)
+    {
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,7 +171,7 @@ public class MapActivity extends AppCompatActivity
             fragmentClass = HikersFragment.class;
 
         } else if (id == R.id.nav_inbox) {
-
+            fragmentClass = MapFragment.class;
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

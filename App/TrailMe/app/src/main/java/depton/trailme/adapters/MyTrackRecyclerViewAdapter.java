@@ -1,14 +1,19 @@
 package depton.trailme.adapters;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
+import android.media.Rating;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import depton.net.trailme.R;
 import depton.trailme.fragments.TracksFragment.OnListFragmentInteractionListener;
-import depton.trailme.fragments.dummy.DummyContent.DummyItem;
+import depton.trailme.fragments.dummy.DummyContent.DummyTrack;
 
 import java.util.List;
 
@@ -19,10 +24,10 @@ import java.util.List;
  */
 public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<DummyTrack> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyTrackRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyTrackRecyclerViewAdapter(List<DummyTrack> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +42,8 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).name);
+        holder.mRatingBar.setRating(mValues.get(position).rating);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,13 +66,15 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public DummyItem mItem;
+        public final RatingBar mRatingBar;
+        public DummyTrack mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.name);
+            mContentView = (TextView) view.findViewById(R.id.Description);
+            mRatingBar = (RatingBar) view.findViewById(R.id.ratingBar);
         }
 
         @Override

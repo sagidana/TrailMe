@@ -17,37 +17,29 @@ public class DummyContent {
      * An array of sample (dummy) items.
      */
     public static final List<DummyItem> ITEMS = new ArrayList<DummyItem>();
+    public static final List<DummyTrack> TRACK_ITEMS = new ArrayList<DummyTrack>();
 
     /**
      * A map of sample (dummy) items, by ID.
      */
     public static final Map<String, DummyItem> ITEM_MAP = new HashMap<String, DummyItem>();
-
-    private static final int COUNT = 25;
-
-    static {
-        // Add some sample items.
-        for (int i = 1; i <= COUNT; i++) {
-            addItem(createDummyItem(i));
-        }
-    }
+    public static final Map<String, DummyTrack> TRACK_MAP = new HashMap<String, DummyTrack>();
 
     private static void addItem(DummyItem item) {
         ITEMS.add(item);
         ITEM_MAP.put(item.id, item);
     }
 
-    private static DummyItem createDummyItem(int position) {
-        return new DummyItem(String.valueOf(position), "Item " + position, makeDetails(position));
+    static {
+        // Add some sample items.
+        DummyTrack Gilabun = new DummyTrack(String.valueOf(1), "Gilabon", "this is the description", 3);
+        TRACK_ITEMS.add(Gilabun);
+        TRACK_MAP.put(Gilabun.id, Gilabun);
     }
 
-    private static String makeDetails(int position) {
-        StringBuilder builder = new StringBuilder();
-        builder.append("Details about Item: ").append(position);
-        for (int i = 0; i < position; i++) {
-            builder.append("\nMore details information here.");
-        }
-        return builder.toString();
+    private static void addTrack(DummyTrack item) {
+        TRACK_ITEMS.add(item);
+        TRACK_MAP.put(item.id, item);
     }
 
     /**
@@ -67,6 +59,59 @@ public class DummyContent {
         @Override
         public String toString() {
             return content;
+        }
+    }
+
+    public static class DummyHiker {
+        public final String id;
+        public final String content;
+        public final String details;
+
+        public DummyHiker(String id, String content, String details) {
+            this.id = id;
+            this.content = content;
+            this.details = details;
+        }
+
+        @Override
+        public String toString() {
+            return content;
+        }
+    }
+
+    public static class DummyGroup {
+        public final String id;
+        public final String content;
+        public final String details;
+
+        public DummyGroup(String id, String content, String details) {
+            this.id = id;
+            this.content = content;
+            this.details = details;
+        }
+
+        @Override
+        public String toString() {
+            return content;
+        }
+    }
+
+    public static class DummyTrack {
+        public final String id;
+        public final String name;
+        public final String description;
+        public final int rating;
+
+        public DummyTrack(String id, String name, String description,int rating) {
+            this.id = id;
+            this.name = name;
+            this.description = description;
+            this.rating = rating;
+        }
+
+        @Override
+        public String toString() {
+            return description;
         }
     }
 }

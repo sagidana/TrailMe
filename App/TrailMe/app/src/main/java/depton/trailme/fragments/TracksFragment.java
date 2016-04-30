@@ -69,7 +69,7 @@ public class TracksFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyTrackRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            recyclerView.setAdapter(new MyTrackRecyclerViewAdapter(DummyContent.TRACK_ITEMS, mListener));
         }
         return view;
     }
@@ -104,6 +104,6 @@ public class TracksFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(DummyContent.DummyTrack item);
     }
 }
