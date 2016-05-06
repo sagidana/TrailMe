@@ -20,8 +20,6 @@ namespace TrailMe
     {
         static void Main(string[] args)
         {
-            DALExample();
-
             TrailMeServer server = new TrailMeServer();
 
             server.Start();
@@ -41,7 +39,6 @@ namespace TrailMe
             var tracks = TrackRepository.GetTracks();
             var users = UserRepository.GetUsers();
             var groups = GroupRepository.GetGroups();
-
         }
 
         private static void aprioriExample()
