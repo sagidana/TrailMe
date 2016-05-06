@@ -65,7 +65,7 @@ namespace TrailMe.DAL
             }
         }
 
-        public IEnumerable<User> GetUsers()
+        public static IEnumerable<User> GetUsers()
         {
             using (var dbContext = new TrailMeDBEntities())
             {

@@ -10,6 +10,7 @@ using System.IO;
 using TrailMe.WebServer;
 using TrailMe.Apriori;
 using TrailMe.Common;
+using TrailMe.DAL;
 
 namespace TrailMe
 {
@@ -19,12 +20,28 @@ namespace TrailMe
     {
         static void Main(string[] args)
         {
+            DALExample();
+
             TrailMeServer server = new TrailMeServer();
 
             server.Start();
-
+            
             Console.WriteLine("Server is running!");
-            Thread.Sleep(int.MaxValue);
+            Console.WriteLine("Press Enter to stop the server");
+            Console.ReadLine();
+
+            server.Stop();
+        }
+
+        #region Examples
+        
+        private static void DALExample()
+        {
+            var events = EventRepository.GetEvents();
+            var tracks = TrackRepository.GetTracks();
+            var users = UserRepository.GetUsers();
+            var groups = GroupRepository.GetGroups();
+
         }
 
         private static void aprioriExample()
@@ -53,5 +70,7 @@ namespace TrailMe
             foreach (var rule in result.StrongRules)
                 Console.WriteLine("{0} => {1} , confidence - {2}", rule.From[0].TrackId, rule.To[0].TrackId, rule.Confidence);
         }
+        
+        #endregion
     }
 }
