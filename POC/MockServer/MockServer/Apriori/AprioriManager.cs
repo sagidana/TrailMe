@@ -47,8 +47,11 @@ namespace TrailMe.Apriori
 
         public List<Track> GetRecommendations(Guid userId)
         {
-            if (Results != null || Results.StrongRules == null || Results.StrongRules.Count == 0)
+            if (Results != null || Results.StrongRules == null)
                 RunApriori(); //TODO : ok for development, but not for production.
+
+            if (Results.StrongRules.Count == 0)
+                return null;
 
             IEnumerable<DAL.Model.Track> dbUserTracks = TrackRepository.GetTracksByUserId(userId);
             List<Track> userTracks = convertTrackFromDb(dbUserTracks);

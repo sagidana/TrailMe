@@ -83,6 +83,13 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = PUTS_METHOD, Handler = addTracks });
         }
 
+        #region Get
+
+        private void getRecommendations(Microsoft.Owin.IOwinContext context)
+        {
+            //
+        }
+
         #region GetAll
 
         private void getAllUsers(Microsoft.Owin.IOwinContext context)
@@ -100,12 +107,7 @@ namespace TrailMe.WebServer
 
         #endregion
 
-        #region Get
-
-        private void getRecommendations(Microsoft.Owin.IOwinContext context)
-        {
-            //
-        }
+        #region GetOne
 
         private void getUser(Microsoft.Owin.IOwinContext context)
         {
@@ -119,6 +121,8 @@ namespace TrailMe.WebServer
         private void getGroup(Microsoft.Owin.IOwinContext context)
         {
         }
+
+        #endregion 
 
         #endregion
 
