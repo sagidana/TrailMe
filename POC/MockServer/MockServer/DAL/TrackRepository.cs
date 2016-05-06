@@ -1,0 +1,42 @@
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+
+//namespace TrailMe.DAL
+//{
+//    public class TrackRepository
+//    {
+//        public static bool AddTrack(string track_name, string location_zone, int distance_km, string level_of_diffuclty, double latitude_, double longitude_)
+//        {
+//            // Create the database context
+//            using (var dbContext = new TrailmeProject.TrailMeDBEntities())
+//            {
+
+//                dbContext.insert_Track(track_name, location_zone, distance_km, level_of_diffuclty, latitude_, longitude_);
+
+//                // Save the changes to the database, and record the number of changes
+//                var changesSaved = dbContext.SaveChanges();
+
+//                // Return a bool based on whether any changes have been stored
+//                return changesSaved >= 1;
+//            }
+//        }
+
+//        public static bool DeleteTrack(Guid track_id)
+//        {
+
+//            using (var dbContext = new TrailmeProject.TrailMeDBEntities())
+//            {
+//                dbContext.delete_Track(track_id);
+
+//                // Save the changes to the database, and record the number of changes
+//                var changesSaved = dbContext.SaveChanges();
+
+//                // Return a bool based on whether any changes have been stored
+//                return changesSaved >= 1;
+//            }
+//        }
+//    }
+//}

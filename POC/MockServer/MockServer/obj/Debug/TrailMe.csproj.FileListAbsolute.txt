@@ -22,3 +22,7 @@ C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Syste
 C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\TrialMe.exe
 C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\TrialMe.pdb
 C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\TrailMe.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\EntityFramework.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\EntityFramework.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\EntityFramework.SqlServer.xml
