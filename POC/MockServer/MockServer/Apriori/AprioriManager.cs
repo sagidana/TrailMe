@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Timers;
 using System.Threading.Tasks;
 using TrailMe.Common;
 using TrailMe.DAL;
@@ -10,8 +11,16 @@ namespace TrailMe.Apriori
 {
     public class AprioriManager
     {
+        #region Consts
+
+        private const int HOUR_IN_MILLISECONDS = 3600000;
+        private const int INTERVAL = HOUR_IN_MILLISECONDS * 10;
+
+        #endregion
+
         #region Data Members
 
+        private Timer m_Timer;
         private AprioriAlgorithm m_AprioriAlgorithm;
         private double m_MinSupport;
         private double m_MinConfidence;
@@ -31,11 +40,24 @@ namespace TrailMe.Apriori
             m_MinSupport = minSupport;
             m_MinConfidence = minConfidence;
             m_AprioriAlgorithm = new AprioriAlgorithm();
+            m_Timer = new Timer();
         }
 
         #endregion
 
         #region Public Methods
+
+        public void Start(int interval = INTERVAL)
+        {
+            m_Timer.Elapsed += OnTimedEvent;
+            m_Timer.Interval = interval;
+            m_Timer.Start();
+        }
+
+        public void Stop()
+        {
+            m_Timer.Stop();
+        }
 
         public void RunApriori()
         {
@@ -126,6 +148,15 @@ namespace TrailMe.Apriori
             }
 
             return transactions;
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        {
+            RunApriori();
         }
 
         #endregion

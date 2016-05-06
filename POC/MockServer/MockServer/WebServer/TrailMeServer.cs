@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TrailMe.Apriori;
 using TrailMe.GoogleCloudMessaging;
 
 namespace TrailMe.WebServer
@@ -29,6 +30,7 @@ namespace TrailMe.WebServer
 
         IDisposable m_Server;
         GcmManager m_GcmManager;
+        AprioriManager m_AprioriManager;
 
         #endregion
 
@@ -37,6 +39,7 @@ namespace TrailMe.WebServer
         public TrailMeServer()
         {
             m_GcmManager = GcmManager.GetInstance();
+            m_AprioriManager = new AprioriManager();
             m_GcmManager.Key = GCM_KEY;
 
             intializeResources();
@@ -49,10 +52,13 @@ namespace TrailMe.WebServer
         public void Start(string url = "http://+:80/")
         {
             m_Server = WebApp.Start<Startup>(url);
+            m_AprioriManager.Start();
         }
 
         public void Stop()
         {
+            m_AprioriManager.Stop();
+
             if (m_Server != null)
                 m_Server.Dispose();
         }
