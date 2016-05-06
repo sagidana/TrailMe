@@ -4,7 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using TrailMe.Apriori;
+using TrailMe.DAL;
 using TrailMe.GoogleCloudMessaging;
+using TrailMe.DAL.Model;
 
 namespace TrailMe.WebServer
 {
@@ -16,13 +18,16 @@ namespace TrailMe.WebServer
 
         const string POST_METHOD = "POST";
         const string GET_METHOD = "GET";
-        const string PUTS_METHOD = "PUTS";
+        const string PUT_METHOD = "PUT";
+        const string DELETE_METHOD = "DELETE";
 
         const string USERS_URL = "/users";
         const string GROUPS_URL = "/groups";
         const string TRACKS_URL = "/tracks";
         const string RECOMMENDATIONS_URL = "/recommendations";
         const string REGISTER_URL = "/register";
+
+        const string JSON_TYPE = "application/json";
 
         #endregion
 
@@ -84,70 +89,41 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = RECOMMENDATIONS_URL, Method = POST_METHOD, Handler = getRecommendations });
 
             // puts.
-            Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = PUTS_METHOD, Handler = addUsers });
-            Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = PUTS_METHOD, Handler = addGroups });
-            Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = PUTS_METHOD, Handler = addTracks });
+            Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = PUT_METHOD, Handler = addUser });
+            Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = PUT_METHOD, Handler = addGroup });
+            Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = PUT_METHOD, Handler = addTrack });
+
+            // deletes.
+            Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = DELETE_METHOD, Handler = deleteUser });
+            Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = DELETE_METHOD, Handler = deleteGroup });
+            Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = DELETE_METHOD, Handler = deleteTrack });
         }
 
         #region Get
 
-        private void getRecommendations(Microsoft.Owin.IOwinContext context)
-        {
-            //
-        }
-
-        #region GetAll
-
         private void getAllUsers(Microsoft.Owin.IOwinContext context)
         {
-            //
+            var dbUsers = UserRepository.GetUsers();
+            JObject users = convertDbUsersToJson(dbUsers);
+
+            createWebResponse(context, JSON_TYPE, users.ToString());
         }
 
         private void getAllTracks(Microsoft.Owin.IOwinContext context)
         {
+            var dbTracks= TrackRepository.GetTracks();
+            JObject tracks = convertDbTracksToJson(dbTracks);
+
+            createWebResponse(context, JSON_TYPE, tracks.ToString());
         }
 
         private void getAllGroups(Microsoft.Owin.IOwinContext context)
         {
+            var dbGroups = GroupRepository.GetGroups();
+            JObject groups = convertDbGroupsToJson(dbGroups);
+
+            createWebResponse(context, JSON_TYPE, groups.ToString());
         }
-
-        #endregion
-
-        #region GetOne
-
-        private void getUser(Microsoft.Owin.IOwinContext context)
-        {
-            //
-        }
-
-        private void getTrack(Microsoft.Owin.IOwinContext context)
-        {
-        }
-
-        private void getGroup(Microsoft.Owin.IOwinContext context)
-        {
-        }
-
-        #endregion 
-
-        #endregion
-
-        #region Add
-
-        private void addUsers(Microsoft.Owin.IOwinContext context)
-        {
-            //
-        }
-
-        private void addTracks(Microsoft.Owin.IOwinContext context)
-        {
-        }
-
-        private void addGroups(Microsoft.Owin.IOwinContext context)
-        {
-        }
-
-        #endregion
 
         private void registerClient(Microsoft.Owin.IOwinContext context)
         {
@@ -155,6 +131,193 @@ namespace TrailMe.WebServer
             string token = jsonRequest.GetValue("registerationID").Value<string>();
 
             m_GcmManager.RegisterClient(token);
+        }
+
+        #endregion
+
+        #region Post
+
+        private void getRecommendations(Microsoft.Owin.IOwinContext context)
+        {
+            //
+        }
+
+        private void getUser(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid userId = Guid.Parse(request["id"].ToString());
+
+            var dbUser = UserRepository.GetUserById(userId);
+
+            JObject user = convertDbUserToJson(dbUser);
+
+            createWebResponse(context, JSON_TYPE, user.ToString());
+        }
+
+        private void getTrack(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid trackId = Guid.Parse(request["id"].ToString());
+
+            var dbTrack = TrackRepository.GetTrackById(trackId);
+
+            JObject track = convertDbTrackToJson(dbTrack);
+
+            createWebResponse(context, JSON_TYPE, track.ToString());
+        }
+
+        private void getGroup(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid groupId = Guid.Parse(request["id"].ToString());
+
+            var dbGroup = GroupRepository.GetGroupById(groupId);
+
+            JObject group = convertDbGroupToJson(dbGroup);
+
+            createWebResponse(context, JSON_TYPE, group.ToString());
+        }
+
+        #endregion 
+
+        #region Put
+
+        private void addUser(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbUser = convertJsonToDbUser(request);
+
+            UserRepository.AddUser( dbUser.MailAddress, 
+                                    dbUser.LastName, 
+                                    dbUser.FirstName, 
+                                    dbUser.City, 
+                                    dbUser.BirthDate.Value);
+        }
+
+        private void addTrack(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbTrack = convertJsonToDbTrack(request);
+
+            TrackRepository.AddTrack(   dbTrack.TrackName, 
+                                        dbTrack.LocationZone, 
+                                        dbTrack.DistanceKM.Value, 
+                                        dbTrack.LevelOfDifficulty, 
+                                        dbTrack.Latitude, 
+                                        dbTrack.Longitude);
+        }
+
+        private void addGroup(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbGroup = convertJsonToDbGroup(request);
+
+            GroupRepository.AddGroup(dbGroup.GroupName);
+        }
+
+        #endregion
+
+        #region Delete
+
+        private void deleteUser(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid userId = Guid.Parse(request["id"].ToString());
+
+            UserRepository.DeleteUser(userId);
+        }
+
+        private void deleteTrack(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid trackId = Guid.Parse(request["id"].ToString());
+
+            TrackRepository.DeleteTrack(trackId);
+        }
+
+        private void deleteGroup(Microsoft.Owin.IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid groupId = Guid.Parse(request["id"].ToString());
+
+            GroupRepository.DeleteGroup(groupId);
+        }
+
+        #endregion
+
+        #region Database Converters
+
+        #region From DB
+
+        private JObject convertDbUserToJson(DAL.Model.User dbUser)
+        {
+            JObject user = new JObject();
+
+            return user;
+        }
+
+        private JObject convertDbTrackToJson(DAL.Model.Track dbTrack)
+        {
+            JObject track = new JObject();
+
+            return track;
+        }
+
+        private JObject convertDbGroupToJson(DAL.Model.Group dbGroup)
+        {
+            JObject group = new JObject();
+
+            return group;
+        }
+
+        private JObject convertDbUsersToJson(IEnumerable<DAL.Model.User> dbUsers)
+        {
+            JObject users = new JObject();
+
+            return users;
+        }
+
+        private JObject convertDbTracksToJson(IEnumerable<Track> dbTracks)
+        {
+            JObject tracks = new JObject();
+
+            return tracks;
+        }
+
+        private JObject convertDbGroupsToJson(IEnumerable<DAL.Model.Group> dbGroups)
+        {
+            JObject groups = new JObject();
+
+            return groups;
+        }
+
+        #endregion
+
+        #region To DB
+
+        private DAL.Model.User convertJsonToDbUser(JObject user)
+        {
+            return null;
+        }
+
+        private DAL.Model.Track convertJsonToDbTrack(JObject track)
+        {
+            return null;
+        }
+
+        private DAL.Model.Group convertJsonToDbGroup(JObject group)
+        {
+            return null;
+        }
+
+        #endregion
+
+        #endregion
+
+        private void createWebResponse(Microsoft.Owin.IOwinContext context, string dataType, string data)
+        {
+            context.Response.ContentType = data;
+            context.Response.Write(data);
         }
 
         private JObject getJsonFromRequest(Microsoft.Owin.IOwinContext context)
