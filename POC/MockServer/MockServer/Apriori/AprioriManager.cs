@@ -49,14 +49,18 @@ namespace TrailMe.Apriori
 
         public void Start(int interval = INTERVAL)
         {
-            m_Timer.Elapsed += OnTimedEvent;
+            m_Timer.Elapsed += onTimedEvent;
             m_Timer.Interval = interval;
             m_Timer.Start();
+            m_Timer.Enabled = true;
+            m_Timer.AutoReset = true;
         }
 
         public void Stop()
         {
             m_Timer.Stop();
+            m_Timer.Enabled = false;
+            m_Timer.Elapsed -= onTimedEvent;
         }
 
         public void RunApriori()
@@ -154,7 +158,7 @@ namespace TrailMe.Apriori
 
         #region Event Handlers
 
-        private void OnTimedEvent(Object source, ElapsedEventArgs e)
+        private void onTimedEvent(Object source, ElapsedEventArgs e)
         {
             RunApriori();
         }
