@@ -20,6 +20,7 @@ namespace TrailMe.WebServer
         const string USERS_URL = "/users";
         const string GROUPS_URL = "/groups";
         const string TRACKS_URL = "/tracks";
+        const string RECOMMENDATIONS_URL = "/recommendations";
         const string REGISTER_URL = "/register";
 
         #endregion
@@ -74,6 +75,7 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = POST_METHOD, Handler = getUser });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = POST_METHOD, Handler = getGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = POST_METHOD, Handler = getTrack });
+            Startup.Resources.Add(new WebResource { Path = RECOMMENDATIONS_URL, Method = POST_METHOD, Handler = getRecommendations });
 
             // puts.
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = PUTS_METHOD, Handler = addUsers });
@@ -98,7 +100,12 @@ namespace TrailMe.WebServer
 
         #endregion
 
-        #region GetOne
+        #region Get
+
+        private void getRecommendations(Microsoft.Owin.IOwinContext context)
+        {
+            //
+        }
 
         private void getUser(Microsoft.Owin.IOwinContext context)
         {

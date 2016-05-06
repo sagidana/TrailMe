@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Apriori\AprioriAlgorithm.cs" />
+    <Compile Include="Apriori\AprioriManager.cs" />
     <Compile Include="Common\Item.cs" />
     <Compile Include="Common\Result.cs" />
     <Compile Include="Common\Rule.cs" />

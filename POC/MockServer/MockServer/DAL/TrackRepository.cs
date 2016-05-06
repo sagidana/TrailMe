@@ -58,6 +58,11 @@ namespace TrailMe.DAL
             }
         }
 
+        public static IEnumerable<Track> GetTracksByUserId(Guid userId)
+        {
+            return null;
+        }
+
         #endregion
     }
 }
