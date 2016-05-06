@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TrailMeDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <ComplexType Name="ReturnAllUser_Result">
+    <Property Name="UserID" Type="Guid" />
+    <Property Name="MailAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="BirthDate" Type="DateTime" />
+  </ComplexType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CategoryID" />
+    </Key>
+    <Property Name="CategoryID" Type="Int32" Nullable="false" />
+    <Property Name="CategoryName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Event">
+    <Key>
+      <PropertyRef Name="EventID" />
+    </Key>
+    <Property Name="EventID" Type="Guid" Nullable="false" />
+    <Property Name="TrackID" Type="Guid" />
+    <Property Name="EventName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StartDate" Type="DateTime" Precision="3" />
+    <Property Name="EndDate" Type="DateTime" Precision="3" />
+    <Property Name="Event_Enable" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Track" Relationship="Self.FK__Events__TrackID__18EBB532" FromRole="Events" ToRole="Tracks" />
+  </EntityType>
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="Groupid" />
+    </Key>
+    <Property Name="Groupid" Type="Guid" Nullable="false" />
+    <Property Name="GroupName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Group_enable" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Users" Relationship="Self.Groups_Users" FromRole="Groups" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Language">
+    <Key>
+      <PropertyRef Name="LanguageID" />
+    </Key>
+    <Property Name="LanguageID" Type="Int32" Nullable="false" />
+    <Property Name="LanguageName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Logs_Using">
+    <Key>
+      <PropertyRef Name="LogID" />
+    </Key>
+    <Property Name="LogID" Type="Guid" Nullable="false" />
+    <Property Name="LogStatus" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LogType" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LogDate" Type="DateTime" Precision="3" />
+    <Property Name="By" Type="Guid" />
+    <Property Name="What" Type="Guid" />
+    <NavigationProperty Name="User" Relationship="Self.FK__Logs_Usin__UserI__0C85DE4D" FromRole="Logs_Using" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="SkillID" />
+    </Key>
+    <Property Name="SkillID" Type="Int32" Nullable="false" />
+    <Property Name="SkillName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Track">
+    <Key>
+      <PropertyRef Name="TrackID" />
+    </Key>
+    <Property Name="TrackID" Type="Guid" Nullable="false" />
+    <Property Name="TrackName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LocationZone" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DistanceKM" Type="Int32" />
+    <Property Name="LevelOfDifficulty" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Latitude" Type="Double" Nullable="false" />
+    <Property Name="Longitude" Type="Double" Nullable="false" />
+    <Property Name="Track_enable" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Events" Relationship="Self.FK__Events__TrackID__18EBB532" FromRole="Tracks" ToRole="Events" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Guid" Nullable="false" />
+    <Property Name="MailAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="BirthDate" Type="DateTime" Precision="3" />
+    <Property Name="user_enable" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Logs_Using" Relationship="Self.FK__Logs_Usin__UserI__0C85DE4D" FromRole="Users" ToRole="Logs_Using" />
+    <NavigationProperty Name="Groups" Relationship="Self.Groups_Users" FromRole="Users" ToRole="Groups" />
+  </EntityType>
+  <Association Name="FK__Events__TrackID__18EBB532">
+    <End Role="Tracks" Type="Self.Track" Multiplicity="0..1" />
+    <End Role="Events" Type="Self.Event" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tracks">
+        <PropertyRef Name="TrackID" />
+      </Principal>
+      <Dependent Role="Events">
+        <PropertyRef Name="TrackID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Logs_Usin__UserI__0C85DE4D">
+    <End Role="Users" Type="Self.User" Multiplicity="0..1" />
+    <End Role="Logs_Using" Type="Self.Logs_Using" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Logs_Using">
+        <PropertyRef Name="By" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="Groups_Users">
+    <End Role="Users" Type="Self.User" Multiplicity="*" />
+    <End Role="Groups" Type="Self.Group" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="TrailMeDBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Events" EntityType="Self.Event" />
+    <EntitySet Name="Groups" EntityType="Self.Group" />
+    <EntitySet Name="Languages" EntityType="Self.Language" />
+    <EntitySet Name="Logs_Using" EntityType="Self.Logs_Using" />
+    <EntitySet Name="Skills" EntityType="Self.Skill" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Tracks" EntityType="Self.Track" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK__Events__TrackID__18EBB532" Association="Self.FK__Events__TrackID__18EBB532">
+      <End Role="Tracks" EntitySet="Tracks" />
+      <End Role="Events" EntitySet="Events" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Logs_Usin__UserI__0C85DE4D" Association="Self.FK__Logs_Usin__UserI__0C85DE4D">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Logs_Using" EntitySet="Logs_Using" />
+    </AssociationSet>
+    <AssociationSet Name="Groups_Users" Association="Self.Groups_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Groups" EntitySet="Groups" />
+    </AssociationSet>
+    <FunctionImport Name="ReturnAllUser" ReturnType="Collection(TrailMeDBModel.ReturnAllUser_Result)" IsComposable="true" />
+    <FunctionImport Name="add_user_to_group">
+      <Parameter Name="groupid" Mode="In" Type="Guid" />
+      <Parameter Name="userid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_Event">
+      <Parameter Name="eventid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_Group">
+      <Parameter Name="groupid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_Track">
+      <Parameter Name="trackid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_User">
+      <Parameter Name="userid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="insert_Event">
+      <Parameter Name="eventname" Mode="In" Type="String" />
+      <Parameter Name="startdate" Mode="In" Type="DateTime" />
+      <Parameter Name="enddate" Mode="In" Type="DateTime" />
+      <Parameter Name="trackid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="insert_Group">
+      <Parameter Name="groupname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="insert_Track">
+      <Parameter Name="trackname" Mode="In" Type="String" />
+      <Parameter Name="loactionzone" Mode="In" Type="String" />
+      <Parameter Name="distancekm" Mode="In" Type="Int32" />
+      <Parameter Name="levelofdiffuclty" Mode="In" Type="String" />
+      <Parameter Name="latitude" Mode="In" Type="Double" />
+      <Parameter Name="longitude" Mode="In" Type="Double" />
+    </FunctionImport>
+    <FunctionImport Name="insert_User">
+      <Parameter Name="mailaddress" Mode="In" Type="String" />
+      <Parameter Name="lastname" Mode="In" Type="String" />
+      <Parameter Name="firstname" Mode="In" Type="String" />
+      <Parameter Name="city" Mode="In" Type="String" />
+      <Parameter Name="birthdate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(TrailMeDBModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(TrailMeDBModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>
