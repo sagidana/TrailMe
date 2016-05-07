@@ -22,7 +22,7 @@ namespace TrailMe.DAL
                 DAL.Model.Event newEvent = new Event()
                 {
                     Id = Guid.NewGuid(),
-                    Name = event_name
+                    Name = event_name,
                     Track = matchingTrack,
                     Group = matchingGroup
                 };

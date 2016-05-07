@@ -122,7 +122,7 @@ namespace TrailMe.Apriori
             var tracks = new List<Track>();
 
             foreach (var track in userTracks)
-                tracks.Add(new Track { TrackId = track.TrackID });
+                tracks.Add(new Track { TrackId = track.Id });
 
             return tracks;
         }
@@ -132,7 +132,7 @@ namespace TrailMe.Apriori
             var tracks = new List<Track>();
 
             foreach (var track in TrackRepository.GetTracks())
-                tracks.Add(new Track() { TrackId = track.TrackID });
+                tracks.Add(new Track() { TrackId = track.Id });
 
             return tracks;
         }
@@ -145,8 +145,8 @@ namespace TrailMe.Apriori
             {
                 List<Track> tracks = new List<Track>();
 
-                foreach (var track in TrackRepository.GetTracksByUserId(user.UserID))
-                    tracks.Add(new Track { TrackId = track.TrackID });
+                foreach (var track in TrackRepository.GetTracksByUserId(user.Id))
+                    tracks.Add(new Track { TrackId = track.Id });
 
                 transactions.Add(new Transaction { Items = tracks });
             }

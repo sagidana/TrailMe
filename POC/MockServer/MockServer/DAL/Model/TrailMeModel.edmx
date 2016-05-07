@@ -387,8 +387,8 @@
           <Property Name="Zone" Type="String" Nullable="false" />
           <Property Name="Kilometers" Type="Int32" Nullable="false" />
           <Property Name="Difficulty" Type="String" Nullable="false" />
-          <Property Name="Latitude" Type="GeometryPoint" Nullable="false" />
-          <Property Name="Longitude" Type="String" Nullable="false" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" Nullable="false" DefaultValue="0.0" />
           <NavigationProperty Name="Users" Relationship="TrailMeModel.UserTrack" FromRole="Track" ToRole="User" />
           <NavigationProperty Name="Events" Relationship="TrailMeModel.EventTrack" FromRole="Track" ToRole="Event" />
           <NavigationProperty Name="Categories" Relationship="TrailMeModel.TrackCategory" FromRole="Track" ToRole="Category" />

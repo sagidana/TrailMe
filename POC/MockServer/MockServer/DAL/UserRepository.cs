@@ -14,10 +14,9 @@ namespace TrailMe.DAL
         public static bool AddUser(string mailaddress, string last_name, string first_name, string city, DateTime birthdate)
         {
             // Create the database context
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.insert_User(mailaddress, last_name, first_name, city, birthdate);
-
+                //dbContext.insert_User(mailaddress, last_name, first_name, city, birthdate);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -30,9 +29,9 @@ namespace TrailMe.DAL
         public static bool DeleteUser(Guid user_id)
         {
 
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.delete_User(user_id);
+                //dbContext.delete_User(user_id);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -45,9 +44,9 @@ namespace TrailMe.DAL
         public static bool AddUserToGroup(Guid group_id, Guid user_id)
         {
 
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.add_user_to_group(group_id, user_id);
+                //dbContext.add_user_to_group(group_id, user_id);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -59,7 +58,7 @@ namespace TrailMe.DAL
 
         public static User GetUserById(Guid user_id)
         {
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
                 return dbContext.Users.Find(user_id);
             }
@@ -67,7 +66,7 @@ namespace TrailMe.DAL
 
         public static IEnumerable<User> GetUsers()
         {
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
                 return dbContext.Users.Include("Groups").ToList();
             }

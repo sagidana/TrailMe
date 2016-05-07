@@ -204,7 +204,7 @@ namespace TrailMe.WebServer
                                     dbUser.LastName, 
                                     dbUser.FirstName, 
                                     dbUser.City, 
-                                    dbUser.BirthDate.Value);
+                                    dbUser.Birthdate);
         }
 
         private void addTrack(Microsoft.Owin.IOwinContext context)
@@ -212,10 +212,10 @@ namespace TrailMe.WebServer
             JObject request = getJsonFromRequest(context);
             var dbTrack = convertJsonToDbTrack(request);
 
-            TrackRepository.AddTrack(   dbTrack.TrackName, 
-                                        dbTrack.LocationZone, 
-                                        dbTrack.DistanceKM.Value, 
-                                        dbTrack.LevelOfDifficulty, 
+            TrackRepository.AddTrack(   dbTrack.Name, 
+                                        dbTrack.Zone, 
+                                        dbTrack.Kilometers, 
+                                        dbTrack.Difficulty, 
                                         dbTrack.Latitude, 
                                         dbTrack.Longitude);
         }
@@ -225,7 +225,7 @@ namespace TrailMe.WebServer
             JObject request = getJsonFromRequest(context);
             var dbGroup = convertJsonToDbGroup(request);
 
-            GroupRepository.AddGroup(dbGroup.GroupName);
+            GroupRepository.AddGroup(dbGroup.Name);
         }
 
         #endregion
@@ -270,12 +270,12 @@ namespace TrailMe.WebServer
             {
                 JObject jUser = new JObject();
 
-                jUser.Add("Id", user.UserID);
+                jUser.Add("Id", user.Id);
                 jUser.Add("Id", user.FirstName);
                 jUser.Add("Id", user.LastName);
                 jUser.Add("Id", user.MailAddress);
                 jUser.Add("Id", user.City);
-                jUser.Add("Id", user.BirthDate);
+                jUser.Add("Id", user.Birthdate);
 
                 jUsers.Add(jUsers);
             }
@@ -291,8 +291,8 @@ namespace TrailMe.WebServer
             {
                 JObject jGroup = new JObject();
 
-                jGroup.Add("Id", group.Groupid);
-                jGroup.Add("Name", group.GroupName);
+                jGroup.Add("Id", group.Id);
+                jGroup.Add("Name", group.Name);
 
                 jGroups.Add(jGroup);
             }
@@ -308,10 +308,10 @@ namespace TrailMe.WebServer
             {
                 JObject jEvent = new JObject();
 
-                jEvent.Add("Id", curEvent.EventID);
-                jEvent.Add("Name", curEvent.EventName);
-                jEvent.Add("StartDate", curEvent.StartDate);
-                jEvent.Add("EndDate", curEvent.EndDate);
+                jEvent.Add("Id", curEvent.Id);
+                jEvent.Add("Name", curEvent.Name);
+                jEvent.Add("TrackId", curEvent.Track.Id);
+                jEvent.Add("GroupId", curEvent.Group.Id);
 
                 jEvents.Add(jEvent);
             }
@@ -327,7 +327,7 @@ namespace TrailMe.WebServer
             user.Add("LastName", dbUser.LastName);
             user.Add("MailAddress", dbUser.MailAddress);
             user.Add("City", dbUser.City);
-            user.Add("BirthDate", dbUser.BirthDate);
+            user.Add("BirthDate", dbUser.Birthdate);
 
             addDbGroupsToJson(user, dbUser.Groups);
 
@@ -338,13 +338,13 @@ namespace TrailMe.WebServer
         {
             JObject track = new JObject();
 
-            track.Add("Id", dbTrack.TrackID);
-            track.Add("Name", dbTrack.TrackName);
+            track.Add("Id", dbTrack.Id);
+            track.Add("Name", dbTrack.Name);
             track.Add("Latitude", dbTrack.Latitude);
             track.Add("Longitude", dbTrack.Longitude);
-            track.Add("Zone", dbTrack.LocationZone);
-            track.Add("Difficulty", dbTrack.LevelOfDifficulty);
-            track.Add("DistanceKM", dbTrack.DistanceKM);
+            track.Add("Zone", dbTrack.Zone);
+            track.Add("Difficulty", dbTrack.Difficulty);
+            track.Add("DistanceKM", dbTrack.Kilometers);
 
             addEventsToJson(track, dbTrack.Events);
 
@@ -355,8 +355,8 @@ namespace TrailMe.WebServer
         {
             JObject jGroup = new JObject();
 
-            jGroup.Add("Id", dbGroup.Groupid);
-            jGroup.Add("Name", dbGroup.GroupName);
+            jGroup.Add("Id", dbGroup.Id);
+            jGroup.Add("Name", dbGroup.Name);
 
             addDbUserToJson(jGroup, dbGroup.Users);
 
@@ -405,7 +405,7 @@ namespace TrailMe.WebServer
                 LastName = user["LastName"].Value<string>(),
                 MailAddress = user["MailAddress"].Value<string>(),
                 City = user["City"].Value<string>(),
-                BirthDate = user["BirthDate"].Value<DateTime>()
+                Birthdate = user["Birthdate"].Value<DateTime>()
             };
 
             return dbUser;
@@ -415,10 +415,10 @@ namespace TrailMe.WebServer
         {
             DAL.Model.Track dbTrack = new DAL.Model.Track()
             {
-                TrackName = track["Name"].Value<string>(),
-                LocationZone = track["Zone"].Value<string>(),
-                DistanceKM = track["DistanceKM"].Value<int>(),
-                LevelOfDifficulty = track["Difficulty"].Value<string>(),
+                Name = track["Name"].Value<string>(),
+                Zone = track["Zone"].Value<string>(),
+                Kilometers = track["DistanceKM"].Value<int>(),
+                Difficulty = track["Difficulty"].Value<string>(),
                 Latitude = track["Latitude"].Value<double>(),
                 Longitude = track["Longitude"].Value<double>()
             };
@@ -429,7 +429,7 @@ namespace TrailMe.WebServer
         private DAL.Model.Group convertJsonToDbGroup(JObject group)
         {
             DAL.Model.Group dbGroup = new DAL.Model.Group() {
-                GroupName = group["Name"].Value<string>(),
+                Name = group["Name"].Value<string>(),
             };
 
             return dbGroup;

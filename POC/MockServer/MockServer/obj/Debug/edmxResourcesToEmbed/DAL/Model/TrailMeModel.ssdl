@@ -1,0 +1,310 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TrailMeModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="TrailMeModelStoreContainer">
+    <EntitySet Name="Users" EntityType="TrailMeModel.Store.Users" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Groups" EntityType="TrailMeModel.Store.Groups" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Tracks" EntityType="TrailMeModel.Store.Tracks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Events" EntityType="TrailMeModel.Store.Events" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Languages" EntityType="TrailMeModel.Store.Languages" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Categories" EntityType="TrailMeModel.Store.Categories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Skills" EntityType="TrailMeModel.Store.Skills" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserTrack" EntityType="TrailMeModel.Store.UserTrack" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserLanguage" EntityType="TrailMeModel.Store.UserLanguage" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserSkill" EntityType="TrailMeModel.Store.UserSkill" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="TrackCategory" EntityType="TrailMeModel.Store.TrackCategory" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserGroup" EntityType="TrailMeModel.Store.UserGroup" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="FK_UserTrack_User" Association="TrailMeModel.Store.FK_UserTrack_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserTrack" EntitySet="UserTrack" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserTrack_Track" Association="TrailMeModel.Store.FK_UserTrack_Track">
+      <End Role="Track" EntitySet="Tracks" />
+      <End Role="UserTrack" EntitySet="UserTrack" />
+    </AssociationSet>
+    <AssociationSet Name="EventTrack" Association="TrailMeModel.Store.EventTrack">
+      <End Role="Event" EntitySet="Events" />
+      <End Role="Track" EntitySet="Tracks" />
+    </AssociationSet>
+    <AssociationSet Name="EventGroup" Association="TrailMeModel.Store.EventGroup">
+      <End Role="Event" EntitySet="Events" />
+      <End Role="Group" EntitySet="Groups" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserLanguage_User" Association="TrailMeModel.Store.FK_UserLanguage_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserLanguage" EntitySet="UserLanguage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserLanguage_Language" Association="TrailMeModel.Store.FK_UserLanguage_Language">
+      <End Role="Language" EntitySet="Languages" />
+      <End Role="UserLanguage" EntitySet="UserLanguage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserSkill_User" Association="TrailMeModel.Store.FK_UserSkill_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserSkill" EntitySet="UserSkill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserSkill_Skill" Association="TrailMeModel.Store.FK_UserSkill_Skill">
+      <End Role="Skill" EntitySet="Skills" />
+      <End Role="UserSkill" EntitySet="UserSkill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TrackCategory_Track" Association="TrailMeModel.Store.FK_TrackCategory_Track">
+      <End Role="Track" EntitySet="Tracks" />
+      <End Role="TrackCategory" EntitySet="TrackCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TrackCategory_Category" Association="TrailMeModel.Store.FK_TrackCategory_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="TrackCategory" EntitySet="TrackCategory" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserGroup_User" Association="TrailMeModel.Store.FK_UserGroup_User">
+      <End Role="User" EntitySet="Users" />
+      <End Role="UserGroup" EntitySet="UserGroup" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserGroup_Group" Association="TrailMeModel.Store.FK_UserGroup_Group">
+      <End Role="Group" EntitySet="Groups" />
+      <End Role="UserGroup" EntitySet="UserGroup" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="City" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MailAddress" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Birthdate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Groups">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="EventId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tracks">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Zone" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Kilometers" Type="int" Nullable="false" />
+    <Property Name="Difficulty" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Latitude" Type="geometry" Nullable="false" SRID="0" />
+    <Property Name="Longitude" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Events">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Track_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Group_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Languages">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Categories">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Skills">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserTrack">
+    <Key>
+      <PropertyRef Name="Users_Id" />
+      <PropertyRef Name="Tracks_Id" />
+    </Key>
+    <Property Name="Users_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Tracks_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserLanguage">
+    <Key>
+      <PropertyRef Name="Users_Id" />
+      <PropertyRef Name="Languages_Id" />
+    </Key>
+    <Property Name="Users_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Languages_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserSkill">
+    <Key>
+      <PropertyRef Name="Users_Id" />
+      <PropertyRef Name="Skills_Id" />
+    </Key>
+    <Property Name="Users_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Skills_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="TrackCategory">
+    <Key>
+      <PropertyRef Name="Tracks_Id" />
+      <PropertyRef Name="Categories_Id" />
+    </Key>
+    <Property Name="Tracks_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Categories_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserGroup">
+    <Key>
+      <PropertyRef Name="Users_Id" />
+      <PropertyRef Name="Groups_Id" />
+    </Key>
+    <Property Name="Users_Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Groups_Id" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <Association Name="EventTrack">
+    <End Role="Event" Type="TrailMeModel.Store.Events" Multiplicity="*" />
+    <End Role="Track" Type="TrailMeModel.Store.Tracks" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Track">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Event">
+        <PropertyRef Name="Track_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EventGroup">
+    <End Role="Event" Type="TrailMeModel.Store.Events" Multiplicity="*" />
+    <End Role="Group" Type="TrailMeModel.Store.Groups" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Event">
+        <PropertyRef Name="Group_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserTrack_User">
+    <End Role="User" Type="TrailMeModel.Store.Users" Multiplicity="1" />
+    <End Role="UserTrack" Type="TrailMeModel.Store.UserTrack" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserTrack">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserTrack_Track">
+    <End Role="UserTrack" Type="TrailMeModel.Store.UserTrack" Multiplicity="*" />
+    <End Role="Track" Type="TrailMeModel.Store.Tracks" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Track">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserTrack">
+        <PropertyRef Name="Tracks_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserLanguage_User">
+    <End Role="User" Type="TrailMeModel.Store.Users" Multiplicity="1" />
+    <End Role="UserLanguage" Type="TrailMeModel.Store.UserLanguage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserLanguage">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserLanguage_Language">
+    <End Role="UserLanguage" Type="TrailMeModel.Store.UserLanguage" Multiplicity="*" />
+    <End Role="Language" Type="TrailMeModel.Store.Languages" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Language">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserLanguage">
+        <PropertyRef Name="Languages_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserSkill_User">
+    <End Role="User" Type="TrailMeModel.Store.Users" Multiplicity="1" />
+    <End Role="UserSkill" Type="TrailMeModel.Store.UserSkill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserSkill">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserSkill_Skill">
+    <End Role="UserSkill" Type="TrailMeModel.Store.UserSkill" Multiplicity="*" />
+    <End Role="Skill" Type="TrailMeModel.Store.Skills" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Skill">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserSkill">
+        <PropertyRef Name="Skills_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TrackCategory_Track">
+    <End Role="Track" Type="TrailMeModel.Store.Tracks" Multiplicity="1" />
+    <End Role="TrackCategory" Type="TrailMeModel.Store.TrackCategory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Track">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TrackCategory">
+        <PropertyRef Name="Tracks_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TrackCategory_Category">
+    <End Role="TrackCategory" Type="TrailMeModel.Store.TrackCategory" Multiplicity="*" />
+    <End Role="Category" Type="TrailMeModel.Store.Categories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="TrackCategory">
+        <PropertyRef Name="Categories_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserGroup_User">
+    <End Role="User" Type="TrailMeModel.Store.Users" Multiplicity="1" />
+    <End Role="UserGroup" Type="TrailMeModel.Store.UserGroup" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserGroup">
+        <PropertyRef Name="Users_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserGroup_Group">
+    <End Role="UserGroup" Type="TrailMeModel.Store.UserGroup" Multiplicity="*" />
+    <End Role="Group" Type="TrailMeModel.Store.Groups" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Group">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="UserGroup">
+        <PropertyRef Name="Groups_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
