@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 05/07/2016 15:46:08
+-- Date Created: 05/07/2016 16:37:40
 -- Generated from EDMX file: C:\Users\trailmeuser\Desktop\TraileMeServer\TrailMe\POC\MockServer\MockServer\DAL\Model\TrailMeModel.edmx
 -- --------------------------------------------------
 
@@ -17,11 +17,59 @@ GO
 -- Dropping existing FOREIGN KEY constraints
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[FK_EventGroup]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Events] DROP CONSTRAINT [FK_EventGroup];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserLanguage_User]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserLanguage] DROP CONSTRAINT [FK_UserLanguage_User];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserLanguage_Language]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserLanguage] DROP CONSTRAINT [FK_UserLanguage_Language];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserSkill_User]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserSkill] DROP CONSTRAINT [FK_UserSkill_User];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserSkill_Skill]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserSkill] DROP CONSTRAINT [FK_UserSkill_Skill];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserGroup_User]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserGroup] DROP CONSTRAINT [FK_UserGroup_User];
+GO
+IF OBJECT_ID(N'[dbo].[FK_UserGroup_Group]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[UserGroup] DROP CONSTRAINT [FK_UserGroup_Group];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
 -- --------------------------------------------------
 
+IF OBJECT_ID(N'[dbo].[Users]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Users];
+GO
+IF OBJECT_ID(N'[dbo].[Groups]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Groups];
+GO
+IF OBJECT_ID(N'[dbo].[Events]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Events];
+GO
+IF OBJECT_ID(N'[dbo].[Languages]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Languages];
+GO
+IF OBJECT_ID(N'[dbo].[Categories]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Categories];
+GO
+IF OBJECT_ID(N'[dbo].[Skills]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Skills];
+GO
+IF OBJECT_ID(N'[dbo].[UserLanguage]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserLanguage];
+GO
+IF OBJECT_ID(N'[dbo].[UserSkill]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserSkill];
+GO
+IF OBJECT_ID(N'[dbo].[UserGroup]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[UserGroup];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -46,23 +94,11 @@ CREATE TABLE [dbo].[Groups] (
 );
 GO
 
--- Creating table 'Tracks'
-CREATE TABLE [dbo].[Tracks] (
-    [Id] uniqueidentifier  NOT NULL,
-    [Name] nvarchar(max)  NOT NULL,
-    [Zone] nvarchar(max)  NOT NULL,
-    [Kilometers] int  NOT NULL,
-    [Difficulty] nvarchar(max)  NOT NULL,
-    [Latitude] geometry  NOT NULL,
-    [Longitude] nvarchar(max)  NOT NULL
-);
-GO
-
 -- Creating table 'Events'
 CREATE TABLE [dbo].[Events] (
     [Id] uniqueidentifier  NOT NULL,
     [Name] nvarchar(max)  NOT NULL,
-    [Track_Id] uniqueidentifier  NOT NULL,
+    [TrackId] uniqueidentifier  NOT NULL,
     [Group_Id] uniqueidentifier  NOT NULL
 );
 GO
@@ -88,10 +124,15 @@ CREATE TABLE [dbo].[Skills] (
 );
 GO
 
--- Creating table 'UserTrack'
-CREATE TABLE [dbo].[UserTrack] (
-    [Users_Id] uniqueidentifier  NOT NULL,
-    [Tracks_Id] uniqueidentifier  NOT NULL
+-- Creating table 'Tracks'
+CREATE TABLE [dbo].[Tracks] (
+    [Id] uniqueidentifier  NOT NULL,
+    [Name] nvarchar(max)  NOT NULL,
+    [Zone] nvarchar(max)  NOT NULL,
+    [Kilometers] int  NOT NULL,
+    [Difficulty] nvarchar(max)  NOT NULL,
+    [Latitude] float  NOT NULL,
+    [Longitude] float  NOT NULL
 );
 GO
 
@@ -109,17 +150,24 @@ CREATE TABLE [dbo].[UserSkill] (
 );
 GO
 
--- Creating table 'TrackCategory'
-CREATE TABLE [dbo].[TrackCategory] (
-    [Tracks_Id] uniqueidentifier  NOT NULL,
-    [Categories_Id] uniqueidentifier  NOT NULL
-);
-GO
-
 -- Creating table 'UserGroup'
 CREATE TABLE [dbo].[UserGroup] (
     [Users_Id] uniqueidentifier  NOT NULL,
     [Groups_Id] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'TrackUser'
+CREATE TABLE [dbo].[TrackUser] (
+    [Tracks_Id] uniqueidentifier  NOT NULL,
+    [Users_Id] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'TrackCategory'
+CREATE TABLE [dbo].[TrackCategory] (
+    [Tracks_Id] uniqueidentifier  NOT NULL,
+    [Categories_Id] uniqueidentifier  NOT NULL
 );
 GO
 
@@ -136,12 +184,6 @@ GO
 -- Creating primary key on [Id] in table 'Groups'
 ALTER TABLE [dbo].[Groups]
 ADD CONSTRAINT [PK_Groups]
-    PRIMARY KEY CLUSTERED ([Id] ASC);
-GO
-
--- Creating primary key on [Id] in table 'Tracks'
-ALTER TABLE [dbo].[Tracks]
-ADD CONSTRAINT [PK_Tracks]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
@@ -169,10 +211,10 @@ ADD CONSTRAINT [PK_Skills]
     PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
--- Creating primary key on [Users_Id], [Tracks_Id] in table 'UserTrack'
-ALTER TABLE [dbo].[UserTrack]
-ADD CONSTRAINT [PK_UserTrack]
-    PRIMARY KEY CLUSTERED ([Users_Id], [Tracks_Id] ASC);
+-- Creating primary key on [Id] in table 'Tracks'
+ALTER TABLE [dbo].[Tracks]
+ADD CONSTRAINT [PK_Tracks]
+    PRIMARY KEY CLUSTERED ([Id] ASC);
 GO
 
 -- Creating primary key on [Users_Id], [Languages_Id] in table 'UserLanguage'
@@ -187,58 +229,27 @@ ADD CONSTRAINT [PK_UserSkill]
     PRIMARY KEY CLUSTERED ([Users_Id], [Skills_Id] ASC);
 GO
 
--- Creating primary key on [Tracks_Id], [Categories_Id] in table 'TrackCategory'
-ALTER TABLE [dbo].[TrackCategory]
-ADD CONSTRAINT [PK_TrackCategory]
-    PRIMARY KEY CLUSTERED ([Tracks_Id], [Categories_Id] ASC);
-GO
-
 -- Creating primary key on [Users_Id], [Groups_Id] in table 'UserGroup'
 ALTER TABLE [dbo].[UserGroup]
 ADD CONSTRAINT [PK_UserGroup]
     PRIMARY KEY CLUSTERED ([Users_Id], [Groups_Id] ASC);
 GO
 
+-- Creating primary key on [Tracks_Id], [Users_Id] in table 'TrackUser'
+ALTER TABLE [dbo].[TrackUser]
+ADD CONSTRAINT [PK_TrackUser]
+    PRIMARY KEY CLUSTERED ([Tracks_Id], [Users_Id] ASC);
+GO
+
+-- Creating primary key on [Tracks_Id], [Categories_Id] in table 'TrackCategory'
+ALTER TABLE [dbo].[TrackCategory]
+ADD CONSTRAINT [PK_TrackCategory]
+    PRIMARY KEY CLUSTERED ([Tracks_Id], [Categories_Id] ASC);
+GO
+
 -- --------------------------------------------------
 -- Creating all FOREIGN KEY constraints
 -- --------------------------------------------------
-
--- Creating foreign key on [Users_Id] in table 'UserTrack'
-ALTER TABLE [dbo].[UserTrack]
-ADD CONSTRAINT [FK_UserTrack_User]
-    FOREIGN KEY ([Users_Id])
-    REFERENCES [dbo].[Users]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating foreign key on [Tracks_Id] in table 'UserTrack'
-ALTER TABLE [dbo].[UserTrack]
-ADD CONSTRAINT [FK_UserTrack_Track]
-    FOREIGN KEY ([Tracks_Id])
-    REFERENCES [dbo].[Tracks]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_UserTrack_Track'
-CREATE INDEX [IX_FK_UserTrack_Track]
-ON [dbo].[UserTrack]
-    ([Tracks_Id]);
-GO
-
--- Creating foreign key on [Track_Id] in table 'Events'
-ALTER TABLE [dbo].[Events]
-ADD CONSTRAINT [FK_EventTrack]
-    FOREIGN KEY ([Track_Id])
-    REFERENCES [dbo].[Tracks]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-
--- Creating non-clustered index for FOREIGN KEY 'FK_EventTrack'
-CREATE INDEX [IX_FK_EventTrack]
-ON [dbo].[Events]
-    ([Track_Id]);
-GO
 
 -- Creating foreign key on [Group_Id] in table 'Events'
 ALTER TABLE [dbo].[Events]
@@ -300,6 +311,52 @@ ON [dbo].[UserSkill]
     ([Skills_Id]);
 GO
 
+-- Creating foreign key on [Users_Id] in table 'UserGroup'
+ALTER TABLE [dbo].[UserGroup]
+ADD CONSTRAINT [FK_UserGroup_User]
+    FOREIGN KEY ([Users_Id])
+    REFERENCES [dbo].[Users]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Groups_Id] in table 'UserGroup'
+ALTER TABLE [dbo].[UserGroup]
+ADD CONSTRAINT [FK_UserGroup_Group]
+    FOREIGN KEY ([Groups_Id])
+    REFERENCES [dbo].[Groups]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_UserGroup_Group'
+CREATE INDEX [IX_FK_UserGroup_Group]
+ON [dbo].[UserGroup]
+    ([Groups_Id]);
+GO
+
+-- Creating foreign key on [Tracks_Id] in table 'TrackUser'
+ALTER TABLE [dbo].[TrackUser]
+ADD CONSTRAINT [FK_TrackUser_Track]
+    FOREIGN KEY ([Tracks_Id])
+    REFERENCES [dbo].[Tracks]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating foreign key on [Users_Id] in table 'TrackUser'
+ALTER TABLE [dbo].[TrackUser]
+ADD CONSTRAINT [FK_TrackUser_User]
+    FOREIGN KEY ([Users_Id])
+    REFERENCES [dbo].[Users]
+        ([Id])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_TrackUser_User'
+CREATE INDEX [IX_FK_TrackUser_User]
+ON [dbo].[TrackUser]
+    ([Users_Id]);
+GO
+
 -- Creating foreign key on [Tracks_Id] in table 'TrackCategory'
 ALTER TABLE [dbo].[TrackCategory]
 ADD CONSTRAINT [FK_TrackCategory_Track]
@@ -323,27 +380,18 @@ ON [dbo].[TrackCategory]
     ([Categories_Id]);
 GO
 
--- Creating foreign key on [Users_Id] in table 'UserGroup'
-ALTER TABLE [dbo].[UserGroup]
-ADD CONSTRAINT [FK_UserGroup_User]
-    FOREIGN KEY ([Users_Id])
-    REFERENCES [dbo].[Users]
-        ([Id])
-    ON DELETE NO ACTION ON UPDATE NO ACTION;
-GO
-
--- Creating foreign key on [Groups_Id] in table 'UserGroup'
-ALTER TABLE [dbo].[UserGroup]
-ADD CONSTRAINT [FK_UserGroup_Group]
-    FOREIGN KEY ([Groups_Id])
-    REFERENCES [dbo].[Groups]
+-- Creating foreign key on [TrackId] in table 'Events'
+ALTER TABLE [dbo].[Events]
+ADD CONSTRAINT [FK_TrackEvent]
+    FOREIGN KEY ([TrackId])
+    REFERENCES [dbo].[Tracks]
         ([Id])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_UserGroup_Group'
-CREATE INDEX [IX_FK_UserGroup_Group]
-ON [dbo].[UserGroup]
-    ([Groups_Id]);
+-- Creating non-clustered index for FOREIGN KEY 'FK_TrackEvent'
+CREATE INDEX [IX_FK_TrackEvent]
+ON [dbo].[Events]
+    ([TrackId]);
 GO
 
 -- --------------------------------------------------

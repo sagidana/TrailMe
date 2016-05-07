@@ -27,10 +27,10 @@ namespace TrailMe.DAL.Model
     
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Group> Groups { get; set; }
-        public virtual DbSet<Track> Tracks { get; set; }
         public virtual DbSet<Event> Events { get; set; }
         public virtual DbSet<Language> Languages { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<Track> Tracks { get; set; }
     }
 }

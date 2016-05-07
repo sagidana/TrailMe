@@ -67,7 +67,6 @@ namespace TrailMe.DAL
             {
                 return dbContext.Events.ToList();
             }
-
         }
 
         #endregion

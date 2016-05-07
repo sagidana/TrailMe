@@ -16,8 +16,9 @@ namespace TrailMe.DAL.Model
     {
         public System.Guid Id { get; set; }
         public string Name { get; set; }
+        public System.Guid TrackId { get; set; }
     
-        public virtual Track Track { get; set; }
         public virtual Group Group { get; set; }
+        public virtual Track Track { get; set; }
     }
 }
