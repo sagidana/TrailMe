@@ -271,11 +271,11 @@ namespace TrailMe.WebServer
                 JObject jUser = new JObject();
 
                 jUser.Add("Id", user.Id);
-                jUser.Add("Id", user.FirstName);
-                jUser.Add("Id", user.LastName);
-                jUser.Add("Id", user.MailAddress);
-                jUser.Add("Id", user.City);
-                jUser.Add("Id", user.Birthdate);
+                jUser.Add("FirstName", user.FirstName);
+                jUser.Add("LastName", user.LastName);
+                jUser.Add("MailAddress", user.MailAddress);
+                jUser.Add("City", user.City);
+                jUser.Add("Birthdate", user.Birthdate);
 
                 jUsers.Add(jUsers);
             }
@@ -344,7 +344,7 @@ namespace TrailMe.WebServer
             track.Add("Longitude", dbTrack.Longitude);
             track.Add("Zone", dbTrack.Zone);
             track.Add("Difficulty", dbTrack.Difficulty);
-            track.Add("DistanceKM", dbTrack.Kilometers);
+            track.Add("Kilometers", dbTrack.Kilometers);
 
             addEventsToJson(track, dbTrack.Events);
 
@@ -417,7 +417,7 @@ namespace TrailMe.WebServer
             {
                 Name = track["Name"].Value<string>(),
                 Zone = track["Zone"].Value<string>(),
-                Kilometers = track["DistanceKM"].Value<int>(),
+                Kilometers = track["Kilometers"].Value<int>(),
                 Difficulty = track["Difficulty"].Value<string>(),
                 Latitude = track["Latitude"].Value<double>(),
                 Longitude = track["Longitude"].Value<double>()
