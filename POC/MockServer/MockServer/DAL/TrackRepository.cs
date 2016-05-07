@@ -54,7 +54,7 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeDBEntities())
             {
-                return dbContext.Tracks.ToList();
+                return dbContext.Tracks.Include("Events").ToList();
             }
         }
 

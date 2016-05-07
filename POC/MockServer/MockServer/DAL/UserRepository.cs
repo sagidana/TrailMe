@@ -69,7 +69,7 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeDBEntities())
             {
-                return dbContext.Users.ToList();
+                return dbContext.Users.Include("Groups").ToList();
             }
         } 
 

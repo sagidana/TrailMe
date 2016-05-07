@@ -77,12 +77,12 @@ namespace TrailMe.WebServer
             Startup.Resources = new List<WebResource>();
 
             // gets.
-            Startup.Resources.Add(new WebResource { Path = REGISTER_URL, Method = POST_METHOD, Handler = registerClient });
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = GET_METHOD, Handler = getAllUsers });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = GET_METHOD, Handler = getAllGroups });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = GET_METHOD, Handler = getAllTracks });
 
             // posts.
+            Startup.Resources.Add(new WebResource { Path = REGISTER_URL, Method = POST_METHOD, Handler = registerClient });
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = POST_METHOD, Handler = getUser });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = POST_METHOD, Handler = getGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = POST_METHOD, Handler = getTrack });
@@ -97,6 +97,19 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = DELETE_METHOD, Handler = deleteUser });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = DELETE_METHOD, Handler = deleteGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = DELETE_METHOD, Handler = deleteTrack });
+        }
+
+        private void createWebResponse(Microsoft.Owin.IOwinContext context, string dataType, string data)
+        {
+            context.Response.ContentType = data;
+            context.Response.Write(data);
+        }
+
+        private JObject getJsonFromRequest(Microsoft.Owin.IOwinContext context)
+        {
+            string body = new StreamReader(context.Request.Body).ReadToEnd();
+            JObject jsonRequest = JObject.Parse(body);
+            return jsonRequest;
         }
 
         #region Get
@@ -125,6 +138,10 @@ namespace TrailMe.WebServer
             createWebResponse(context, JSON_TYPE, groups.ToString());
         }
 
+        #endregion
+
+        #region Post
+
         private void registerClient(Microsoft.Owin.IOwinContext context)
         {
             JObject jsonRequest = getJsonFromRequest(context);
@@ -133,13 +150,9 @@ namespace TrailMe.WebServer
             m_GcmManager.RegisterClient(token);
         }
 
-        #endregion
-
-        #region Post
-
         private void getRecommendations(Microsoft.Owin.IOwinContext context)
         {
-            //
+            
         }
 
         private void getUser(Microsoft.Owin.IOwinContext context)
@@ -249,9 +262,74 @@ namespace TrailMe.WebServer
 
         #region From DB
 
+        private void addDbUserToJson(JObject json, ICollection<User> users)
+        {
+            JArray jUsers = new JArray();
+
+            foreach (var user in users)
+            {
+                JObject jUser = new JObject();
+
+                jUser.Add("Id", user.UserID);
+                jUser.Add("Id", user.FirstName);
+                jUser.Add("Id", user.LastName);
+                jUser.Add("Id", user.MailAddress);
+                jUser.Add("Id", user.City);
+                jUser.Add("Id", user.BirthDate);
+
+                jUsers.Add(jUsers);
+            }
+
+            json.Add("Users", jUsers);
+        }
+
+        private void addDbGroupsToJson(JObject json, ICollection<Group> groups)
+        {
+            JArray jGroups = new JArray();
+            
+            foreach (var group in groups)
+            {
+                JObject jGroup = new JObject();
+
+                jGroup.Add("Id", group.Groupid);
+                jGroup.Add("Name", group.GroupName);
+
+                jGroups.Add(jGroup);
+            }
+
+            json.Add("Groups", jGroups);
+        }
+
+        private void addEventsToJson(JObject json, ICollection<Event> events)
+        {
+            JArray jEvents = new JArray();
+
+            foreach (var curEvent in events)
+            {
+                JObject jEvent = new JObject();
+
+                jEvent.Add("Id", curEvent.EventID);
+                jEvent.Add("Name", curEvent.EventName);
+                jEvent.Add("StartDate", curEvent.StartDate);
+                jEvent.Add("EndDate", curEvent.EndDate);
+
+                jEvents.Add(jEvent);
+            }
+
+            json.Add("Events", jEvents);
+        }
+
         private JObject convertDbUserToJson(DAL.Model.User dbUser)
         {
             JObject user = new JObject();
+            
+            user.Add("FirstName", dbUser.FirstName);
+            user.Add("LastName", dbUser.LastName);
+            user.Add("MailAddress", dbUser.MailAddress);
+            user.Add("City", dbUser.City);
+            user.Add("BirthDate", dbUser.BirthDate);
+
+            addDbGroupsToJson(user, dbUser.Groups);
 
             return user;
         }
@@ -260,33 +338,64 @@ namespace TrailMe.WebServer
         {
             JObject track = new JObject();
 
+            track.Add("Id", dbTrack.TrackID);
+            track.Add("Name", dbTrack.TrackName);
+            track.Add("Latitude", dbTrack.Latitude);
+            track.Add("Longitude", dbTrack.Longitude);
+            track.Add("Zone", dbTrack.LocationZone);
+            track.Add("Difficulty", dbTrack.LevelOfDifficulty);
+            track.Add("DistanceKM", dbTrack.DistanceKM);
+
+            addEventsToJson(track, dbTrack.Events);
+
             return track;
         }
 
         private JObject convertDbGroupToJson(DAL.Model.Group dbGroup)
         {
-            JObject group = new JObject();
+            JObject jGroup = new JObject();
 
-            return group;
+            jGroup.Add("Id", dbGroup.Groupid);
+            jGroup.Add("Name", dbGroup.GroupName);
+
+            addDbUserToJson(jGroup, dbGroup.Users);
+
+            return jGroup;
         }
 
         private JObject convertDbUsersToJson(IEnumerable<DAL.Model.User> dbUsers)
         {
             JObject users = new JObject();
+            JArray arrayUsers = new JArray();
 
+            foreach(var dbUser in dbUsers)
+                arrayUsers.Add(convertDbUserToJson(dbUser));
+
+            users.Add("Users", arrayUsers);
             return users;
         }
 
         private JObject convertDbTracksToJson(IEnumerable<Track> dbTracks)
         {
             JObject tracks = new JObject();
+            JArray arrayTracks = new JArray();
 
+            foreach (var dbTrack in dbTracks)
+                arrayTracks.Add(convertDbTrackToJson(dbTrack));
+
+            tracks.Add("Tracks", arrayTracks);
             return tracks;
         }
 
         private JObject convertDbGroupsToJson(IEnumerable<DAL.Model.Group> dbGroups)
         {
             JObject groups = new JObject();
+            JArray arrayGroups= new JArray();
+
+            foreach (var dbGroup in dbGroups)
+                arrayGroups.Add(convertDbGroupToJson(dbGroup));
+
+            groups.Add("Groups", arrayGroups);
 
             return groups;
         }
@@ -313,19 +422,6 @@ namespace TrailMe.WebServer
         #endregion
 
         #endregion
-
-        private void createWebResponse(Microsoft.Owin.IOwinContext context, string dataType, string data)
-        {
-            context.Response.ContentType = data;
-            context.Response.Write(data);
-        }
-
-        private JObject getJsonFromRequest(Microsoft.Owin.IOwinContext context)
-        {
-            string body = new StreamReader(context.Request.Body).ReadToEnd();
-            JObject jsonRequest = JObject.Parse(body);
-            return jsonRequest;
-        }
 
         #endregion
     }
