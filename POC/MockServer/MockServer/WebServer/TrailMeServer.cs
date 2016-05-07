@@ -406,17 +406,40 @@ namespace TrailMe.WebServer
 
         private DAL.Model.User convertJsonToDbUser(JObject user)
         {
-            return null;
+            DAL.Model.User dbUser = new DAL.Model.User
+            {
+                FirstName = user["FirstName"].Value<string>(),
+                LastName = user["LastName"].Value<string>(),
+                MailAddress = user["MailAddress"].Value<string>(),
+                City = user["City"].Value<string>(),
+                BirthDate = user["BirthDate"].Value<DateTime>()
+            };
+
+            return dbUser;
         }
 
         private DAL.Model.Track convertJsonToDbTrack(JObject track)
         {
-            return null;
+            DAL.Model.Track dbTrack = new DAL.Model.Track()
+            {
+                TrackName = track["Name"].Value<string>(),
+                LocationZone = track["Zone"].Value<string>(),
+                DistanceKM = track["DistanceKM"].Value<int>(),
+                LevelOfDifficulty = track["Difficulty"].Value<string>(),
+                Latitude = track["Latitude"].Value<double>(),
+                Longitude = track["Longitude"].Value<double>()
+            };
+
+            return dbTrack;
         }
 
         private DAL.Model.Group convertJsonToDbGroup(JObject group)
         {
-            return null;
+            DAL.Model.Group dbGroup = new DAL.Model.Group() {
+                GroupName = group["Name"].Value<string>(),
+            };
+
+            return dbGroup;
         }
 
         #endregion
