@@ -117,7 +117,7 @@ namespace TrailMe.WebServer
         private void getAllUsers(Microsoft.Owin.IOwinContext context)
         {
             var dbUsers = UserRepository.GetUsers();
-            JObject users = convertDbUsersToJson(dbUsers);
+            JArray users = convertDbUsersToJson(dbUsers);
 
             createWebResponse(context, JSON_TYPE, users.ToString());
         }
@@ -125,7 +125,7 @@ namespace TrailMe.WebServer
         private void getAllTracks(Microsoft.Owin.IOwinContext context)
         {
             var dbTracks= TrackRepository.GetTracks();
-            JObject tracks = convertDbTracksToJson(dbTracks);
+            JArray tracks = convertDbTracksToJson(dbTracks);
 
             createWebResponse(context, JSON_TYPE, tracks.ToString());
         }
@@ -133,7 +133,7 @@ namespace TrailMe.WebServer
         private void getAllGroups(Microsoft.Owin.IOwinContext context)
         {
             var dbGroups = GroupRepository.GetGroups();
-            JObject groups = convertDbGroupsToJson(dbGroups);
+            JArray groups = convertDbGroupsToJson(dbGroups);
 
             createWebResponse(context, JSON_TYPE, groups.ToString());
         }
@@ -363,41 +363,34 @@ namespace TrailMe.WebServer
             return jGroup;
         }
 
-        private JObject convertDbUsersToJson(IEnumerable<DAL.Model.User> dbUsers)
+        private JArray convertDbUsersToJson(IEnumerable<DAL.Model.User> dbUsers)
         {
-            JObject users = new JObject();
             JArray arrayUsers = new JArray();
 
             foreach(var dbUser in dbUsers)
                 arrayUsers.Add(convertDbUserToJson(dbUser));
 
-            users.Add("Users", arrayUsers);
-            return users;
+            return arrayUsers;
         }
 
-        private JObject convertDbTracksToJson(IEnumerable<Track> dbTracks)
+        private JArray convertDbTracksToJson(IEnumerable<Track> dbTracks)
         {
-            JObject tracks = new JObject();
             JArray arrayTracks = new JArray();
 
             foreach (var dbTrack in dbTracks)
                 arrayTracks.Add(convertDbTrackToJson(dbTrack));
 
-            tracks.Add("Tracks", arrayTracks);
-            return tracks;
+            return arrayTracks;
         }
 
-        private JObject convertDbGroupsToJson(IEnumerable<DAL.Model.Group> dbGroups)
+        private JArray convertDbGroupsToJson(IEnumerable<DAL.Model.Group> dbGroups)
         {
-            JObject groups = new JObject();
             JArray arrayGroups= new JArray();
 
             foreach (var dbGroup in dbGroups)
                 arrayGroups.Add(convertDbGroupToJson(dbGroup));
 
-            groups.Add("Groups", arrayGroups);
-
-            return groups;
+            return arrayGroups;
         }
 
         #endregion

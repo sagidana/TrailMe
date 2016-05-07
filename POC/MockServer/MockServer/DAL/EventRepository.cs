@@ -11,13 +11,23 @@ namespace TrailMe.DAL
     {
         #region Static Methods
 
-        public static bool AddEvent(string event_name, DateTime start_date, DateTime end_date, Guid track_id)
+        public static bool AddEvent(string event_name, DateTime timestamp, Guid track_id, Guid group_id)
         {
             // Create the database context
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
+                DAL.Model.Track matchingTrack = dbContext.Tracks.Where(track => track.Id == track_id).First();
+                DAL.Model.Group matchingGroup = dbContext.Groups.Where(group => group.Id == group_id).First();
 
-                dbContext.insert_Event(event_name, start_date, end_date, track_id);
+                DAL.Model.Event newEvent = new Event()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = event_name
+                    Track = matchingTrack,
+                    Group = matchingGroup
+                };
+
+                dbContext.Events.Add(newEvent);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -30,9 +40,10 @@ namespace TrailMe.DAL
         public static bool DeleteEvent(Guid event_id)
         {
 
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.delete_Event(event_id);
+                var matchingEvent = dbContext.Events.Where(Event => Event.Id == event_id).First();
+                dbContext.Events.Remove(matchingEvent);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -44,7 +55,7 @@ namespace TrailMe.DAL
 
         public static Event GetEventById(Guid event_id)
         {
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
                 return dbContext.Events.Find(event_id);
             }
@@ -52,7 +63,7 @@ namespace TrailMe.DAL
 
         public static IEnumerable<Event> GetEvents()
         {
-            using (var dbContext = new TrailMeDBEntities())
+            using (var dbContext = new TrailMeModelContainer())
             {
                 return dbContext.Events.ToList();
             }

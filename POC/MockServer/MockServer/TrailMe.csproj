@@ -92,55 +92,40 @@
     <Compile Include="DAL\EventRepository.cs" />
     <Compile Include="DAL\GroupRepository.cs" />
     <Compile Include="DAL\Model\Category.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\Model\Event.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\Model\Group.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\Model\Language.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\Logs_Using.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\Model.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\Model.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\Model.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Model.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\ReturnAllUser_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\Model\Skill.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\sp_helpdiagrams_Result.cs">
-      <DependentUpon>Model.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DAL\Model\sysdiagram.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\Model\Track.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Model\TrailMeModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrailMeModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Model\TrailMeModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\Model\TrailMeModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrailMeModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="DAL\Model\User.cs">
-      <DependentUpon>Model.tt</DependentUpon>
+      <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
     <Compile Include="DAL\TrackRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
@@ -153,29 +138,31 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <EntityDeploy Include="DAL\Model\Model.edmx">
+    <EntityDeploy Include="DAL\Model\TrailMeModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model.Designer.cs</LastGenOutput>
+      <LastGenOutput>TrailMeModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="DAL\Model\Model.Context.tt">
+    <None Include="DAL\Model\TrailMeModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>Model.Context.cs</LastGenOutput>
+      <LastGenOutput>TrailMeModel.Context.cs</LastGenOutput>
+      <DependentUpon>TrailMeModel.edmx</DependentUpon>
     </None>
-    <None Include="DAL\Model\Model.edmx.diagram">
-      <DependentUpon>Model.edmx</DependentUpon>
+    <None Include="DAL\Model\TrailMeModel.edmx.diagram">
+      <DependentUpon>TrailMeModel.edmx</DependentUpon>
     </None>
-    <None Include="DAL\Model\Model.tt">
+    <None Include="DAL\Model\TrailMeModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model.edmx</DependentUpon>
-      <LastGenOutput>Model.cs</LastGenOutput>
+      <LastGenOutput>TrailMeModel.cs</LastGenOutput>
+      <DependentUpon>TrailMeModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="DAL\Model\TrailMeModel.edmx.sql" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

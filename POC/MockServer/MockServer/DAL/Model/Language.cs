@@ -14,7 +14,14 @@ namespace TrailMe.DAL.Model
     
     public partial class Language
     {
-        public int LanguageID { get; set; }
-        public string LanguageName { get; set; }
+        public Language()
+        {
+            this.Users = new HashSet<User>();
+        }
+    
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
+    
+        public virtual ICollection<User> Users { get; set; }
     }
 }

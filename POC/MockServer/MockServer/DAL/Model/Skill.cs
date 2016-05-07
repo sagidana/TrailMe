@@ -14,7 +14,14 @@ namespace TrailMe.DAL.Model
     
     public partial class Skill
     {
-        public int SkillID { get; set; }
-        public string SkillName { get; set; }
+        public Skill()
+        {
+            this.Users = new HashSet<User>();
+        }
+    
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
+    
+        public virtual ICollection<User> Users { get; set; }
     }
 }

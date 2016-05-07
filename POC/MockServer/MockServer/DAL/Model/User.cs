@@ -16,19 +16,22 @@ namespace TrailMe.DAL.Model
     {
         public User()
         {
-            this.Logs_Using = new HashSet<Logs_Using>();
+            this.Tracks = new HashSet<Track>();
+            this.Languages = new HashSet<Language>();
+            this.Skills = new HashSet<Skill>();
             this.Groups = new HashSet<Group>();
         }
     
-        public System.Guid UserID { get; set; }
-        public string MailAddress { get; set; }
-        public string LastName { get; set; }
+        public System.Guid Id { get; set; }
         public string FirstName { get; set; }
+        public string LastName { get; set; }
         public string City { get; set; }
-        public Nullable<System.DateTime> BirthDate { get; set; }
-        public string user_enable { get; set; }
+        public string MailAddress { get; set; }
+        public System.DateTime Birthdate { get; set; }
     
-        public virtual ICollection<Logs_Using> Logs_Using { get; set; }
+        public virtual ICollection<Track> Tracks { get; set; }
+        public virtual ICollection<Language> Languages { get; set; }
+        public virtual ICollection<Skill> Skills { get; set; }
         public virtual ICollection<Group> Groups { get; set; }
     }
 }

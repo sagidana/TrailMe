@@ -16,13 +16,15 @@ namespace TrailMe.DAL.Model
     {
         public Group()
         {
+            this.Events = new HashSet<Event>();
             this.Users = new HashSet<User>();
         }
     
-        public System.Guid Groupid { get; set; }
-        public string GroupName { get; set; }
-        public string Group_enable { get; set; }
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
+        public System.Guid EventId { get; set; }
     
+        public virtual ICollection<Event> Events { get; set; }
         public virtual ICollection<User> Users { get; set; }
     }
 }

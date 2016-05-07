@@ -16,18 +16,21 @@ namespace TrailMe.DAL.Model
     {
         public Track()
         {
+            this.Users = new HashSet<User>();
             this.Events = new HashSet<Event>();
+            this.Categories = new HashSet<Category>();
         }
     
-        public System.Guid TrackID { get; set; }
-        public string TrackName { get; set; }
-        public string LocationZone { get; set; }
-        public Nullable<int> DistanceKM { get; set; }
-        public string LevelOfDifficulty { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
-        public string Track_enable { get; set; }
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Zone { get; set; }
+        public int Kilometers { get; set; }
+        public string Difficulty { get; set; }
+        public System.Data.Entity.Spatial.DbGeometry Latitude { get; set; }
+        public string Longitude { get; set; }
     
+        public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<Event> Events { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
     }
 }

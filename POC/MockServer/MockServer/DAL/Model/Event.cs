@@ -14,13 +14,10 @@ namespace TrailMe.DAL.Model
     
     public partial class Event
     {
-        public System.Guid EventID { get; set; }
-        public Nullable<System.Guid> TrackID { get; set; }
-        public string EventName { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<System.DateTime> EndDate { get; set; }
-        public string Event_Enable { get; set; }
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
     
         public virtual Track Track { get; set; }
+        public virtual Group Group { get; set; }
     }
 }

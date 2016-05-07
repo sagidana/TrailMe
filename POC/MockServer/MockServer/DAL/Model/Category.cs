@@ -14,7 +14,14 @@ namespace TrailMe.DAL.Model
     
     public partial class Category
     {
-        public int CategoryID { get; set; }
-        public string CategoryName { get; set; }
+        public Category()
+        {
+            this.Tracks = new HashSet<Track>();
+        }
+    
+        public System.Guid Id { get; set; }
+        public string Name { get; set; }
+    
+        public virtual ICollection<Track> Tracks { get; set; }
     }
 }

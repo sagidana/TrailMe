@@ -14,6 +14,7 @@
     </Key>
     <Property Name="CategoryID" Type="Int32" Nullable="false" />
     <Property Name="CategoryName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Tracks" Relationship="TrailMeDBModel.CategoryTrack" FromRole="Category" ToRole="Track" />
   </EntityType>
   <EntityType Name="Event">
     <Key>
@@ -26,6 +27,7 @@
     <Property Name="EndDate" Type="DateTime" Precision="3" />
     <Property Name="Event_Enable" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Track" Relationship="Self.FK__Events__TrackID__18EBB532" FromRole="Events" ToRole="Tracks" />
+    <NavigationProperty Name="Group" Relationship="TrailMeDBModel.EventGroup" FromRole="Event" ToRole="Group" />
   </EntityType>
   <EntityType Name="Group">
     <Key>
@@ -34,7 +36,8 @@
     <Property Name="Groupid" Type="Guid" Nullable="false" />
     <Property Name="GroupName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Group_enable" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Users" Relationship="Self.Groups_Users" FromRole="Groups" ToRole="Users" />
+    <NavigationProperty Name="Events" Relationship="TrailMeDBModel.EventGroup" FromRole="Group" ToRole="Event" />
+    <NavigationProperty Name="Users" Relationship="TrailMeDBModel.UserGroup" FromRole="Group" ToRole="User" />
   </EntityType>
   <EntityType Name="Language">
     <Key>
@@ -42,6 +45,7 @@
     </Key>
     <Property Name="LanguageID" Type="Int32" Nullable="false" />
     <Property Name="LanguageName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="TrailMeDBModel.LanguageUser" FromRole="Language" ToRole="User" />
   </EntityType>
   <EntityType Name="Logs_Using">
     <Key>
@@ -61,6 +65,7 @@
     </Key>
     <Property Name="SkillID" Type="Int32" Nullable="false" />
     <Property Name="SkillName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="TrailMeDBModel.SkillUser" FromRole="Skill" ToRole="User" />
   </EntityType>
   <EntityType Name="sysdiagram">
     <Key>
@@ -85,6 +90,8 @@
     <Property Name="Longitude" Type="Double" Nullable="false" />
     <Property Name="Track_enable" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Events" Relationship="Self.FK__Events__TrackID__18EBB532" FromRole="Tracks" ToRole="Events" />
+    <NavigationProperty Name="Users" Relationship="TrailMeDBModel.UserTrack" FromRole="Track" ToRole="User" />
+    <NavigationProperty Name="Categories" Relationship="TrailMeDBModel.CategoryTrack" FromRole="Track" ToRole="Category" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -98,7 +105,10 @@
     <Property Name="BirthDate" Type="DateTime" Precision="3" />
     <Property Name="user_enable" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Logs_Using" Relationship="Self.FK__Logs_Usin__UserI__0C85DE4D" FromRole="Users" ToRole="Logs_Using" />
-    <NavigationProperty Name="Groups" Relationship="Self.Groups_Users" FromRole="Users" ToRole="Groups" />
+    <NavigationProperty Name="Tracks" Relationship="TrailMeDBModel.UserTrack" FromRole="User" ToRole="Track" />
+    <NavigationProperty Name="Languages" Relationship="TrailMeDBModel.LanguageUser" FromRole="User" ToRole="Language" />
+    <NavigationProperty Name="Skills" Relationship="TrailMeDBModel.SkillUser" FromRole="User" ToRole="Skill" />
+    <NavigationProperty Name="Groups" Relationship="TrailMeDBModel.UserGroup" FromRole="User" ToRole="Group" />
   </EntityType>
   <Association Name="FK__Events__TrackID__18EBB532">
     <End Role="Tracks" Type="Self.Track" Multiplicity="0..1" />
@@ -124,10 +134,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="Groups_Users">
-    <End Role="Users" Type="Self.User" Multiplicity="*" />
-    <End Role="Groups" Type="Self.Group" Multiplicity="*" />
-  </Association>
   <EntityContainer Name="TrailMeDBEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="Categories" EntityType="Self.Category" />
     <EntitySet Name="Events" EntityType="Self.Event" />
@@ -145,10 +151,6 @@
     <AssociationSet Name="FK__Logs_Usin__UserI__0C85DE4D" Association="Self.FK__Logs_Usin__UserI__0C85DE4D">
       <End Role="Users" EntitySet="Users" />
       <End Role="Logs_Using" EntitySet="Logs_Using" />
-    </AssociationSet>
-    <AssociationSet Name="Groups_Users" Association="Self.Groups_Users">
-      <End Role="Users" EntitySet="Users" />
-      <End Role="Groups" EntitySet="Groups" />
     </AssociationSet>
     <FunctionImport Name="ReturnAllUser" ReturnType="Collection(TrailMeDBModel.ReturnAllUser_Result)" IsComposable="true" />
     <FunctionImport Name="add_user_to_group">
@@ -221,6 +223,101 @@
       <Parameter Name="new_diagramname" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="sp_upgraddiagrams" />
+    <AssociationSet Name="UserTrack" Association="TrailMeDBModel.UserTrack">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Track" EntitySet="Tracks" />
+    </AssociationSet>
+    <FunctionImport Name="add_user_to_group1">
+      <Parameter Name="groupid" Mode="In" Type="Guid" />
+      <Parameter Name="userid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_Event1">
+      <Parameter Name="eventid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_Group1">
+      <Parameter Name="groupid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_Track1">
+      <Parameter Name="trackid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="delete_User1">
+      <Parameter Name="userid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="insert_Event1">
+      <Parameter Name="eventname" Mode="In" Type="String" />
+      <Parameter Name="startdate" Mode="In" Type="DateTime" />
+      <Parameter Name="enddate" Mode="In" Type="DateTime" />
+      <Parameter Name="trackid" Mode="In" Type="Guid" />
+    </FunctionImport>
+    <FunctionImport Name="insert_Group1">
+      <Parameter Name="groupname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="insert_Track1">
+      <Parameter Name="trackname" Mode="In" Type="String" />
+      <Parameter Name="loactionzone" Mode="In" Type="String" />
+      <Parameter Name="distancekm" Mode="In" Type="Int32" />
+      <Parameter Name="levelofdiffuclty" Mode="In" Type="String" />
+      <Parameter Name="latitude" Mode="In" Type="Double" />
+      <Parameter Name="longitude" Mode="In" Type="Double" />
+    </FunctionImport>
+    <FunctionImport Name="insert_User1">
+      <Parameter Name="mailaddress" Mode="In" Type="String" />
+      <Parameter Name="lastname" Mode="In" Type="String" />
+      <Parameter Name="firstname" Mode="In" Type="String" />
+      <Parameter Name="city" Mode="In" Type="String" />
+      <Parameter Name="birthdate" Mode="In" Type="DateTime" />
+    </FunctionImport>
+    <FunctionImport Name="ReturnAllUser1" IsComposable="true" ReturnType="Collection(TrailMeDBModel.ReturnAllUser1_Result)" />
+    <FunctionImport Name="sp_alterdiagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition1" ReturnType="Collection(TrailMeDBModel.sp_helpdiagramdefinition1_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams1" ReturnType="Collection(TrailMeDBModel.sp_helpdiagrams1_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram1">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams1" />
+    <AssociationSet Name="EventGroup" Association="TrailMeDBModel.EventGroup">
+      <End Role="Event" EntitySet="Events" />
+      <End Role="Group" EntitySet="Groups" />
+    </AssociationSet>
+    <AssociationSet Name="LanguageUser" Association="TrailMeDBModel.LanguageUser">
+      <End Role="Language" EntitySet="Languages" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="CategoryTrack" Association="TrailMeDBModel.CategoryTrack">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Track" EntitySet="Tracks" />
+    </AssociationSet>
+    <AssociationSet Name="SkillUser" Association="TrailMeDBModel.SkillUser">
+      <End Role="Skill" EntitySet="Skills" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="UserGroup" Association="TrailMeDBModel.UserGroup">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Group" EntitySet="Groups" />
+    </AssociationSet>
   </EntityContainer>
   <ComplexType Name="sp_helpdiagramdefinition_Result">
     <Property Type="Int32" Name="version" Nullable="true" />
@@ -233,4 +330,47 @@
     <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
     <Property Type="Int32" Name="OwnerID" Nullable="false" />
   </ComplexType>
+  <Association Name="UserTrack">
+    <End Type="TrailMeDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="TrailMeDBModel.Track" Role="Track" Multiplicity="*" />
+  </Association>
+  <ComplexType Name="ReturnAllUser1_Result">
+    <Property Type="Guid" Name="UserID" Nullable="true" />
+    <Property Type="String" Name="MailAddress" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="LastName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="FirstName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="City" Nullable="true" MaxLength="255" />
+    <Property Type="DateTime" Name="BirthDate" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition1_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams1_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <Association Name="EventGroup">
+    <End Type="TrailMeDBModel.Event" Role="Event" Multiplicity="*" />
+    <End Type="TrailMeDBModel.Group" Role="Group" Multiplicity="1" />
+  </Association>
+  <Association Name="LanguageUser">
+    <End Type="TrailMeDBModel.Language" Role="Language" Multiplicity="*" />
+    <End Type="TrailMeDBModel.User" Role="User" Multiplicity="*" />
+  </Association>
+  <Association Name="CategoryTrack">
+    <End Type="TrailMeDBModel.Category" Role="Category" Multiplicity="*" />
+    <End Type="TrailMeDBModel.Track" Role="Track" Multiplicity="*" />
+  </Association>
+  <Association Name="SkillUser">
+    <End Type="TrailMeDBModel.Skill" Role="Skill" Multiplicity="*" />
+    <End Type="TrailMeDBModel.User" Role="User" Multiplicity="*" />
+  </Association>
+  <Association Name="UserGroup">
+    <End Type="TrailMeDBModel.User" Role="User" Multiplicity="*" />
+    <End Type="TrailMeDBModel.Group" Role="Group" Multiplicity="*" />
+  </Association>
 </Schema>
