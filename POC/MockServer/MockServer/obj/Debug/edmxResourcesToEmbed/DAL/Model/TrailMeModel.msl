@@ -22,24 +22,12 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Tracks">
-      <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.Track)">
-        <MappingFragment StoreEntitySet="Tracks">
-          <ScalarProperty Name="Id" ColumnName="Id" />
-          <ScalarProperty Name="Name" ColumnName="Name" />
-          <ScalarProperty Name="Zone" ColumnName="Zone" />
-          <ScalarProperty Name="Kilometers" ColumnName="Kilometers" />
-          <ScalarProperty Name="Difficulty" ColumnName="Difficulty" />
-          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Events">
       <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.Event)">
         <MappingFragment StoreEntitySet="Events">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="TrackId" ColumnName="TrackId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -67,22 +55,19 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="UserTrack" TypeName="TrailMeModel.UserTrack" StoreEntitySet="UserTrack">
-      <EndProperty Name="User">
-        <ScalarProperty Name="Id" ColumnName="Users_Id" />
-      </EndProperty>
-      <EndProperty Name="Track">
-        <ScalarProperty Name="Id" ColumnName="Tracks_Id" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <AssociationSetMapping Name="EventTrack" TypeName="TrailMeModel.EventTrack" StoreEntitySet="Events">
-      <EndProperty Name="Track">
-        <ScalarProperty Name="Id" ColumnName="Track_Id" />
-      </EndProperty>
-      <EndProperty Name="Event">
-        <ScalarProperty Name="Id" ColumnName="Id" />
-      </EndProperty>
-    </AssociationSetMapping>
+    <EntitySetMapping Name="Tracks">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.Track)">
+        <MappingFragment StoreEntitySet="Tracks">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Zone" ColumnName="Zone" />
+          <ScalarProperty Name="Kilometers" ColumnName="Kilometers" />
+          <ScalarProperty Name="Difficulty" ColumnName="Difficulty" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <AssociationSetMapping Name="EventGroup" TypeName="TrailMeModel.EventGroup" StoreEntitySet="Events">
       <EndProperty Name="Group">
         <ScalarProperty Name="Id" ColumnName="Group_Id" />
@@ -107,20 +92,28 @@
         <ScalarProperty Name="Id" ColumnName="Skills_Id" />
       </EndProperty>
     </AssociationSetMapping>
-    <AssociationSetMapping Name="TrackCategory" TypeName="TrailMeModel.TrackCategory" StoreEntitySet="TrackCategory">
-      <EndProperty Name="Track">
-        <ScalarProperty Name="Id" ColumnName="Tracks_Id" />
-      </EndProperty>
-      <EndProperty Name="Category">
-        <ScalarProperty Name="Id" ColumnName="Categories_Id" />
-      </EndProperty>
-    </AssociationSetMapping>
     <AssociationSetMapping Name="UserGroup" TypeName="TrailMeModel.UserGroup" StoreEntitySet="UserGroup">
       <EndProperty Name="User">
         <ScalarProperty Name="Id" ColumnName="Users_Id" />
       </EndProperty>
       <EndProperty Name="Group">
         <ScalarProperty Name="Id" ColumnName="Groups_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TrackUser" TypeName="TrailMeModel.TrackUser" StoreEntitySet="TrackUser">
+      <EndProperty Name="Track">
+        <ScalarProperty Name="Id" ColumnName="Tracks_Id" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="Id" ColumnName="Users_Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="TrackCategory" TypeName="TrailMeModel.TrackCategory" StoreEntitySet="TrackCategory">
+      <EndProperty Name="Track">
+        <ScalarProperty Name="Id" ColumnName="Tracks_Id" />
+      </EndProperty>
+      <EndProperty Name="Category">
+        <ScalarProperty Name="Id" ColumnName="Categories_Id" />
       </EndProperty>
     </AssociationSetMapping>
   </EntityContainerMapping>

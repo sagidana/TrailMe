@@ -16,7 +16,13 @@ namespace TrailMe.DAL
             // Create the database context
             using (var dbContext = new TrailMeModelContainer())
             {
-                //dbContext.insert_Group(group_name);
+                DAL.Model.Group newGroup = new Group()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = group_name
+                };
+
+                dbContext.Groups.Add(newGroup);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -28,10 +34,9 @@ namespace TrailMe.DAL
 
         public static bool DeleteGroup(Guid group_id)
         {
-
             using (var dbContext = new TrailMeModelContainer())
             {
-                //dbContext.delete_Group(group_id);
+                dbContext.Groups.Remove(dbContext.Groups.Where(group => group.Id == group_id).First());
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();

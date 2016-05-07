@@ -16,7 +16,17 @@ namespace TrailMe.DAL
             // Create the database context
             using (var dbContext = new TrailMeModelContainer())
             {
-                //dbContext.insert_User(mailaddress, last_name, first_name, city, birthdate);
+                DAL.Model.User newUser = new User()
+                {
+                    Id = Guid.NewGuid(),
+                    MailAddress = mailaddress,
+                    LastName = last_name,
+                    FirstName = first_name,
+                    City = city,
+                    Birthdate = birthdate
+                };
+
+                dbContext.Users.Add(newUser);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -28,10 +38,9 @@ namespace TrailMe.DAL
 
         public static bool DeleteUser(Guid user_id)
         {
-
             using (var dbContext = new TrailMeModelContainer())
             {
-                //dbContext.delete_User(user_id);
+                dbContext.Users.Remove(dbContext.Users.Where(user => user.Id == user_id).First());
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -43,10 +52,12 @@ namespace TrailMe.DAL
 
         public static bool AddUserToGroup(Guid group_id, Guid user_id)
         {
-
             using (var dbContext = new TrailMeModelContainer())
             {
-                //dbContext.add_user_to_group(group_id, user_id);
+                var matchingGroup = dbContext.Groups.Where(group => group.Id == group_id).First();
+                var matchingUser = dbContext.Users.Where(user => user.Id == user_id).First();
+
+                matchingGroup.Users.Add(matchingUser);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();

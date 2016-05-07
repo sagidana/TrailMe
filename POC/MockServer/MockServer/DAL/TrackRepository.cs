@@ -16,8 +16,18 @@ namespace TrailMe.DAL
             // Create the database context
             using (var dbContext = new TrailMeModelContainer())
             {
+                DAL.Model.Track newTrack = new Track()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = track_name,
+                    Zone = location_zone,
+                    Kilometers = distance_km,
+                    Difficulty = level_of_diffuclty,
+                    Latitude = latitude_,
+                    Longitude = longitude_
+                };
 
-                //dbContext.insert_Track(track_name, location_zone, distance_km, level_of_diffuclty, latitude_, longitude_);
+                dbContext.Tracks.Add(newTrack);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -29,10 +39,9 @@ namespace TrailMe.DAL
 
         public static bool DeleteTrack(Guid track_id)
         {
-
             using (var dbContext = new TrailMeModelContainer())
             {
-                //dbContext.delete_Track(track_id);
+                dbContext.Tracks.Remove(dbContext.Tracks.Where(track => track.Id == track_id).First());
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -60,7 +69,10 @@ namespace TrailMe.DAL
 
         public static IEnumerable<Track> GetTracksByUserId(Guid userId)
         {
-            return null;
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                return dbContext.Users.Where(user => user.Id == userId).First().Tracks;
+            }
         }
 
         #endregion
