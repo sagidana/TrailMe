@@ -54,7 +54,7 @@ namespace TrailMe.WebServer
 
         #region Public Methods
 
-        public void Start(string url = "http://+:80/")
+        public void Start(string url = "http://trailmedev.cloudapp.net:9900/")
         {
             m_Server = WebApp.Start<Startup>(url);
             m_AprioriManager.Start();
@@ -101,7 +101,7 @@ namespace TrailMe.WebServer
 
         private void createWebResponse(Microsoft.Owin.IOwinContext context, string dataType, string data)
         {
-            context.Response.ContentType = data;
+            context.Response.ContentType = dataType;
             context.Response.Write(data);
         }
 
