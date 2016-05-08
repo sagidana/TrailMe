@@ -686,8 +686,8 @@ namespace TrailMe.WebServer
         private DAL.Model.Event convertJsonToDbEvent(JObject jEvent)
         {
             string eventName = jEvent.GetValue("Name").Value<string>();
-            Guid trackId= jEvent.GetValue("TrackId").Value<Guid>();
-            Guid groupId = jEvent.GetValue("GroupId").Value<Guid>();
+            Guid trackId= Guid.Parse(jEvent.GetValue("TrackId").Value<string>());
+            Guid groupId = Guid.Parse(jEvent.GetValue("GroupId").Value<string>());
 
             var dbEvent = new DAL.Model.Event
             {

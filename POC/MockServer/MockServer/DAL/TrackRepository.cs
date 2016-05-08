@@ -91,7 +91,7 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                return dbContext.Tracks.Include("Events").ToList();
+                return dbContext.Tracks.Include("Events").Include("Events.Group").Include("Events.Track").ToList();
             }
         }
 
