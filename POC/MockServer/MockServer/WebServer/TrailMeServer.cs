@@ -198,8 +198,8 @@ namespace TrailMe.WebServer
             JObject jsonRequest = getJsonFromRequest(context);
 
             string method = jsonRequest.GetValue("Method").Value<string>();
-            Guid source = jsonRequest.GetValue("SourceId").Value<Guid>();
-            Guid destination = jsonRequest.GetValue("DestinationId").Value<Guid>();
+            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
 
             switch (method)
             {
