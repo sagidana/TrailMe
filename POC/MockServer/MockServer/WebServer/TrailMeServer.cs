@@ -242,7 +242,14 @@ namespace TrailMe.WebServer
 
         private void getRecommendations(Microsoft.Owin.IOwinContext context)
         {
-            
+            JObject request = getJsonFromRequest(context);
+
+            Guid userId = request.GetValue("UserId").Value<Guid>();
+
+            var recommendedTracks = m_AprioriManager.GetRecommendations(userId);
+            JArray jRecommendedTracks = convertTracksToJson(recommendedTracks);
+
+            createWebResponse(context, JSON_TYPE, jRecommendedTracks.ToString());
         }
 
         private void getUser(Microsoft.Owin.IOwinContext context)
@@ -417,7 +424,23 @@ namespace TrailMe.WebServer
 
         #region Database Converters
 
-        #region From DB
+        #region To Json
+
+        private JArray convertTracksToJson(List<Common.Track> tracks)
+        {
+            JArray arrayTracks = new JArray();
+
+            foreach (var track in tracks)
+            {
+                JObject jTrack = new JObject();
+
+                jTrack.Add("Id", track.TrackId);
+
+                arrayTracks.Add(jTrack);
+            }
+
+            return arrayTracks;
+        }
 
         private void addDbUserToJson(JObject json, ICollection<User> users)
         {
