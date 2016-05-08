@@ -19,6 +19,7 @@ namespace TrailMe.DAL
                 Category category = dbContext.Categories.Find(category_id);
 
                 track.Categories.Add(category);
+                category.Tracks.Add(track);
 
                 var changesSaved = dbContext.SaveChanges();
             }
@@ -32,6 +33,7 @@ namespace TrailMe.DAL
                 User user = dbContext.Users.Find(user_id);
 
                 track.Users.Add(user);
+                user.Tracks.Add(track);
 
                 var changesSaved = dbContext.SaveChanges();
             }

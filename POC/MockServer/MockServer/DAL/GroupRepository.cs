@@ -18,6 +18,8 @@ namespace TrailMe.DAL
             {
                 DAL.Model.Group group = dbContext.Groups.Find(group_id);
                 DAL.Model.User user = dbContext.Users.Find(user_id);
+
+                user.Groups.Add(group);
                 group.Users.Add(user);
 
                 var changesSaved = dbContext.SaveChanges();

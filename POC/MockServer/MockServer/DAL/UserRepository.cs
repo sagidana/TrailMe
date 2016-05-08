@@ -18,7 +18,9 @@ namespace TrailMe.DAL
                 User user = dbContext.Users.Find(user_id);
                 Skill skill = dbContext.Skills.Find(skill_id);
 
+                skill.Users.Add(user);
                 user.Skills.Add(skill);
+
                 var changesSaved = dbContext.SaveChanges();
             }
         }
@@ -31,6 +33,8 @@ namespace TrailMe.DAL
                 Language language = dbContext.Languages.Find(language_id);
 
                 user.Languages.Add(language);
+                language.Users.Add(user);
+
                 var changesSaved = dbContext.SaveChanges();
             }
         }
@@ -78,15 +82,13 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                var matchingGroup = dbContext.Groups.Where(group => group.Id == group_id).First();
-                var matchingUser = dbContext.Users.Where(user => user.Id == user_id).First();
+                var group = dbContext.Groups.Find(group_id);
+                var user = dbContext.Users.Find(user_id);
 
-                matchingGroup.Users.Add(matchingUser);
+                user.Groups.Add(group);
+                group.Users.Add(user);
 
-                // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
-
-                // Return a bool based on whether any changes have been stored
                 return changesSaved >= 1;
             }
         }
