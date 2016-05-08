@@ -11,6 +11,32 @@ namespace TrailMe.DAL
     {
         #region Static Methods
 
+        public static void AddCategoryToTrack(Guid track_id, Guid category_id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                Track track = dbContext.Tracks.Find(track_id);
+                Category category = dbContext.Categories.Find(category_id);
+
+                track.Categories.Add(category);
+
+                var changesSaved = dbContext.SaveChanges();
+            }
+        }
+
+        public static void AddUserToTrack(Guid track_id, Guid user_id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                Track track = dbContext.Tracks.Find(track_id);
+                User user = dbContext.Users.Find(user_id);
+
+                track.Users.Add(user);
+
+                var changesSaved = dbContext.SaveChanges();
+            }
+        }
+
         public static bool AddTrack(string track_name, string location_zone, int distance_km, string level_of_diffuclty, double latitude_, double longitude_)
         {
             // Create the database context

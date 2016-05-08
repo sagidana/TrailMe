@@ -322,7 +322,8 @@ namespace TrailMe.WebServer
         private JObject convertDbUserToJson(DAL.Model.User dbUser)
         {
             JObject user = new JObject();
-            
+
+            user.Add("Id", dbUser.Id);
             user.Add("FirstName", dbUser.FirstName);
             user.Add("LastName", dbUser.LastName);
             user.Add("MailAddress", dbUser.MailAddress);

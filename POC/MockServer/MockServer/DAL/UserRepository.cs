@@ -11,6 +11,30 @@ namespace TrailMe.DAL
     {
         #region Static Methods
 
+        public static void AddSkillToUser(Guid user_id, Guid skill_id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                User user = dbContext.Users.Find(user_id);
+                Skill skill = dbContext.Skills.Find(skill_id);
+
+                user.Skills.Add(skill);
+                var changesSaved = dbContext.SaveChanges();
+            }
+        }
+
+        public static void AddLanguageToUser(Guid user_id, Guid language_id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                User user = dbContext.Users.Find(user_id);
+                Language language = dbContext.Languages.Find(language_id);
+
+                user.Languages.Add(language);
+                var changesSaved = dbContext.SaveChanges();
+            }
+        }
+
         public static bool AddUser(string mailaddress, string last_name, string first_name, string city, DateTime birthdate)
         {
             // Create the database context

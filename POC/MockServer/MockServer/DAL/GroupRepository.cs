@@ -11,6 +11,20 @@ namespace TrailMe.DAL
     {
         #region Static Methods
 
+        public static bool AddUserToGroup(Guid group_id, Guid user_id)
+        {
+            // Create the database context
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                DAL.Model.Group group = dbContext.Groups.Find(group_id);
+                DAL.Model.User user = dbContext.Users.Find(user_id);
+                group.Users.Add(user);
+
+                var changesSaved = dbContext.SaveChanges();
+                return changesSaved >= 1;
+            }
+        }
+
         public static bool AddGroup(string group_name)
         {
             // Create the database context
