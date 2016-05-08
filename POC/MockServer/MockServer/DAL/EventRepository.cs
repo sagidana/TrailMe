@@ -11,29 +11,6 @@ namespace TrailMe.DAL
     {
         #region Static Methods
 
-        public static void AddGroupToEvent(Guid event_id, Guid group_id)
-        {
-            using (var dbContext = new TrailMeModelContainer())
-            {
-                DAL.Model.Group matchingGroup = dbContext.Groups.Where(group => group.Id == group_id).First();
-                dbContext.Events.Where(currEvent => currEvent.Id == event_id).First().Group = matchingGroup;
-
-                var changesSaved = dbContext.SaveChanges();
-            }
-        }
-
-        public static void SetTrackToEvent(Guid event_id, Guid track_id)
-        {
-            using (var dbContext = new TrailMeModelContainer())
-            {
-                DAL.Model.Track matchingTrack = dbContext.Tracks.Where(track => track.Id == track_id).First();
-                dbContext.Events.Where(currEvent => currEvent.Id == event_id).First().Track = matchingTrack;
-                dbContext.Events.Where(currEvent => currEvent.Id == event_id).First().TrackId = matchingTrack.Id;
-
-                var changesSaved = dbContext.SaveChanges();
-            }
-        }
-
         public static bool AddEvent(string event_name, DateTime timestamp, Guid track_id, Guid group_id)
         {
             // Create the database context

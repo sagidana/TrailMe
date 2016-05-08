@@ -7,6 +7,7 @@ using TrailMe.Apriori;
 using TrailMe.DAL;
 using TrailMe.GoogleCloudMessaging;
 using TrailMe.DAL.Model;
+using Microsoft.Owin;
 
 namespace TrailMe.WebServer
 {
@@ -24,6 +25,12 @@ namespace TrailMe.WebServer
         const string USERS_URL = "/users";
         const string GROUPS_URL = "/groups";
         const string TRACKS_URL = "/tracks";
+        const string EVENTS_URL = "/events";
+        const string SKILLS_URL = "/skills";
+        const string CATEGORIES_URL = "/categories";
+        const string LANGUAGES_URL = "/languages";
+
+        const string ACTIONS_URL = "/actions";
         const string RECOMMENDATIONS_URL = "/recommendations";
         const string REGISTER_URL = "/register";
 
@@ -80,6 +87,10 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = GET_METHOD, Handler = getAllUsers });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = GET_METHOD, Handler = getAllGroups });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = GET_METHOD, Handler = getAllTracks });
+            Startup.Resources.Add(new WebResource { Path = SKILLS_URL, Method = GET_METHOD, Handler = getAllSkills });
+            Startup.Resources.Add(new WebResource { Path = LANGUAGES_URL, Method = GET_METHOD, Handler = getAllLanguages });
+            Startup.Resources.Add(new WebResource { Path = CATEGORIES_URL, Method = GET_METHOD, Handler = getAllCategories });
+            Startup.Resources.Add(new WebResource { Path = EVENTS_URL, Method = GET_METHOD, Handler = getAllEvents });
 
             // posts.
             Startup.Resources.Add(new WebResource { Path = REGISTER_URL, Method = POST_METHOD, Handler = registerClient });
@@ -87,16 +98,25 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = POST_METHOD, Handler = getGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = POST_METHOD, Handler = getTrack });
             Startup.Resources.Add(new WebResource { Path = RECOMMENDATIONS_URL, Method = POST_METHOD, Handler = getRecommendations });
+            Startup.Resources.Add(new WebResource { Path = ACTIONS_URL, Method = POST_METHOD, Handler = addLinks });
 
             // puts.
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = PUT_METHOD, Handler = addUser });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = PUT_METHOD, Handler = addGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = PUT_METHOD, Handler = addTrack });
+            Startup.Resources.Add(new WebResource { Path = SKILLS_URL, Method = PUT_METHOD, Handler = addSkill });
+            Startup.Resources.Add(new WebResource { Path = LANGUAGES_URL, Method = PUT_METHOD, Handler = addLanguage });
+            Startup.Resources.Add(new WebResource { Path = CATEGORIES_URL, Method = PUT_METHOD, Handler = addCategory });
+            Startup.Resources.Add(new WebResource { Path = EVENTS_URL, Method = PUT_METHOD, Handler = addEvent });
 
             // deletes.
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = DELETE_METHOD, Handler = deleteUser });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = DELETE_METHOD, Handler = deleteGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = DELETE_METHOD, Handler = deleteTrack });
+            Startup.Resources.Add(new WebResource { Path = SKILLS_URL, Method = DELETE_METHOD, Handler = deleteSkill });
+            Startup.Resources.Add(new WebResource { Path = LANGUAGES_URL, Method = DELETE_METHOD, Handler = deleteLanguage });
+            Startup.Resources.Add(new WebResource { Path = CATEGORIES_URL, Method = DELETE_METHOD, Handler = deleteCategory });
+            Startup.Resources.Add(new WebResource { Path = EVENTS_URL, Method = DELETE_METHOD, Handler = deleteEvent });
         }
 
         private void createWebResponse(Microsoft.Owin.IOwinContext context, string dataType, string data)
@@ -113,6 +133,38 @@ namespace TrailMe.WebServer
         }
 
         #region Get
+
+        private void getAllEvents(Microsoft.Owin.IOwinContext context)
+        {
+            var dbEvents= EventRepository.GetEvents();
+            JArray events = convertDbEventsToJson(dbEvents);
+
+            createWebResponse(context, JSON_TYPE, events.ToString());
+        }
+
+        private void getAllSkills(Microsoft.Owin.IOwinContext context)
+        {
+            var dbSkills = SkillRepository.GetSkills();
+            JArray skills = convertDbSkillsToJson(dbSkills);
+
+            createWebResponse(context, JSON_TYPE, skills.ToString());
+        }
+
+        private void getAllCategories(Microsoft.Owin.IOwinContext context)
+        {
+            var dbCategories = CategoryRepository.GetCategories();
+            JArray categories = convertDbCategoriesToJson(dbCategories);
+
+            createWebResponse(context, JSON_TYPE, categories.ToString());
+        }
+
+        private void getAllLanguages(Microsoft.Owin.IOwinContext context)
+        {
+            var dbLanguages = LanguageRepository.GetLanguages();
+            JArray languages = convertDbLanguagesToJson(dbLanguages);
+
+            createWebResponse(context, JSON_TYPE, languages.ToString());
+        }
 
         private void getAllUsers(Microsoft.Owin.IOwinContext context)
         {
@@ -141,6 +193,44 @@ namespace TrailMe.WebServer
         #endregion
 
         #region Post
+
+        private void addLinks(IOwinContext context)
+        {
+            JObject jsonRequest = getJsonFromRequest(context);
+
+            string method = jsonRequest.GetValue("method").Value<string>();
+            Guid source = jsonRequest.GetValue("SourceId").Value<Guid>();
+            Guid destination = jsonRequest.GetValue("DestinationId").Value<Guid>();
+
+            switch (method)
+            {
+                case ("addUserToGroup"):
+                    {
+                        GroupRepository.AddUserToGroup(source, destination);
+                        break;
+                    }
+                case ("addUserToTrack"):
+                    {
+                        TrackRepository.AddUserToTrack(source, destination);
+                        break;
+                    }
+                case ("addSkillToUser"):
+                    {
+                        UserRepository.AddSkillToUser(source, destination);
+                        break;
+                    }
+                case ("addLanguageToUser"):
+                    {
+                        UserRepository.AddLanguageToUser(source, destination);
+                        break;
+                    }
+                case ("addCategoryToTrack"):
+                    {
+                        TrackRepository.AddCategoryToTrack(source, destination);
+                        break;
+                    }
+            }
+        }
 
         private void registerClient(Microsoft.Owin.IOwinContext context)
         {
@@ -191,9 +281,44 @@ namespace TrailMe.WebServer
             createWebResponse(context, JSON_TYPE, group.ToString());
         }
 
-        #endregion 
+        #endregion
 
         #region Put
+
+        private void addEvent(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbEvent = convertJsonToDbEvent(request);
+
+            EventRepository.AddEvent(   dbEvent.Name,
+                                        DateTime.Now,
+                                        dbEvent.Track.Id,
+                                        dbEvent.Group.Id);
+        }
+
+        private void addCategory(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbCategory = convertJsonToDbCategory(request);
+
+            CategoryRepository.AddCategory(dbCategory.Name);
+        }
+
+        private void addLanguage(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbLanguage = convertJsonToDbLanguage(request);
+
+            LanguageRepository.AddLanguage(dbLanguage.Name);
+        }
+
+        private void addSkill(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            var dbSkill = convertJsonToDbSkill(request);
+
+            SkillRepository.AddSkill(dbSkill.Name);
+        }
 
         private void addUser(Microsoft.Owin.IOwinContext context)
         {
@@ -231,6 +356,38 @@ namespace TrailMe.WebServer
         #endregion
 
         #region Delete
+
+        private void deleteEvent(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid eventId = Guid.Parse(request["id"].ToString());
+
+            EventRepository.DeleteEvent(eventId);
+        }
+
+        private void deleteCategory(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid categoryId = Guid.Parse(request["id"].ToString());
+
+            CategoryRepository.DeleteCategory(categoryId);
+        }
+
+        private void deleteLanguage(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid LanguageId = Guid.Parse(request["id"].ToString());
+
+            LanguageRepository.DeleteLanguage(LanguageId);
+        }
+
+        private void deleteSkill(IOwinContext context)
+        {
+            JObject request = getJsonFromRequest(context);
+            Guid skillId = Guid.Parse(request["id"].ToString());
+
+            SkillRepository.Deleteskill(skillId);
+        }
 
         private void deleteUser(Microsoft.Owin.IOwinContext context)
         {
@@ -394,9 +551,131 @@ namespace TrailMe.WebServer
             return arrayGroups;
         }
 
+        private JArray convertDbSkillsToJson(IEnumerable<Skill> dbSkills)
+        {
+            JArray arraySkills = new JArray();
+
+            foreach (var dbSkill in dbSkills)
+            {
+                JObject skill = new JObject();
+
+                skill.Add("Id", dbSkill.Id);
+                skill.Add("Name", dbSkill.Name);
+
+                arraySkills.Add(skill);
+            }
+
+            return arraySkills;
+        }
+
+        private JArray convertDbCategoriesToJson(IEnumerable<Category> dbCategories)
+        {
+            JArray arrayCategories = new JArray();
+
+            foreach (var dbCategory in dbCategories)
+            {
+                JObject category = new JObject();
+
+                category.Add("Id", dbCategory.Id);
+                category.Add("Name", dbCategory.Name);
+
+                arrayCategories.Add(category);
+            }
+
+            return arrayCategories;
+        }
+
+        private JArray convertDbLanguagesToJson(IEnumerable<Language> dbLanguages)
+        {
+            JArray arrayLanguages = new JArray();
+
+            foreach (var dbLanguage in dbLanguages)
+            {
+                JObject language = new JObject();
+
+                language.Add("Id", dbLanguage.Id);
+                language.Add("Name", dbLanguage.Name);
+
+                arrayLanguages.Add(language);
+            }
+
+            return arrayLanguages;
+        }
+
+        private JArray convertDbEventsToJson(IEnumerable<Event> dbEvents)
+        {
+            JArray arrayEvents= new JArray();
+
+            foreach (var dbEvent in dbEvents)
+            {
+                JObject jEvent = new JObject();
+
+                jEvent.Add("Id", dbEvent.Id);
+                jEvent.Add("Name", dbEvent.Name);
+                jEvent.Add("GroupId", dbEvent.Group.Id);
+                jEvent.Add("TrackId", dbEvent.Track.Id);
+
+                arrayEvents.Add(jEvent);
+            }
+
+            return arrayEvents;
+        }
+
         #endregion
 
         #region To DB
+
+        private DAL.Model.Language convertJsonToDbLanguage(JObject jLanguage)
+        {
+            string name = jLanguage.GetValue("Name").Value<string>();
+
+            var dbLanguage = new DAL.Model.Language
+            {
+                Name = name,
+            };
+
+            return dbLanguage;
+        }
+
+        private DAL.Model.Skill convertJsonToDbSkill(JObject jSkill)
+        {
+            string name = jSkill.GetValue("Name").Value<string>();
+
+            var dbSkill= new DAL.Model.Skill
+            {
+                Name = name,
+            };
+
+            return dbSkill;
+        }
+
+        private DAL.Model.Category convertJsonToDbCategory(JObject jCategory)
+        {
+            string name = jCategory.GetValue("Name").Value<string>();
+
+            var dbCategory = new DAL.Model.Category
+            {
+                Name = name,
+            };
+
+            return dbCategory;
+        }
+
+        private DAL.Model.Event convertJsonToDbEvent(JObject jEvent)
+        {
+            string eventName = jEvent.GetValue("Name").Value<string>();
+            Guid trackId= jEvent.GetValue("TrackId").Value<Guid>();
+            Guid groupId = jEvent.GetValue("GroupId").Value<Guid>();
+
+            var dbEvent = new DAL.Model.Event
+            {
+                Name = eventName,
+                Track = TrackRepository.GetTrackById(trackId),
+                Group = GroupRepository.GetGroupById(groupId)
+            };
+
+            return dbEvent;
+        }
 
         private DAL.Model.User convertJsonToDbUser(JObject user)
         {

@@ -89,8 +89,10 @@
     <Compile Include="Common\Rule.cs" />
     <Compile Include="Common\Track.cs" />
     <Compile Include="Common\Transaction.cs" />
+    <Compile Include="DAL\CategoryRepository.cs" />
     <Compile Include="DAL\EventRepository.cs" />
     <Compile Include="DAL\GroupRepository.cs" />
+    <Compile Include="DAL\LanguageRepository.cs" />
     <Compile Include="DAL\Model\Category.cs">
       <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
@@ -127,6 +129,7 @@
     <Compile Include="DAL\Model\User.cs">
       <DependentUpon>TrailMeModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="DAL\SkillRepository.cs" />
     <Compile Include="DAL\TrackRepository.cs" />
     <Compile Include="DAL\UserRepository.cs" />
     <Compile Include="GoogleCloudMessaging\GcmManager.cs" />
