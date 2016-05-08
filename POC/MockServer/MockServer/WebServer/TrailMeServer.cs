@@ -29,8 +29,7 @@ namespace TrailMe.WebServer
         const string SKILLS_URL = "/skills";
         const string CATEGORIES_URL = "/categories";
         const string LANGUAGES_URL = "/languages";
-
-        const string ACTIONS_URL = "/actions";
+        const string LINK_URL = "/link";
         const string RECOMMENDATIONS_URL = "/recommendations";
         const string REGISTER_URL = "/register";
 
@@ -98,7 +97,7 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = POST_METHOD, Handler = getGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = POST_METHOD, Handler = getTrack });
             Startup.Resources.Add(new WebResource { Path = RECOMMENDATIONS_URL, Method = POST_METHOD, Handler = getRecommendations });
-            Startup.Resources.Add(new WebResource { Path = ACTIONS_URL, Method = POST_METHOD, Handler = addLinks });
+            Startup.Resources.Add(new WebResource { Path = LINK_URL, Method = POST_METHOD, Handler = addLinks });
 
             // puts.
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = PUT_METHOD, Handler = addUser });
@@ -198,7 +197,7 @@ namespace TrailMe.WebServer
         {
             JObject jsonRequest = getJsonFromRequest(context);
 
-            string method = jsonRequest.GetValue("method").Value<string>();
+            string method = jsonRequest.GetValue("Method").Value<string>();
             Guid source = jsonRequest.GetValue("SourceId").Value<Guid>();
             Guid destination = jsonRequest.GetValue("DestinationId").Value<Guid>();
 
