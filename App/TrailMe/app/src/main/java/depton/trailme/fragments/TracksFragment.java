@@ -6,14 +6,23 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import depton.net.trailme.R;
+import depton.trailme.activities.MapActivity;
 import depton.trailme.adapters.MyTrackRecyclerViewAdapter;
+import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.RESTCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
+import depton.trailme.models.Track;
 
 /**
  * A fragment representing a list of Items.
@@ -21,13 +30,14 @@ import depton.trailme.fragments.dummy.DummyContent.DummyItem;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class TracksFragment extends Fragment {
+public class TracksFragment extends Fragment implements AsyncResponse{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private RESTCaller restCaller = new RESTCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,6 +63,8 @@ public class TracksFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
+        restCaller.delegate = this;
     }
 
     @Override
@@ -69,7 +81,9 @@ public class TracksFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyTrackRecyclerViewAdapter(DummyContent.TRACK_ITEMS, mListener));
+
+            restCaller.execute("http://trailmedev.cloudapp.net:9100/tracks");
+            //recyclerView.setAdapter(new MyTrackRecyclerViewAdapter(new ArrayList<Track>(), mListener));
         }
         return view;
     }
@@ -92,6 +106,16 @@ public class TracksFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void processFinish(String output) {
+        try{
+            output.toString();
+        }
+        catch (Exception e){
+            Log.d("Sd", "processFinish: " + e.toString());
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -104,6 +128,6 @@ public class TracksFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyContent.DummyTrack item);
+        void onListFragmentInteraction(Track item);
     }
 }
