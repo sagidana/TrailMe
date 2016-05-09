@@ -6,76 +6,68 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
+using System.IO;
+using TrailMe.WebServer;
+using TrailMe.Apriori;
+using TrailMe.Common;
+using TrailMe.DAL;
 
-namespace MockServer
+namespace TrailMe
 {
+    public delegate void requestHandler(Microsoft.Owin.IOwinContext context);
+
     public class Program
     {
-        static public List<string> registeredClients = new List<string>();
-        static string GCM_URL = "https://gcm-http.googleapis.com/gcm/send";
-
         static void Main(string[] args)
         {
-            string serviceUrl = "http://+:9900/";
+            TrailMeServer server = new TrailMeServer();
 
-            using (WebApp.Start<Startup>(serviceUrl))
-            {
-                notificationLoop();
-            }
+            server.Start();
+            
+            Console.WriteLine("Server is running!");
+            Console.WriteLine("Press Enter to stop the server");
+            Console.ReadLine();
+
+            server.Stop();
+        }
+
+        #region Examples
+        
+        private static void DALExample()
+        {
+            var events = EventRepository.GetEvents();
+            var tracks = TrackRepository.GetTracks();
+            var users = UserRepository.GetUsers();
+            var groups = GroupRepository.GetGroups();
+        }
+
+        private static void aprioriExample()
+        {
+            AprioriAlgorithm apriori = new AprioriAlgorithm();
+
+            List<Track> tracks = new List<Track> {  new Track() { TrackId = Guid.NewGuid() },
+                                                    new Track() { TrackId = Guid.NewGuid() },
+                                                    new Track() { TrackId = Guid.NewGuid() },
+                                                    new Track() { TrackId = Guid.NewGuid() },
+                                                    new Track() { TrackId = Guid.NewGuid() },
+                                                    new Track() { TrackId = Guid.NewGuid() }};
+
+            for (int i = 0; i < tracks.Count; i++)
+                Console.WriteLine("Track {0} - {1}", i + 1, tracks[i].TrackId);
+
+            List<Transaction> transactions = new List<Transaction>() {  new Transaction() { Items = new List<Track>() { tracks[0], tracks[2] } },
+                                                                        new Transaction() { Items = new List<Track>() { tracks[0], tracks[2] } },
+                                                                        new Transaction() { Items = new List<Track>() { tracks[0], tracks[3] } },
+                                                                        new Transaction() { Items = new List<Track>() { tracks[0], tracks[4] } },
+                                                                        new Transaction() { Items = new List<Track>() { tracks[0], tracks[5] } }};
+
+
+            var result = apriori.ProcessTransaction(0.3, 0.6, tracks, transactions);
+
+            foreach (var rule in result.StrongRules)
+                Console.WriteLine("{0} => {1} , confidence - {2}", rule.From[0].TrackId, rule.To[0].TrackId, rule.Confidence);
         }
         
-        static private void notificationLoop()
-        {
-            while (true)
-            {
-                if (registeredClients.Count > 0)
-                {
-                    lock (registeredClients)
-                    {
-                        foreach (string to in registeredClients)
-                        {
-                            PushNotifications(to, "Simple message!");
-                        }
-                    }
-                }
-
-                Thread.Sleep(1000);
-            }
-        }
-
-        static public void RegisterClient(string id)
-        {
-            lock(registeredClients)
-            {
-                registeredClients.Add(id);
-
-                Console.WriteLine("New client registered - {0}", id);
-            }
-        }
-
-        static public void PushNotifications(string to, string message)
-        {
-            try
-            {
-                WebRequest request = WebRequest.Create(GCM_URL);
-
-                string data = "{\"data\": {\"message\":\"" + message + "\"}, \"to\":\"" + to + "\"}";
-
-                request.Method = "POST";
-                request.ContentType = "application/json";
-                request.Headers.Add(String.Format("Authorization: key={0}", "AIzaSyCvU8Qs3VbnuwsQZh4LAYaOfogF9pALae0")); // API Key
-                
-                request.GetRequestStream().Write(Encoding.UTF8.GetBytes(data), 0, Encoding.UTF8.GetBytes(data).Length);
-
-                using (WebResponse response = request.GetResponse())
-                {
-
-                }
-
-                Console.WriteLine("Sending notification to - {0}", to);
-            }
-            catch
-            { }
-        }
+        #endregion
     }
 }

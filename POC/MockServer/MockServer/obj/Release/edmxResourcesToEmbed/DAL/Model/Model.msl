@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="TrailMeDBModelStoreContainer" CdmEntityContainer="TrailMeDBEntities">
+    <EntitySetMapping Name="Categories">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Category)">
+        <MappingFragment StoreEntitySet="Categories">
+          <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Events">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Event)">
+        <MappingFragment StoreEntitySet="Events">
+          <ScalarProperty Name="EventID" ColumnName="EventID" />
+          <ScalarProperty Name="TrackID" ColumnName="TrackID" />
+          <ScalarProperty Name="EventName" ColumnName="EventName" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="Event_Enable" ColumnName="Event_Enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Groups">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Group)">
+        <MappingFragment StoreEntitySet="Groups">
+          <ScalarProperty Name="Groupid" ColumnName="Groupid" />
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="Group_enable" ColumnName="Group_enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Languages">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Language)">
+        <MappingFragment StoreEntitySet="Languages">
+          <ScalarProperty Name="LanguageID" ColumnName="LanguageID" />
+          <ScalarProperty Name="LanguageName" ColumnName="LanguageName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Logs_Using">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Logs_Using)">
+        <MappingFragment StoreEntitySet="Logs_Using">
+          <ScalarProperty Name="LogID" ColumnName="LogID" />
+          <ScalarProperty Name="LogStatus" ColumnName="LogStatus" />
+          <ScalarProperty Name="LogType" ColumnName="LogType" />
+          <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+          <ScalarProperty Name="By" ColumnName="By" />
+          <ScalarProperty Name="What" ColumnName="What" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Skill)">
+        <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="SkillID" ColumnName="SkillID" />
+          <ScalarProperty Name="SkillName" ColumnName="SkillName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.sysdiagram)">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tracks">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.Track)">
+        <MappingFragment StoreEntitySet="Tracks">
+          <ScalarProperty Name="TrackID" ColumnName="TrackID" />
+          <ScalarProperty Name="TrackName" ColumnName="TrackName" />
+          <ScalarProperty Name="LocationZone" ColumnName="LocationZone" />
+          <ScalarProperty Name="DistanceKM" ColumnName="DistanceKM" />
+          <ScalarProperty Name="LevelOfDifficulty" ColumnName="LevelOfDifficulty" />
+          <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+          <ScalarProperty Name="Track_enable" ColumnName="Track_enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(TrailMeDBModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="MailAddress" ColumnName="MailAddress" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+          <ScalarProperty Name="user_enable" ColumnName="user_enable" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="UserTrack" TypeName="TrailMeDBModel.UserTrack" StoreEntitySet="Tracks">
+      <EndProperty Name="User">
+        <ScalarProperty Name="UserID" ColumnName="Users_UserID" />
+      </EndProperty>
+      <EndProperty Name="Track">
+        <ScalarProperty Name="TrackID" ColumnName="TrackID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="EventGroup" TypeName="TrailMeDBModel.EventGroup" StoreEntitySet="Events">
+      <EndProperty Name="Group">
+        <ScalarProperty Name="Groupid" ColumnName="Group_Groupid" />
+      </EndProperty>
+      <EndProperty Name="Event">
+        <ScalarProperty Name="EventID" ColumnName="EventID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="LanguageUser" TypeName="TrailMeDBModel.LanguageUser" StoreEntitySet="LanguageUser">
+      <EndProperty Name="Language">
+        <ScalarProperty Name="LanguageID" ColumnName="Languages_LanguageID" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="UserID" ColumnName="Users_UserID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="CategoryTrack" TypeName="TrailMeDBModel.CategoryTrack" StoreEntitySet="CategoryTrack">
+      <EndProperty Name="Category">
+        <ScalarProperty Name="CategoryID" ColumnName="Categories_CategoryID" />
+      </EndProperty>
+      <EndProperty Name="Track">
+        <ScalarProperty Name="TrackID" ColumnName="Tracks_TrackID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="SkillUser" TypeName="TrailMeDBModel.SkillUser" StoreEntitySet="SkillUser">
+      <EndProperty Name="Skill">
+        <ScalarProperty Name="SkillID" ColumnName="Skills_SkillID" />
+      </EndProperty>
+      <EndProperty Name="User">
+        <ScalarProperty Name="UserID" ColumnName="Users_UserID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="UserGroup" TypeName="TrailMeDBModel.UserGroup" StoreEntitySet="UserGroup">
+      <EndProperty Name="User">
+        <ScalarProperty Name="UserID" ColumnName="Users_UserID" />
+      </EndProperty>
+      <EndProperty Name="Group">
+        <ScalarProperty Name="Groupid" ColumnName="Groups_Groupid" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

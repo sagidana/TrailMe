@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e7e409fddda74aab9b9aa9d7a1b3b040" Name="Diagram1" >
+        <EntityTypeShape EntityType="TrailMeModel.User" Width="1.5" PointX="5.125" PointY="3.375" />
+        <EntityTypeShape EntityType="TrailMeModel.Group" Width="1.5" PointX="9.125" PointY="4.375" />
+        <EntityTypeShape EntityType="TrailMeModel.Event" Width="1.5" PointX="9.375" PointY="1.875" />
+        <EntityTypeShape EntityType="TrailMeModel.Language" Width="1.5" PointX="1.625" PointY="2" />
+        <EntityTypeShape EntityType="TrailMeModel.Category" Width="1.5" PointX="4.125" PointY="0.75" />
+        <EntityTypeShape EntityType="TrailMeModel.Skill" Width="1.5" PointX="2.25" PointY="4.375" />
+        <AssociationConnector Association="TrailMeModel.EventGroup" />
+        <AssociationConnector Association="TrailMeModel.UserLanguage" />
+        <AssociationConnector Association="TrailMeModel.UserSkill" />
+        <AssociationConnector Association="TrailMeModel.UserGroup" />
+        <EntityTypeShape EntityType="TrailMeModel.Track" Width="1.5" PointX="7.375" PointY="1.125" />
+        <AssociationConnector Association="TrailMeModel.TrackUser" />
+        <AssociationConnector Association="TrailMeModel.TrackCategory" />
+        <AssociationConnector Association="TrailMeModel.TrackEvent" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

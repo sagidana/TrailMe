@@ -22,3 +22,27 @@ C:\CSharp Projects\MockServer\MockServer\bin\Debug\System.Net.Http.Primitives.xm
 C:\CSharp Projects\MockServer\MockServer\obj\Debug\MockServer.csproj.App.config
 C:\CSharp Projects\MockServer\MockServer\bin\Debug\Newtonsoft.Json.dll
 C:\CSharp Projects\MockServer\MockServer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\MockServer.exe.config
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\MockServer.exe
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\MockServer.pdb
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\MockServer.csproj.App.config
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\obj\Debug\MockServer.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\MockServer.exe
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\MockServer.pdb
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Host.HttpListener.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Hosting.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Security.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Owin.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\System.Net.Http.Extensions.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\System.Net.Http.Primitives.dll
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Host.HttpListener.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Hosting.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Microsoft.Owin.Security.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\System.Net.Http.Extensions.xml
+C:\Users\Administrator\TrailMe\TrailMe\POC\MockServer\MockServer\bin\Debug\System.Net.Http.Primitives.xml

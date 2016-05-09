@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="TrailMeModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+  <EntityContainer Name="TrailMeModelContainer" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Users" EntityType="TrailMeModel.User" />
+    <EntitySet Name="Groups" EntityType="TrailMeModel.Group" />
+    <EntitySet Name="Events" EntityType="TrailMeModel.Event" />
+    <EntitySet Name="Languages" EntityType="TrailMeModel.Language" />
+    <EntitySet Name="Categories" EntityType="TrailMeModel.Category" />
+    <EntitySet Name="Skills" EntityType="TrailMeModel.Skill" />
+    <AssociationSet Name="EventGroup" Association="TrailMeModel.EventGroup">
+      <End Role="Event" EntitySet="Events" />
+      <End Role="Group" EntitySet="Groups" />
+    </AssociationSet>
+    <AssociationSet Name="UserLanguage" Association="TrailMeModel.UserLanguage">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Language" EntitySet="Languages" />
+    </AssociationSet>
+    <AssociationSet Name="UserSkill" Association="TrailMeModel.UserSkill">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Skill" EntitySet="Skills" />
+    </AssociationSet>
+    <AssociationSet Name="UserGroup" Association="TrailMeModel.UserGroup">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Group" EntitySet="Groups" />
+    </AssociationSet>
+    <EntitySet Name="Tracks" EntityType="TrailMeModel.Track" />
+    <AssociationSet Name="TrackUser" Association="TrailMeModel.TrackUser">
+      <End Role="Track" EntitySet="Tracks" />
+      <End Role="User" EntitySet="Users" />
+    </AssociationSet>
+    <AssociationSet Name="TrackCategory" Association="TrailMeModel.TrackCategory">
+      <End Role="Track" EntitySet="Tracks" />
+      <End Role="Category" EntitySet="Categories" />
+    </AssociationSet>
+    <AssociationSet Name="TrackEvent" Association="TrailMeModel.TrackEvent">
+      <End Role="Track" EntitySet="Tracks" />
+      <End Role="Event" EntitySet="Events" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="FirstName" Type="String" Nullable="false" />
+    <Property Name="LastName" Type="String" Nullable="false" />
+    <Property Name="City" Type="String" Nullable="false" />
+    <Property Name="MailAddress" Type="String" Nullable="false" />
+    <Property Name="Birthdate" Type="DateTime" Nullable="false" />
+    <NavigationProperty Name="Languages" Relationship="TrailMeModel.UserLanguage" FromRole="User" ToRole="Language" />
+    <NavigationProperty Name="Skills" Relationship="TrailMeModel.UserSkill" FromRole="User" ToRole="Skill" />
+    <NavigationProperty Name="Groups" Relationship="TrailMeModel.UserGroup" FromRole="User" ToRole="Group" />
+    <NavigationProperty Name="Tracks" Relationship="TrailMeModel.TrackUser" FromRole="User" ToRole="Track" />
+  </EntityType>
+  <EntityType Name="Group">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="EventId" Type="Guid" Nullable="false" />
+    <NavigationProperty Name="Events" Relationship="TrailMeModel.EventGroup" FromRole="Group" ToRole="Event" />
+    <NavigationProperty Name="Users" Relationship="TrailMeModel.UserGroup" FromRole="Group" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Event">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Group" Relationship="TrailMeModel.EventGroup" FromRole="Event" ToRole="Group" />
+    <NavigationProperty Name="Track" Relationship="TrailMeModel.TrackEvent" FromRole="Event" ToRole="Track" />
+    <Property Name="TrackId" Type="Guid" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Language">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="TrailMeModel.UserLanguage" FromRole="Language" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Tracks" Relationship="TrailMeModel.TrackCategory" FromRole="Category" ToRole="Track" />
+  </EntityType>
+  <EntityType Name="Skill">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="TrailMeModel.UserSkill" FromRole="Skill" ToRole="User" />
+  </EntityType>
+  <Association Name="EventGroup">
+    <End Type="TrailMeModel.Event" Role="Event" Multiplicity="*" />
+    <End Type="TrailMeModel.Group" Role="Group" Multiplicity="1" />
+  </Association>
+  <Association Name="UserLanguage">
+    <End Type="TrailMeModel.User" Role="User" Multiplicity="*" />
+    <End Type="TrailMeModel.Language" Role="Language" Multiplicity="*" />
+  </Association>
+  <Association Name="UserSkill">
+    <End Type="TrailMeModel.User" Role="User" Multiplicity="*" />
+    <End Type="TrailMeModel.Skill" Role="Skill" Multiplicity="*" />
+  </Association>
+  <Association Name="UserGroup">
+    <End Type="TrailMeModel.User" Role="User" Multiplicity="*" />
+    <End Type="TrailMeModel.Group" Role="Group" Multiplicity="*" />
+  </Association>
+  <EntityType Name="Track">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
+    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Zone" Type="String" Nullable="false" />
+    <Property Name="Kilometers" Type="Int32" Nullable="false" />
+    <Property Name="Difficulty" Type="String" Nullable="false" />
+    <Property Name="Latitude" Type="Double" Nullable="false" />
+    <Property Name="Longitude" Type="Double" Nullable="false" />
+    <NavigationProperty Name="Users" Relationship="TrailMeModel.TrackUser" FromRole="Track" ToRole="User" />
+    <NavigationProperty Name="Categories" Relationship="TrailMeModel.TrackCategory" FromRole="Track" ToRole="Category" />
+    <NavigationProperty Name="Events" Relationship="TrailMeModel.TrackEvent" FromRole="Track" ToRole="Event" />
+  </EntityType>
+  <Association Name="TrackUser">
+    <End Type="TrailMeModel.Track" Role="Track" Multiplicity="*" />
+    <End Type="TrailMeModel.User" Role="User" Multiplicity="*" />
+  </Association>
+  <Association Name="TrackCategory">
+    <End Type="TrailMeModel.Track" Role="Track" Multiplicity="*" />
+    <End Type="TrailMeModel.Category" Role="Category" Multiplicity="*" />
+  </Association>
+  <Association Name="TrackEvent">
+    <End Type="TrailMeModel.Track" Role="Track" Multiplicity="1" />
+    <End Type="TrailMeModel.Event" Role="Event" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Track">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Event">
+        <PropertyRef Name="TrackId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
