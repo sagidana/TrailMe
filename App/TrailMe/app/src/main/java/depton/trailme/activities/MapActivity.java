@@ -32,10 +32,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
+import depton.trailme.data.RESTCaller;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.dummy.DummyContent;
+import depton.trailme.models.Track;
 
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -48,6 +50,7 @@ public class MapActivity extends AppCompatActivity
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+    public RESTCaller restCaller = new RESTCaller();
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -125,7 +128,7 @@ public class MapActivity extends AppCompatActivity
     {
 
     }
-    public void onListFragmentInteraction(DummyContent.DummyTrack item)
+    public void onListFragmentInteraction(Track item)
     {
 
     }

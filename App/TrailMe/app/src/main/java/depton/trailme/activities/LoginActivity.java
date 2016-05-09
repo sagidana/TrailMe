@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,18 +31,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import depton.net.trailme.R;
 import depton.trailme.authenticator.AuthenticationManager;
+import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.RESTCaller;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements AsyncResponse,LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -58,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private RESTCaller  restCaller = new RESTCaller();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
+
+        restCaller.delegate=this;
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -89,6 +97,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
+
+        try{
+            JSONObject jsonObject = new JSONObject("{Tracks=[{Id=23e47bbd-a47f-4005-b603-00d67bbe842a, Name=River Hamud, Latitude=32.874865, Longitude=35.515653, Zone=Kineret, Difficulty=Medium, DistanceKM=4, Events=[{Id=d88a9255-be10-4b17-a12e-cc79491776b9, Name=My Family, StartDate=2016-04-01T00:00:00, EndDate=2016-04-02T00:00:00}, {Id=0b62264d-cfd0-4373-b3a7-e35274f42770, Name=Passover 2016, StartDate=2016-02-05T00:00:00, EndDate=2016-05-05T00:00:00}]}, {Id=e8eecbea-5a47-45f9-b6da-b6e220dfaa0d, Name=River Shofet, Latitude=32.633706, Longitude=35.103318, Zone=Yokneam, Difficulty=Easy, DistanceKM=2, Events=[]}]}");
+        }
+        catch(Exception e){}
+
+        try{
+            JSONObject jsonObject = new JSONObject("{Tracks:[{Id:23e47bbd-a47f-4005-b603-00d67bbe842a, Name:River Hamud, Latitude:32.874865, Longitude:35.515653, Zone:Kineret, Difficulty:Medium, DistanceKM:4, Events:[{Id:d88a9255-be10-4b17-a12e-cc79491776b9, Name:My Family, StartDate:2016-04-01T00:00:00, EndDate:2016-04-02T00:00:00}, {Id:0b62264d-cfd0-4373-b3a7-e35274f42770, Name:Passover 2016, StartDate:2016-02-05T00:00:00, EndDate:2016-05-05T00:00:00}]}, {Id:e8eecbea-5a47-45f9-b6da-b6e220dfaa0d, Name:River Shofet, Latitude:32.633706, Longitude:35.103318, Zone:Yokneam, Difficulty:Easy, DistanceKM:2, Events:[]}]}");
+        }
+        catch(Exception e){}
+
+        try{
+            JSONObject jsonObject = new JSONObject("{\"ip\": \"109.64.76.125\"}");
+        }
+        catch(Exception e){}
+        try{
+            JSONObject jsonObject = new JSONObject("{\"Tracks=[{\"Id\"=\"23e47bbd-a47f-4005-b603-00d67bbe842a\", \"Name=River Hamud\", \"Latitude\"=\"32.874865\", \"Longitude\"=\"35.515653\", \"Zone\"=\"Kineret\", \"Difficulty\"=\"Medium\", \"DistanceKM\"=\"4\", \"Events\"=[{\"Id\"=\"d88a9255-be10-4b17-a12e-cc79491776b9\", \"Name\"=\"My Family\", \"StartDate\"=\"2016-04-01T00:00:00\", \"EndDate=2016-04-02T00:00:00\"}, {\"Id\"=\"0b62264d-cfd0-4373-b3a7-e35274f42770\", \"Name\"=\"Passover 2016\", \"StartDate\"=\"2016-02-05T00:00:00\", \"EndDate\"=\"2016-05-05T00:00:00\"}]}, {\"Id\"=\"e8eecbea-5a47-45f9-b6da-b6e220dfaa0d\", \"Name\"=\"River Shofet\", \"Latitude\"=\"32.633706\", \"Longitude\"=\"35.103318\", \"Zone\"=\"Yokneam\", \"Difficulty\"=\"Easy\", \"DistanceKM\"=\"2\", \"Events\"=[]}]}");
+        }
+        catch(Exception e){}
+        try{
+            JSONObject jsonObject = new JSONObject("{\"Tracks:[{\"Id\":\"23e47bbd-a47f-4005-b603-00d67bbe842a\", \"Name:River Hamud\", \"Latitude\":\"32.874865\", \"Longitude\":\"35.515653\", \"Zone\":\"Kineret\", \"Difficulty\":\"Medium\", \"DistanceKM\":\"4\", \"Events\":[{\"Id\":\"d88a9255-be10-4b17-a12e-cc79491776b9\", \"Name\":\"My Family\", \"StartDate\":\"2016-04-01T00:00:00\", \"EndDate:2016-04-02T00:00:00\"}, {\"Id\":\"0b62264d-cfd0-4373-b3a7-e35274f42770\", \"Name\":\"Passover 2016\", \"StartDate\":\"2016-02-05T00:00:00\", \"EndDate\":\"2016-05-05T00:00:00\"}]}, {\"Id\":\"e8eecbea-5a47-45f9-b6da-b6e220dfaa0d\", \"Name\":\"River Shofet\", \"Latitude\":\"32.633706\", \"Longitude\":\"35.103318\", \"Zone\":\"Yokneam\", \"Difficulty\":\"Easy\", \"DistanceKM\":\"2\", \"Events\":[]}]}");
+        }
+        catch(Exception e){}
+
     }
 
     private void populateAutoComplete() {
@@ -97,6 +131,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+
+    public void processFinish(String output){
+        Log.d("Called from Activity",output);
     }
 
     private boolean mayRequestContacts() {

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import depton.net.trailme.R;
 import depton.trailme.fragments.TracksFragment.OnListFragmentInteractionListener;
 import depton.trailme.fragments.dummy.DummyContent.DummyTrack;
+import depton.trailme.models.Track;
 
 import java.util.List;
 
@@ -24,10 +25,10 @@ import java.util.List;
  */
 public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyTrack> mValues;
+    private final List<Track> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyTrackRecyclerViewAdapter(List<DummyTrack> items, OnListFragmentInteractionListener listener) {
+    public MyTrackRecyclerViewAdapter(List<Track> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -42,8 +43,8 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).name);
-        holder.mRatingBar.setRating(mValues.get(position).rating);
+        holder.mIdView.setText(mValues.get(position).Name);
+        holder.mRatingBar.setRating(mValues.get(position).Rating);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +68,7 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
         public final TextView mIdView;
         public final TextView mContentView;
         public final RatingBar mRatingBar;
-        public DummyTrack mItem;
+        public Track mItem;
 
         public ViewHolder(View view) {
             super(view);
