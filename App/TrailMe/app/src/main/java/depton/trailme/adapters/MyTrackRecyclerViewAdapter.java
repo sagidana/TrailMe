@@ -16,6 +16,7 @@ import depton.trailme.fragments.TracksFragment.OnListFragmentInteractionListener
 import depton.trailme.fragments.dummy.DummyContent.DummyTrack;
 import depton.trailme.models.Track;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
