@@ -73,7 +73,7 @@ namespace TrailMe.Apriori
 
         public List<Track> GetRecommendations(Guid userId)
         {
-            if (Results != null || Results.StrongRules == null)
+            if (Results == null || Results.StrongRules == null)
                 RunApriori(); //TODO : ok for development, but not for production.
 
             if (Results.StrongRules.Count == 0)
@@ -89,16 +89,32 @@ namespace TrailMe.Apriori
 
         #region Private Methods
 
+        private bool isTrackInTracks(Track track, List<Track> tracks)
+        {
+            return tracks.Where(currTrack => currTrack.TrackId == track.TrackId).Any();
+        }
+
+        private int getTracksDifference(List<Track> source, List<Track> destination)
+        {
+            int difference = 0;
+
+            foreach (var destinationTrack in destination)
+                if (!isTrackInTracks(destinationTrack, source))
+                    difference++;
+
+            return difference;
+        }
+
         private int findMinimumDifferenceInRules(List<Track> tracks)
         {
             int minimumDifference = tracks.Count;
 
             foreach (Rule rule in Results.StrongRules)
             {
-                var difference = rule.From.Except(tracks);
+                var difference = getTracksDifference(rule.From, tracks);
 
-                if (difference.Count() < minimumDifference)
-                    minimumDifference = difference.Count();
+                if (difference < minimumDifference)
+                    minimumDifference = difference;
             }
 
             return minimumDifference;
@@ -111,7 +127,7 @@ namespace TrailMe.Apriori
             List<Track> recommendedTracks = new List<Track>();
 
             foreach (Rule rule in Results.StrongRules)
-                if (rule.From.Except(tracks).Count() == minimumDifference)
+                if (getTracksDifference(rule.From, tracks) == minimumDifference)
                     recommendedTracks.AddRange(rule.To);
 
             return recommendedTracks;

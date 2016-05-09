@@ -243,7 +243,7 @@ namespace TrailMe.WebServer
         {
             JObject request = getJsonFromRequest(context);
 
-            Guid userId = request.GetValue("UserId").Value<Guid>();
+            Guid userId = Guid.Parse(request.GetValue("UserId").Value<string>());
 
             var recommendedTracks = m_AprioriManager.GetRecommendations(userId);
             JArray jRecommendedTracks = convertTracksToJson(recommendedTracks);
