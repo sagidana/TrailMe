@@ -20,11 +20,16 @@ namespace TrailMe.DAL
             }
         }
 
-        public static void Deleteskill(Guid skill_id)
+        public static void DeleteSkill(Guid skill_id)
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.Skills.Remove(dbContext.Skills.Find(skill_id));
+                var skill = dbContext.Skills.Find(skill_id);
+
+                foreach (var user in skill.Users)
+                    user.Skills.Remove(skill);
+
+                dbContext.Skills.Remove(skill);
                 dbContext.SaveChanges();
             }
         }

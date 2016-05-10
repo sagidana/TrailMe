@@ -42,7 +42,11 @@ namespace TrailMe.DAL
 
             using (var dbContext = new TrailMeModelContainer())
             {
-                var matchingEvent = dbContext.Events.Where(Event => Event.Id == event_id).First();
+                var matchingEvent = dbContext.Events.Find(event_id);
+                
+                matchingEvent.Track.Events.Remove(matchingEvent);
+                matchingEvent.Group.Events.Remove(matchingEvent);
+
                 dbContext.Events.Remove(matchingEvent);
 
                 // Save the changes to the database, and record the number of changes

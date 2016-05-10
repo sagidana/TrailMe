@@ -392,7 +392,7 @@ namespace TrailMe.WebServer
             JObject request = getJsonFromRequest(context);
             Guid skillId = Guid.Parse(request["id"].ToString());
 
-            SkillRepository.Deleteskill(skillId);
+            SkillRepository.DeleteSkill(skillId);
         }
 
         private void deleteUser(Microsoft.Owin.IOwinContext context)

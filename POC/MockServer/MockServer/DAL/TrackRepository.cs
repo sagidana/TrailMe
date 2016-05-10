@@ -69,7 +69,14 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.Tracks.Remove(dbContext.Tracks.Where(track => track.Id == track_id).First());
+                var track = dbContext.Tracks.Find(track_id);
+
+                foreach (var user in track.Users)
+                    user.Tracks.Remove(track);
+                foreach (var category in track.Categories)
+                    category.Tracks.Remove(track);
+
+                dbContext.Tracks.Remove(track);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
