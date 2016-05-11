@@ -75,6 +75,8 @@ namespace TrailMe.DAL
                     user.Tracks.Remove(track);
                 foreach (var category in track.Categories)
                     category.Tracks.Remove(track);
+                foreach (var dbEvent in track.Events)
+                    EventRepository.DeleteEvent(dbEvent.Id);
 
                 dbContext.Tracks.Remove(track);
 

@@ -120,6 +120,13 @@ namespace TrailMe.Apriori
             return minimumDifference;
         }
 
+        private void addTracksToList(List<Track> addTo, List<Track> toAdd)
+        {
+            foreach(var track in toAdd)
+                if (!addTo.Contains(track))
+                    addTo.Add(track);
+        }
+
         private List<Track> getRecommendations(List<Track> tracks)
         {
             int minimumDifference = findMinimumDifferenceInRules(tracks);
@@ -128,7 +135,7 @@ namespace TrailMe.Apriori
 
             foreach (Rule rule in Results.StrongRules)
                 if (getTracksDifference(rule.From, tracks) == minimumDifference)
-                    recommendedTracks.AddRange(rule.To);
+                    addTracksToList(recommendedTracks, rule.To);
 
             return recommendedTracks;
         }
