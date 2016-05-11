@@ -61,15 +61,15 @@ namespace TrailMe.Apriori
             List<Item> allFrequentItems = getAllFrequentItems(minSupport, items, transactions);
 
             printItems(allFrequentItems);
-            Console.WriteLine("RULES______________________________________");
             
             List<Rule> rules = generateRules(allFrequentItems);
             
+            Console.WriteLine("RULES______________________________________");
             printRules(rules);
-            Console.WriteLine("STRONG RULES_____________________________________________");
             
             List<Rule> strongRules = getStrongRules(rules, minConfidence, allFrequentItems);
             
+            Console.WriteLine("STRONG RULES_____________________________________________");
             printRules(strongRules);
 
             Result result = new Result()
@@ -81,21 +81,22 @@ namespace TrailMe.Apriori
             return result;
         }
 
-        private void printItems(List<Item> allFrequentItems)
-        {
-            foreach(var item in allFrequentItems)
-            {
-                Console.WriteLine("Tracks in item:");
-                foreach (var track in item.Tracks)
-                    Console.WriteLine(track.TrackId);
-            }
-        }
 
         #endregion
 
         #region Private Methods
 
         #region Debug
+        
+        private void printItems(List<Item> allFrequentItems)
+        {
+            foreach(var item in allFrequentItems)
+            {
+                Console.WriteLine("Item (Support={0})", item.Support);
+                foreach (var track in item.Tracks)
+                    Console.WriteLine(track.TrackId);
+            }
+        }
 
         private void printRules(List<Rule> rules)
         {
@@ -108,6 +109,8 @@ namespace TrailMe.Apriori
 
         private void printRule(Rule rule)
         {
+            Console.WriteLine("Confidence {0}", rule.Confidence);
+
             foreach(var item in rule.From)
                 Console.WriteLine("{0}, ", item.TrackId);
 
@@ -230,11 +233,22 @@ namespace TrailMe.Apriori
         #endregion
 
         #region GenerateStrongRules
+        
+        private bool areTracksEquel(List<Track> first, List<Track> second)
+        {
+            foreach (var track in first)
+                if (!second.Contains(track))
+                    return false;
+            foreach (var track in second)
+                if (!first.Contains(track))
+                    return false;
+            return true;
+        }
 
         private double getConfidence(List<Track> X, List<Track> XY, List<Item> allFrequentItems)
         {
             var xItem = allFrequentItems.Where(item => item.Tracks.SequenceEqual(X));
-            var xyItem = allFrequentItems.Where(item => item.Tracks.SequenceEqual(XY));
+            var xyItem = allFrequentItems.Where(item => areTracksEqual(item.Tracks,XY));
 
             if (!xItem.Any() || !xyItem.Any())
                 return 0;

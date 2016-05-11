@@ -26,5 +26,10 @@ namespace TrailMe.Common
         {
             return TrackId.ToString().CompareTo(other.TrackId.ToString());
         }
+
+        public override int GetHashCode()
+        {
+            return TrackId.ToString().GetHashCode();
+        }
     }
 }

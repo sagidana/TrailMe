@@ -35,7 +35,7 @@ namespace TrailMe.Apriori
 
         #region C-tors
 
-        public AprioriManager(double minSupport = 0.01, double minConfidence = 0.40)
+        public AprioriManager(double minSupport = 0.01, double minConfidence = 0.15)
         {
             m_MinSupport = minSupport;
             m_MinConfidence = minConfidence;
