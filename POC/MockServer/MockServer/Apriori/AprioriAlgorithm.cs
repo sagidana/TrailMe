@@ -59,8 +59,13 @@ namespace TrailMe.Apriori
         public Result ProcessTransaction(double minSupport, double minConfidence, List<Track> items, List<Transaction> transactions)
         {
             List<Item> allFrequentItems = getAllFrequentItems(minSupport, items, transactions);
+
+            printItems(allFrequentItems);
+
             List<Rule> rules = generateRules(allFrequentItems);
             printRules(rules);
+
+            Console.WriteLine("STRONG_____________________________________________");
             List<Rule> strongRules = getStrongRules(rules, minConfidence, allFrequentItems);
             printRules(strongRules);
 
@@ -71,6 +76,16 @@ namespace TrailMe.Apriori
             };
             
             return result;
+        }
+
+        private void printItems(List<Item> allFrequentItems)
+        {
+            foreach(var item in allFrequentItems)
+            {
+                Console.WriteLine("Tracks in item:");
+                foreach (var track in item.Tracks)
+                    Console.WriteLine(track.TrackId);
+            }
         }
 
         #endregion
