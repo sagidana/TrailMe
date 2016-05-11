@@ -6,14 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyGroupRecyclerViewAdapter;
+import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.RESTCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
+import depton.trailme.models.Group;
 
 /**
  * A fragment representing a list of Items.
@@ -21,13 +28,15 @@ import depton.trailme.fragments.dummy.DummyContent.DummyItem;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class GroupFragment extends Fragment {
+public class GroupFragment extends Fragment implements AsyncResponse {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private MyGroupRecyclerViewAdapter mAdapter = null;
+    private RESTCaller restCaller = new RESTCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,6 +62,7 @@ public class GroupFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        restCaller.delegate = this;
     }
 
     @Override
@@ -69,7 +79,8 @@ public class GroupFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyGroupRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            restCaller.execute("http://trailmedev.cloudapp.net:9100/groups");
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -80,6 +91,7 @@ public class GroupFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
+            mAdapter= new MyGroupRecyclerViewAdapter(new ArrayList<Group>(), mListener);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -90,6 +102,32 @@ public class GroupFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void processFinish(LinkedHashMap<String,String>[] output) {
+        try{
+            if(output != null) {
+
+                ArrayList<Group> groups = new ArrayList<>(output.length);
+
+                for (int i = 0; i < output.length; i++) {
+                    Group g = new Group();
+                    g.Id = output[i].get("Id");
+                    g.Name = output[i].get("Name");
+                    groups.add(g);
+                    Log.d("Tracks", "TrackFragment - processFinish: Added track " + g.Name + " in ID" + String.valueOf(i) + " ");
+                }
+                mAdapter.updateList(groups);
+            }
+            else {
+                Log.d("ERROR", "processFinish: Issues Connecting to the server");
+            }
+
+        }
+        catch (Exception e){
+            Log.d("Sd", "processFinish: " + e.toString());
+        }
     }
 
     /**
@@ -104,6 +142,6 @@ public class GroupFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Group item);
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import depton.net.trailme.R;
 import depton.trailme.fragments.HikersFragment.OnListFragmentInteractionListener;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
+import depton.trailme.models.User;
 
 import java.util.List;
 
@@ -19,10 +20,10 @@ import java.util.List;
  */
 public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecyclerViewAdapter.ViewHolder> {
 
-    private final List<DummyItem> mValues;
+    private final List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
 
-    public MyHikerRecyclerViewAdapter(List<DummyItem> items, OnListFragmentInteractionListener listener) {
+    public MyHikerRecyclerViewAdapter(List<User> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,8 +38,8 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mNameView.setText(mValues.get(position).FirstName + " " + mValues.get(position).SurName);
+        holder.mAboutView.setText(mValues.get(position).ID);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,22 +58,28 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
         return mValues.size();
     }
 
+    public void updateList(List<User> newlist) {
+        mValues.clear();
+        mValues.addAll(newlist);
+        this.notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
-        public DummyItem mItem;
+        public final TextView mNameView;
+        public final TextView mAboutView;
+        public User mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mNameView = (TextView) view.findViewById(R.id.name);
+            mAboutView = (TextView) view.findViewById(R.id.about);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mNameView.getText() + "'";
         }
     }
 }

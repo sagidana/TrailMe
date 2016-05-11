@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -37,7 +38,9 @@ import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.dummy.DummyContent;
+import depton.trailme.models.Group;
 import depton.trailme.models.Track;
+import depton.trailme.models.User;
 
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -124,13 +127,17 @@ public class MapActivity extends AppCompatActivity
     {
 
     }
-    public void onListFragmentInteraction(DummyContent.DummyItem item)
+    public void onListFragmentInteraction(User item)
     {
-
+        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT);
     }
     public void onListFragmentInteraction(Track item)
     {
-
+        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT);
+    }
+    public void onListFragmentInteraction(Group item)
+    {
+        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT);
     }
 
     @Override

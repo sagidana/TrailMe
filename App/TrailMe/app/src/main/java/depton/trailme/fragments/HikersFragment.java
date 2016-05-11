@@ -6,14 +6,22 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
+import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.RESTCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
+import depton.trailme.models.User;
 
 /**
  * A fragment representing a list of Items.
@@ -21,13 +29,15 @@ import depton.trailme.fragments.dummy.DummyContent.DummyItem;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HikersFragment extends Fragment {
+public class HikersFragment extends Fragment implements AsyncResponse {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private MyHikerRecyclerViewAdapter mAdapter = null;
+    private RESTCaller restCaller = new RESTCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -53,6 +63,7 @@ public class HikersFragment extends Fragment {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+        restCaller.delegate = this;
     }
 
     @Override
@@ -69,22 +80,50 @@ public class HikersFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyHikerRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+            restCaller.execute("http://trailmedev.cloudapp.net:9100/users");
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
 
+    @Override
+    public void processFinish(LinkedHashMap<String,String>[] output) {
+        try{
+            if(output != null) {
+
+                ArrayList<User> users = new ArrayList<>(output.length);
+
+                for (int i = 0; i < output.length; i++) {
+                    User u = new User();
+                    u.ID = output[i].get("Id");
+                    u.FirstName = output[i].get("FirstName");
+                    u.SurName = output[i].get("LastName");
+                    users.add(u);
+                    Log.d("Hikers", "HikerFragment - processFinish: Added track " + u.FirstName + " in ID" + String.valueOf(i) + " ");
+                }
+                mAdapter.updateList(users);
+            }
+            else {
+                Log.d("ERROR", "processFinish: Issues Connecting to the server");
+            }
+        }
+        catch (Exception e){
+            Log.d("Sd", "processFinish: " + e.toString());
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
+            mAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), mListener);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
     }
+
 
     @Override
     public void onDetach() {
@@ -104,6 +143,6 @@ public class HikersFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(User item);
     }
 }

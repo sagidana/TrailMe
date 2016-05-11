@@ -19,11 +19,6 @@ import depton.trailme.models.Track;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link DummyItem} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecyclerViewAdapter.ViewHolder> {
 
     private final List<Track> mValues;
@@ -32,6 +27,12 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
     public MyTrackRecyclerViewAdapter(List<Track> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+    }
+
+    public void updateList(List<Track> newlist) {
+        mValues.clear();
+        mValues.addAll(newlist);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -67,7 +68,7 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mIdView;
-        public final TextView mContentView;
+        public final TextView mDescriptionView;
         public final RatingBar mRatingBar;
         public Track mItem;
 
@@ -75,13 +76,13 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.name);
-            mContentView = (TextView) view.findViewById(R.id.Description);
+            mDescriptionView = (TextView) view.findViewById(R.id.Description);
             mRatingBar = (RatingBar) view.findViewById(R.id.ratingBar);
         }
 
         @Override
         public String toString() {
-            return super.toString() + " '" + mContentView.getText() + "'";
+            return super.toString() + " '" + mDescriptionView.getText() + "'";
         }
     }
 }

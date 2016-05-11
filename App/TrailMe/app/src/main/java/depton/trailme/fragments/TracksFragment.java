@@ -120,16 +120,16 @@ public class TracksFragment extends Fragment implements AsyncResponse{
                 for (int i = 0; i < output.length; i++) {
                     Track t = new Track();
                     t.ID = output[i].get("Id");
-                    t.longitude = Double.parseDouble(output[i].get("Longitude"));
-                    t.latitude = Double.parseDouble(output[i].get("Latitude"));
+                    //Log.d("longtitude", "processFinish: "+output[i].get("Longitude"));
+                    //t.longitude = (Double) output[i].get("Longitude");
+                    //t.latitude = Double.parseDouble(output[i].get("Latitude"));
                     t.Name = output[i].get("Name");
                     t.Difficulty = Enums.Difficulty.valueOf(output[i].get("Difficulty"));
-                    t.Length = Integer.parseInt(output[i].get("Kilometers"));
+                    //t.Length = Integer.parseInt(output[i].get("Kilometers"));
                     tracks.add(t);
                     Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
                 }
-
-                mAdapter.notifyDataSetChanged();
+                mAdapter.updateList(tracks);
             }
             else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");
