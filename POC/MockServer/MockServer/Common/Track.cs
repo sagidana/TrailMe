@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrailMe.Common
 {
-    public class Track
+    public class Track : IComparable<Track>
     {
         public Guid TrackId { get; set; }
 
@@ -20,6 +20,11 @@ namespace TrailMe.Common
             }
 
             return TrackId.Equals(item.TrackId);
+        }
+
+        public int CompareTo(Track other)
+        {
+            return TrackId.ToString().CompareTo(other.TrackId.ToString());
         }
     }
 }

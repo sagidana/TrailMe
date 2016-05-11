@@ -73,8 +73,8 @@ namespace TrailMe.Apriori
 
         public List<Track> GetRecommendations(Guid userId)
         {
-            if (Results == null || Results.StrongRules == null)
-                RunApriori(); //TODO : ok for development, but not for production.
+            //if (Results == null || Results.StrongRules == null)
+            RunApriori(); //TODO : ok for development, but not for production.
 
             if (Results.StrongRules.Count == 0)
                 return null;

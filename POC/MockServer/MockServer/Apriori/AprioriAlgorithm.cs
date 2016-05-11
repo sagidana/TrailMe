@@ -60,17 +60,17 @@ namespace TrailMe.Apriori
         {
             List<Item> allFrequentItems = getAllFrequentItems(minSupport, items, transactions);
 
-            //printItems(allFrequentItems);
-            //Console.WriteLine("RULES______________________________________");
+            printItems(allFrequentItems);
+            Console.WriteLine("RULES______________________________________");
             
             List<Rule> rules = generateRules(allFrequentItems);
             
-            //printRules(rules);
-            //Console.WriteLine("STRONG RULES_____________________________________________");
+            printRules(rules);
+            Console.WriteLine("STRONG RULES_____________________________________________");
             
             List<Rule> strongRules = getStrongRules(rules, minConfidence, allFrequentItems);
             
-            //printRules(strongRules);
+            printRules(strongRules);
 
             Result result = new Result()
             {
@@ -171,7 +171,7 @@ namespace TrailMe.Apriori
                 }
             }
 
-            return generatedCandidates;
+            return generatedCandidates.Distinct().ToList();
         }
 
         private Item generateCandidates(Item first, Item second)
