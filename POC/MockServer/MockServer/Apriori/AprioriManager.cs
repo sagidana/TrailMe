@@ -131,6 +131,11 @@ namespace TrailMe.Apriori
                     addTo.Add(track);
         }
 
+        private void removeIrrelevantTracks(List<Track> recommendedTracks, List<Track> userTracks)
+        {
+            recommendedTracks.RemoveAll(track => userTracks.Contains(track));
+        }
+
         private List<Track> getRecommendations(List<Track> tracks)
         {
             int minimumDifference = findMinimumDifferenceInRules(tracks);
@@ -140,6 +145,8 @@ namespace TrailMe.Apriori
             foreach (Rule rule in Results.StrongRules)
                 if (getTracksDifference(rule.From, tracks) == minimumDifference)
                     addTracksToList(recommendedTracks, rule.To);
+
+            removeIrrelevantTracks(recommendedTracks, tracks);
 
             return recommendedTracks;
         }
