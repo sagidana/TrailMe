@@ -35,7 +35,7 @@ namespace TrailMe.Apriori
 
         #region C-tors
 
-        public AprioriManager(double minSupport = 0.01, double minConfidence = 0.6)
+        public AprioriManager(double minSupport = 0.01, double minConfidence = 0.40)
         {
             m_MinSupport = minSupport;
             m_MinConfidence = minConfidence;
@@ -100,6 +100,10 @@ namespace TrailMe.Apriori
 
             foreach (var destinationTrack in destination)
                 if (!isTrackInTracks(destinationTrack, source))
+                    difference++;
+
+            foreach (var sourceTrack in source)
+                if (!isTrackInTracks(sourceTrack, destination))
                     difference++;
 
             return difference;
