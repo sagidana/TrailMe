@@ -50,7 +50,7 @@ namespace TrailMe.WebServer
         public TrailMeServer()
         {
             m_GcmManager = GcmManager.GetInstance();
-            m_AprioriManager = new AprioriManager(0.1);
+            m_AprioriManager = new AprioriManager();
             m_GcmManager.Key = GCM_KEY;
 
             intializeResources();
