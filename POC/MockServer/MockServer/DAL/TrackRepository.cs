@@ -69,7 +69,16 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.Tracks.Remove(dbContext.Tracks.Where(track => track.Id == track_id).First());
+                var track = dbContext.Tracks.Find(track_id);
+
+                foreach (var user in track.Users)
+                    user.Tracks.Remove(track);
+                foreach (var category in track.Categories)
+                    category.Tracks.Remove(track);
+                foreach (var dbEvent in track.Events)
+                    EventRepository.DeleteEvent(dbEvent.Id);
+
+                dbContext.Tracks.Remove(track);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -99,9 +108,18 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                return dbContext.Users.Where(user => user.Id == userId).First().Tracks;
+                return dbContext.Users.Find(userId).Tracks;
             }
         }
+
+        public static IEnumerable<Track> GetTracksByEventId(Guid id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                return dbContext.Tracks.Where(track => track.Events.Where(dbEvent => dbEvent.Id == id).Any()).ToList();
+            }
+        }
+
 
         #endregion
     }

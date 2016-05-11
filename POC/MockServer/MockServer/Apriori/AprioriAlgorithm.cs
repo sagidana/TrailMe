@@ -95,11 +95,17 @@ namespace TrailMe.Apriori
 
         private Item generateCandidates(Item first, Item second)
         {
-            Item generatedCandidate = new Item() { Tracks = new List<Track>(first.Tracks) };
+            Item generatedCandidate = new Item() { Tracks = new List<Track>() };
 
             foreach (var track in second.Tracks)
-                if (!generatedCandidate.Tracks.Contains(track))
+            {
+                if (!first.Tracks.Contains(track))
+                {
+                    generatedCandidate.Tracks.AddRange(first.Tracks);
                     generatedCandidate.Tracks.Add(track);
+                    break;
+                }
+            }
 
             return generatedCandidate;
         }
@@ -202,6 +208,24 @@ namespace TrailMe.Apriori
             return remaining;
         }
 
+        private bool areTracksEqual(List<Track> first, List<Track> second)
+        {
+            foreach (var curr in first)
+                if (!second.Contains(curr))
+                    return false;
+            foreach (var curr in second)
+                if (!first.Contains(curr))
+                    return false;
+            return true;
+        }
+        private bool isRulesContainRule(List<Rule> rules, Rule rule)
+        {
+            foreach(var curr in rules)
+                if ((areTracksEqual(curr.From, rule.From)) && areTracksEqual(curr.To, rule.To))
+                    return true;
+            return false;
+        }
+
         private List<Rule> generateRules(List<Item> allFrequentItems)
         {
             var rules = new List<Rule>();
@@ -217,7 +241,7 @@ namespace TrailMe.Apriori
                         var remaining = getRemaining(subset.Tracks, item);
                         Rule rule = new Rule() { From = subset.Tracks, To = remaining };
 
-                        if (!rules.Contains(rule))
+                        if (!isRulesContainRule(rules, rule))
                             rules.Add(rule);
                     }
                 }

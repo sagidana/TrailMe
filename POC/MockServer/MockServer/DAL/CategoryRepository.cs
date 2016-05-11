@@ -30,7 +30,12 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.Categories.Remove(dbContext.Categories.Find(category_id));
+                var category = dbContext.Categories.Find(category_id);
+
+                foreach (var track in category.Tracks)
+                    track.Categories.Remove(category);
+                
+                dbContext.Categories.Remove(category);
                 dbContext.SaveChanges();
             }
         }
