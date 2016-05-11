@@ -23,7 +23,9 @@ namespace TrailMe.Apriori
         {
             List<Item> allFrequentItems = getAllFrequentItems(minSupport, items, transactions);
             List<Rule> rules = generateRules(allFrequentItems);
+            printRules(rules);
             List<Rule> strongRules = getStrongRules(rules, minConfidence, allFrequentItems);
+            printRules(strongRules);
 
             Result result = new Result()
             {
@@ -37,6 +39,30 @@ namespace TrailMe.Apriori
         #endregion
 
         #region Private Methods
+
+        #region Debug
+
+        private void printRules(List<Rule> rules)
+        {
+            foreach (var rule in rules)
+            {
+                printRule(rule);
+                Console.WriteLine("-------------------------------------------------------------------");
+            }
+        }
+
+        private void printRule(Rule rule)
+        {
+            foreach(var item in rule.From)
+                Console.WriteLine("{0}, ", item.TrackId);
+
+            Console.WriteLine("=>");
+
+            foreach (var item in rule.To)
+                Console.WriteLine("{0}, ", item.TrackId);
+        }
+
+        #endregion
 
         #region GetFrequentItems
 
