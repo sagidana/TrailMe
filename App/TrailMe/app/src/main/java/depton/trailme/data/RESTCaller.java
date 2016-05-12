@@ -35,7 +35,7 @@ public class RESTCaller extends AsyncTask<String, Void, LinkedHashMap<String,Str
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
             //Track[] jsonResponse = restTemplate.getForObject(url, Track[].class);
 
-            ResponseEntity<Object[]> responseEntity = restTemplate.getForEntity("http://trailmedev.cloudapp.net:9100/tracks", Object[].class);
+            ResponseEntity<Object[]> responseEntity = restTemplate.getForEntity(url, Object[].class);
             Object[] objects = responseEntity.getBody();
             MediaType contentType = responseEntity.getHeaders().getContentType();
             HttpStatus statusCode = responseEntity.getStatusCode();

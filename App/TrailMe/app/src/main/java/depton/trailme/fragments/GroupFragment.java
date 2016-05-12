@@ -116,7 +116,7 @@ public class GroupFragment extends Fragment implements AsyncResponse {
                     g.Id = output[i].get("Id");
                     g.Name = output[i].get("Name");
                     groups.add(g);
-                    Log.d("Tracks", "TrackFragment - processFinish: Added track " + g.Name + " in ID" + String.valueOf(i) + " ");
+                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
                 }
                 mAdapter.updateList(groups);
             }
