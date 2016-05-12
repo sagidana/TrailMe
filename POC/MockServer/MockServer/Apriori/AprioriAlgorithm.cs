@@ -8,7 +8,44 @@ using System.Collections.ObjectModel;
 using TrailMe.Common;
 
 namespace TrailMe.Apriori
-{ 
+{
+    public static class extensionMethods
+    {
+        private static IEnumerable<T[]> combinationsImpl<T>(IList<T> argList, int argStart, int argIteration, List<int> argIndicies = null)
+        {
+            argIndicies = argIndicies ?? new List<int>();
+            for (int i = argStart; i < argList.Count; i++)
+            {
+                argIndicies.Add(i);
+                if (argIteration > 0)
+                {
+                    foreach (var array in combinationsImpl(argList, i + 1, argIteration - 1, argIndicies))
+                    {
+                        yield return array;
+                    }
+                }
+                else
+                {
+                    var array = new T[argIndicies.Count];
+                    for (int j = 0; j < argIndicies.Count; j++)
+                    {
+                        array[j] = argList[argIndicies[j]];
+                    }
+
+                    yield return array;
+                }
+                argIndicies.RemoveAt(argIndicies.Count - 1);
+            }
+        }
+
+        public static IEnumerable<T[]> Combinations<T>(this IList<T> argList, int argSetSize)
+        {
+            if (argList == null) throw new ArgumentNullException("argList");
+            if (argSetSize <= 0) throw new ArgumentException("argSetSize Must be greater than 0", "argSetSize");
+            return combinationsImpl(argList, 0, argSetSize - 1);
+        }
+
+    }
     public class AprioriAlgorithm
     {
         #region C-tors
@@ -22,8 +59,18 @@ namespace TrailMe.Apriori
         public Result ProcessTransaction(double minSupport, double minConfidence, List<Track> items, List<Transaction> transactions)
         {
             List<Item> allFrequentItems = getAllFrequentItems(minSupport, items, transactions);
+
+            printItems(allFrequentItems);
+            
             List<Rule> rules = generateRules(allFrequentItems);
+            
+            Console.WriteLine("RULES______________________________________");
+            printRules(rules);
+            
             List<Rule> strongRules = getStrongRules(rules, minConfidence, allFrequentItems);
+            
+            Console.WriteLine("STRONG RULES_____________________________________________");
+            printRules(strongRules);
 
             Result result = new Result()
             {
@@ -34,9 +81,46 @@ namespace TrailMe.Apriori
             return result;
         }
 
+
         #endregion
 
         #region Private Methods
+
+        #region Debug
+        
+        private void printItems(List<Item> allFrequentItems)
+        {
+            foreach(var item in allFrequentItems)
+            {
+                Console.WriteLine("Item (Support={0})", item.Support);
+                foreach (var track in item.Tracks)
+                    Console.WriteLine(track.TrackId);
+            }
+        }
+
+        private void printRules(List<Rule> rules)
+        {
+            foreach (var rule in rules)
+            {
+                printRule(rule);
+                Console.WriteLine("-------------------------------------------------------------------");
+            }
+        }
+
+        private void printRule(Rule rule)
+        {
+            Console.WriteLine("Confidence {0}", rule.Confidence);
+
+            foreach(var item in rule.From)
+                Console.WriteLine("{0}, ", item.TrackId);
+
+            Console.WriteLine("=>");
+
+            foreach (var item in rule.To)
+                Console.WriteLine("{0}, ", item.TrackId);
+        }
+
+        #endregion
 
         #region GetFrequentItems
 
@@ -90,16 +174,22 @@ namespace TrailMe.Apriori
                 }
             }
 
-            return generatedCandidates;
+            return generatedCandidates.Distinct().ToList();
         }
 
         private Item generateCandidates(Item first, Item second)
         {
-            Item generatedCandidate = new Item() { Tracks = new List<Track>(first.Tracks) };
+            Item generatedCandidate = new Item() { Tracks = new List<Track>() };
 
             foreach (var track in second.Tracks)
-                if (!generatedCandidate.Tracks.Contains(track))
+            {
+                if (!first.Tracks.Contains(track))
+                {
+                    generatedCandidate.Tracks.AddRange(first.Tracks);
                     generatedCandidate.Tracks.Add(track);
+                    break;
+                }
+            }
 
             return generatedCandidate;
         }
@@ -143,11 +233,22 @@ namespace TrailMe.Apriori
         #endregion
 
         #region GenerateStrongRules
+        
+        private bool areTracksEquel(List<Track> first, List<Track> second)
+        {
+            foreach (var track in first)
+                if (!second.Contains(track))
+                    return false;
+            foreach (var track in second)
+                if (!first.Contains(track))
+                    return false;
+            return true;
+        }
 
         private double getConfidence(List<Track> X, List<Track> XY, List<Item> allFrequentItems)
         {
             var xItem = allFrequentItems.Where(item => item.Tracks.SequenceEqual(X));
-            var xyItem = allFrequentItems.Where(item => item.Tracks.SequenceEqual(XY));
+            var xyItem = allFrequentItems.Where(item => areTracksEqual(item.Tracks,XY));
 
             if (!xItem.Any() || !xyItem.Any())
                 return 0;
@@ -202,6 +303,24 @@ namespace TrailMe.Apriori
             return remaining;
         }
 
+        private bool areTracksEqual(List<Track> first, List<Track> second)
+        {
+            foreach (var curr in first)
+                if (!second.Contains(curr))
+                    return false;
+            foreach (var curr in second)
+                if (!first.Contains(curr))
+                    return false;
+            return true;
+        }
+        private bool isRulesContainRule(List<Rule> rules, Rule rule)
+        {
+            foreach(var curr in rules)
+                if ((areTracksEqual(curr.From, rule.From)) && areTracksEqual(curr.To, rule.To))
+                    return true;
+            return false;
+        }
+
         private List<Rule> generateRules(List<Item> allFrequentItems)
         {
             var rules = new List<Rule>();
@@ -217,7 +336,7 @@ namespace TrailMe.Apriori
                         var remaining = getRemaining(subset.Tracks, item);
                         Rule rule = new Rule() { From = subset.Tracks, To = remaining };
 
-                        if (!rules.Contains(rule))
+                        if (!isRulesContainRule(rules, rule))
                             rules.Add(rule);
                     }
                 }
@@ -230,9 +349,9 @@ namespace TrailMe.Apriori
         {
             var subItems = new List<Item>();
 
-            for (int i = 1; i <= item.Tracks.Count / 2; i++)
+            for (int i = 1; i <= item.Tracks.Count - 1; i++)
             {
-                var subSets = getPermutationsWithRept(item.Tracks, i);
+                var subSets = item.Tracks.Combinations(i);
 
                 foreach (var innerItem in subSets)
                     subItems.Add(new Item() { Tracks = innerItem.ToList() });

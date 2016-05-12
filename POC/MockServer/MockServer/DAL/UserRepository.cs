@@ -68,7 +68,18 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.Users.Remove(dbContext.Users.Where(user => user.Id == user_id).First());
+                var user = dbContext.Users.Find(user_id);
+
+                foreach (var language in user.Languages)
+                    language.Users.Remove(user);
+                foreach (var track in user.Tracks)
+                    track.Users.Remove(user);
+                foreach (var skill in user.Skills)
+                    skill.Users.Remove(user);
+                foreach (var group in user.Groups)
+                    group.Users.Remove(user);
+
+                dbContext.Users.Remove(user);
 
                 // Save the changes to the database, and record the number of changes
                 var changesSaved = dbContext.SaveChanges();
@@ -107,7 +118,23 @@ namespace TrailMe.DAL
             {
                 return dbContext.Users.Include("Groups").ToList();
             }
-        } 
+        }
+
+        public static IEnumerable<User> getUsersByGroupId(Guid id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                return dbContext.Users.Where(user => user.Groups.Where(group => group.Id == id).Any()).ToList();
+            }
+        }
+
+        public static IEnumerable<User> getUsersByTrackId(Guid id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                return dbContext.Users.Where(user => user.Tracks.Where(track => track.Id == id).Any()).ToList();
+            }
+        }
 
         #endregion
     }

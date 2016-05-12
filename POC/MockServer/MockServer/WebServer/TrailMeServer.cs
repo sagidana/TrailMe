@@ -29,7 +29,7 @@ namespace TrailMe.WebServer
         const string SKILLS_URL = "/skills";
         const string CATEGORIES_URL = "/categories";
         const string LANGUAGES_URL = "/languages";
-        const string LINK_URL = "/link";
+        const string METHODS_URL = "/methods";
         const string RECOMMENDATIONS_URL = "/recommendations";
         const string REGISTER_URL = "/register";
 
@@ -97,7 +97,7 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = POST_METHOD, Handler = getGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = POST_METHOD, Handler = getTrack });
             Startup.Resources.Add(new WebResource { Path = RECOMMENDATIONS_URL, Method = POST_METHOD, Handler = getRecommendations });
-            Startup.Resources.Add(new WebResource { Path = LINK_URL, Method = POST_METHOD, Handler = addLinks });
+            Startup.Resources.Add(new WebResource { Path = METHODS_URL, Method = POST_METHOD, Handler = handleMethods });
 
             // puts.
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = PUT_METHOD, Handler = addUser });
@@ -193,38 +193,110 @@ namespace TrailMe.WebServer
 
         #region Post
 
-        private void addLinks(IOwinContext context)
+        private void handleMethods(IOwinContext context)
         {
             JObject jsonRequest = getJsonFromRequest(context);
 
             string method = jsonRequest.GetValue("Method").Value<string>();
-            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
-            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
 
             switch (method)
             {
+                case ("getTracksByUserId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbTracks = TrackRepository.GetTracksByUserId(id);
+                        var jTracks = convertDbTracksToJson(dbTracks);
+                        createWebResponse(context, JSON_TYPE, jTracks.ToString());
+                        break;
+                    }
+                case ("getTracksByEventId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbTracks = TrackRepository.GetTracksByUserId(id);
+                        var jTracks = convertDbTracksToJson(dbTracks);
+                        createWebResponse(context, JSON_TYPE, jTracks.ToString());
+                        break;
+                    }
+                case ("getUsersByGroupId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbUsers= UserRepository.getUsersByGroupId(id);
+                        var jUsers = convertDbUsersToJson(dbUsers);
+                        createWebResponse(context, JSON_TYPE, jUsers.ToString());
+                        break;
+                    }
+                case ("getUsersByTrackId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbUsers = UserRepository.getUsersByTrackId(id);
+                        var jUsers = convertDbUsersToJson(dbUsers);
+                        createWebResponse(context, JSON_TYPE, jUsers.ToString());
+                        break;
+                    }
+                case ("getGroupsByUserId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbGroups = GroupRepository.getGroupsByUserId(id);
+                        var jGroups = convertDbGroupsToJson(dbGroups);
+                        createWebResponse(context, JSON_TYPE, jGroups.ToString());
+                        break;
+                    }
+                case ("getGroupsByEventId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbGroups = GroupRepository.getGroupsByEventId(id);
+                        var jGroups = convertDbGroupsToJson(dbGroups);
+                        createWebResponse(context, JSON_TYPE, jGroups.ToString());
+                        break;
+                    }
+                case ("getEventsByGroupId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbEvents = EventRepository.getEventsByGroupId(id);
+                        var jEvents = convertDbEventsToJson(dbEvents);
+                        createWebResponse(context, JSON_TYPE, jEvents.ToString());
+                        break;
+                    }
+                case ("getEventsByTrackId"):
+                    {
+                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                        var dbEvents = EventRepository.getEventsByTrackId(id);
+                        var jEvents = convertDbEventsToJson(dbEvents);
+                        createWebResponse(context, JSON_TYPE, jEvents.ToString());
+                        break;
+                    }
                 case ("addUserToGroup"):
                     {
+                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
                         GroupRepository.AddUserToGroup(source, destination);
                         break;
                     }
                 case ("addUserToTrack"):
                     {
+                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
                         TrackRepository.AddUserToTrack(source, destination);
                         break;
                     }
                 case ("addSkillToUser"):
                     {
+                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
                         UserRepository.AddSkillToUser(source, destination);
                         break;
                     }
                 case ("addLanguageToUser"):
                     {
+                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
                         UserRepository.AddLanguageToUser(source, destination);
                         break;
                     }
                 case ("addCategoryToTrack"):
                     {
+                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
                         TrackRepository.AddCategoryToTrack(source, destination);
                         break;
                     }
@@ -243,7 +315,7 @@ namespace TrailMe.WebServer
         {
             JObject request = getJsonFromRequest(context);
 
-            Guid userId = request.GetValue("UserId").Value<Guid>();
+            Guid userId = Guid.Parse(request.GetValue("UserId").Value<string>());
 
             var recommendedTracks = m_AprioriManager.GetRecommendations(userId);
             JArray jRecommendedTracks = convertTracksToJson(recommendedTracks);
@@ -392,7 +464,7 @@ namespace TrailMe.WebServer
             JObject request = getJsonFromRequest(context);
             Guid skillId = Guid.Parse(request["id"].ToString());
 
-            SkillRepository.Deleteskill(skillId);
+            SkillRepository.DeleteSkill(skillId);
         }
 
         private void deleteUser(Microsoft.Owin.IOwinContext context)
@@ -509,8 +581,6 @@ namespace TrailMe.WebServer
             user.Add("City", dbUser.City);
             user.Add("BirthDate", dbUser.Birthdate);
 
-            addDbGroupsToJson(user, dbUser.Groups);
-
             return user;
         }
 
@@ -526,8 +596,6 @@ namespace TrailMe.WebServer
             track.Add("Difficulty", dbTrack.Difficulty);
             track.Add("Kilometers", dbTrack.Kilometers);
 
-            addEventsToJson(track, dbTrack.Events);
-
             return track;
         }
 
@@ -537,8 +605,6 @@ namespace TrailMe.WebServer
 
             jGroup.Add("Id", dbGroup.Id);
             jGroup.Add("Name", dbGroup.Name);
-
-            addDbUserToJson(jGroup, dbGroup.Users);
 
             return jGroup;
         }

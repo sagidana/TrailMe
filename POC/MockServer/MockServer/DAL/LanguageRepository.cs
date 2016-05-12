@@ -24,7 +24,12 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                dbContext.Languages.Remove(dbContext.Languages.Find(language_id));
+                var language = dbContext.Languages.Find(language_id);
+
+                foreach (var user in language.Users)
+                    user.Languages.Remove(language);
+
+                dbContext.Languages.Remove(language);
                 dbContext.SaveChanges();
             }
         }
