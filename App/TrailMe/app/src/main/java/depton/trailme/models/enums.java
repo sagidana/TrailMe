@@ -1,6 +1,6 @@
 package depton.trailme.models;
 
-class Enums
+public class Enums
 {
     public enum Difficulty
     {

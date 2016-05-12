@@ -34,6 +34,7 @@ import android.widget.TextView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import depton.net.trailme.R;
@@ -134,8 +135,9 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
     }
 
 
-    public void processFinish(String output){
-        Log.d("Called from Activity",output);
+    public void processFinish(LinkedHashMap<String,String>[] output){
+        Log.d("Called from Activity",
+                "Hey");
     }
 
     private boolean mayRequestContacts() {

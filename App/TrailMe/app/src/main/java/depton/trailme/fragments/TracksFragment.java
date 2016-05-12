@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import depton.net.trailme.R;
 import depton.trailme.activities.MapActivity;
@@ -22,6 +23,7 @@ import depton.trailme.data.AsyncResponse;
 import depton.trailme.data.RESTCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
+import depton.trailme.models.Enums;
 import depton.trailme.models.Track;
 
 /**
@@ -37,6 +39,7 @@ public class TracksFragment extends Fragment implements AsyncResponse{
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
+    private MyTrackRecyclerViewAdapter mAdapter = null;
     private RESTCaller restCaller = new RESTCaller();
 
     /**
@@ -83,7 +86,7 @@ public class TracksFragment extends Fragment implements AsyncResponse{
             }
 
             restCaller.execute("http://trailmedev.cloudapp.net:9100/tracks");
-            //recyclerView.setAdapter(new MyTrackRecyclerViewAdapter(new ArrayList<Track>(), mListener));
+            recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
@@ -94,6 +97,7 @@ public class TracksFragment extends Fragment implements AsyncResponse{
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
+            mAdapter= new MyTrackRecyclerViewAdapter(new ArrayList<Track>(), mListener);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -107,9 +111,30 @@ public class TracksFragment extends Fragment implements AsyncResponse{
     }
 
     @Override
-    public void processFinish(String output) {
+    public void processFinish(LinkedHashMap<String,String>[] output) {
         try{
-            output.toString();
+            if(output != null) {
+
+                ArrayList<Track> tracks = new ArrayList<>(output.length);
+
+                for (int i = 0; i < output.length; i++) {
+                    Track t = new Track();
+                    t.ID = output[i].get("Id");
+                    //Log.d("longtitude", "processFinish: "+output[i].get("Longitude"));
+                    //t.longitude = (Double) output[i].get("Longitude");
+                    //t.latitude = Double.parseDouble(output[i].get("Latitude"));
+                    t.Name = output[i].get("Name");
+                    t.Difficulty = Enums.Difficulty.valueOf(output[i].get("Difficulty"));
+                    //t.Length = Integer.parseInt(output[i].get("Kilometers"));
+                    tracks.add(t);
+                    Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
+                }
+                mAdapter.updateList(tracks);
+            }
+            else {
+                Log.d("ERROR", "processFinish: Issues Connecting to the server");
+            }
+
         }
         catch (Exception e){
             Log.d("Sd", "processFinish: " + e.toString());
