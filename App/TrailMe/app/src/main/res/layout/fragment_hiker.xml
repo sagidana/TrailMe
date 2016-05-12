@@ -15,7 +15,7 @@
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:id="@+id/TrackImage"
+            android:id="@+id/ProfileImage"
             android:src="@drawable/empty_profile"
             android:layout_margin="@dimen/text_margin"/>
 

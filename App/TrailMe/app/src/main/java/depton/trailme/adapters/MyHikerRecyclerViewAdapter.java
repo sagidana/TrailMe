@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import depton.net.trailme.R;
@@ -68,6 +69,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
         public final View mView;
         public final TextView mNameView;
         public final TextView mAboutView;
+        public final ImageView mProfilePic;
         public User mItem;
 
         public ViewHolder(View view) {
@@ -75,6 +77,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.name);
             mAboutView = (TextView) view.findViewById(R.id.about);
+            mProfilePic = (ImageView) view.findViewById(R.id.ProfileImage);
         }
 
         @Override
