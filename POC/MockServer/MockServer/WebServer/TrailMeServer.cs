@@ -212,7 +212,7 @@ namespace TrailMe.WebServer
                 case ("getTracksByEventId"):
                     {
                         Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbTracks = TrackRepository.GetTracksByUserId(id);
+                        var dbTracks = TrackRepository.GetTracksByEventId(id);
                         var jTracks = convertDbTracksToJson(dbTracks);
                         createWebResponse(context, JSON_TYPE, jTracks.ToString());
                         break;
