@@ -64,17 +64,26 @@ public class TrailMeServer
     {
         return get("users");
     }
-
     public JSONArray getTracks()
     {
         return get("tracks");
     }
-
     public JSONArray getGroups(){ return get("groups"); }
-
     public JSONArray getEvents()
     {
         return get("events");
+    }
+    public JSONArray getCategories()
+    {
+        return get("categories");
+    }
+    public JSONArray getSkills()
+    {
+        return get("skills");
+    }
+    public JSONArray getLanguages()
+    {
+        return get("languages");
     }
 
     public void addUser(JSONObject user){put("users", user);}
@@ -84,6 +93,80 @@ public class TrailMeServer
     public void addCategory(JSONObject category){put("categories", category);}
     public void addSkill(JSONObject skill){put("skills", skill);}
     public void addLanguage(JSONObject language){put("languages", language);}
+
+    public void deleteUser(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("users", json);
+    }
+    public void deleteGroup(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("groups", json);
+    }
+    public void deleteTrack(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("tracks", json);
+    }
+    public void deleteEvent(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("events", json);
+    }
+    public void deleteCategory(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("categries", json);
+    }
+    public void deleteSkill(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("skills", json);
+    }
+    public void deleteLanguage(String id)
+    {
+        JSONObject json;
+        try {
+            json = new JSONObject().put("id", id);
+        }
+        catch (Exception e) {return;}
+        delete("languages", json);
+    }
+
+
+    private void delete(String entity, JSONObject json)
+    {
+        String url = SERVER_URL + entity;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, json, null, null);
+
+        addToRequestQueue(request);
+    }
 
     private void put(String entity, JSONObject json)
     {
