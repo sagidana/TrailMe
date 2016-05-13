@@ -23,7 +23,7 @@ import depton.net.trailme.R;
 import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.activities.MapActivity;
 import depton.trailme.adapters.MyTrackRecyclerViewAdapter;
-import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
@@ -36,7 +36,7 @@ import depton.trailme.models.Track;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class TracksFragment extends Fragment implements AsyncResponse{
+public class TracksFragment extends Fragment implements TrailMeListener{
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -89,10 +89,7 @@ public class TracksFragment extends Fragment implements AsyncResponse{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-
-            //JSONArray tracks = TrailMeServer.getInstance(this.getContext()).getTracks();
-
-            restCaller.execute(this.getContext(),"tracks");
+            restCaller.execute(this.getContext(),"getTracks");
 
             recyclerView.setAdapter(mAdapter);
         }
@@ -119,7 +116,7 @@ public class TracksFragment extends Fragment implements AsyncResponse{
     }
 
     @Override
-    public void processFinish(JSONArray response) {
+    public void processFinish(JSONObject response) {
         try{
             if(response != null) {
 

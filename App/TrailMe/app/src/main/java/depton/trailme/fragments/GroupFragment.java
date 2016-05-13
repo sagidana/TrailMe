@@ -12,14 +12,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyGroupRecyclerViewAdapter;
-import depton.trailme.data.AsyncResponse;
 import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
 import depton.trailme.models.Group;
@@ -30,7 +31,7 @@ import depton.trailme.models.Group;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class GroupFragment extends Fragment implements AsyncResponse {
+public class GroupFragment extends Fragment implements TrailMeListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -81,7 +82,9 @@ public class GroupFragment extends Fragment implements AsyncResponse {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //restCaller.execute("http://trailmedev.cloudapp.net:9100/groups");
+
+            restCaller.execute(this.getContext(), "getGroups");
+
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -107,7 +110,7 @@ public class GroupFragment extends Fragment implements AsyncResponse {
     }
 
     @Override
-    public void processFinish(JSONArray output) {
+    public void processFinish(JSONObject output) {
         try{
             if(output != null) {
 

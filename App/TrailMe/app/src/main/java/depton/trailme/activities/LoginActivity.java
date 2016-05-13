@@ -44,7 +44,7 @@ import java.util.List;
 import depton.net.trailme.R;
 import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.authenticator.AuthenticationManager;
-import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -52,7 +52,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements AsyncResponse,LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements TrailMeListener,LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
     }
 
 
-    public void processFinish(JSONArray output){
+    public void processFinish(JSONObject output){
         Log.d("Called from Activity",
                 "Hey");
     }

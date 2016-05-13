@@ -18,6 +18,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.RequestFuture;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -158,10 +159,268 @@ public class TrailMeServer
         delete("languages", json);
     }
 
+    public JSONArray getTracksByUserId(String id)
+    {
+        JSONObject request = new JSONObject();
 
-    // TODO: add getById and add links (addUserToGroup, addSkillToUser , etc...)
+        try {
+            request.put("Method", "getTracksByUserId");
+            request.put("Id", id);
 
-    //TODO: add post.
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getTracksByEventId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getTracksByEventId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getUsersByGroupId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getUsersByGroupId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getUsersByTrackId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getUsersByTrackId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getGroupsByUserId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getGroupsByUserId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getGroupsByEventId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getGroupsByEventId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getEventsByGroupId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getEventsByGroupId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getEventsByTrackId(String id)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getEventsByTrackId");
+            request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void addUserToGroup(String userId, String groupId)
+    {
+        JSONObject request = new JSONObject();
+
+        try
+        {
+            request.put("Method", "addUserToGroup");
+            request.put("SourceId", userId);
+            request.put("DestinationId", groupId);
+
+            postObject("methods", request);
+        }
+        catch (Exception e) { }
+    }
+
+    public void addUserToTrack(String userId, String trackId)
+    {
+        JSONObject request = new JSONObject();
+
+        try
+        {
+            request.put("Method", "addUserToTrack");
+            request.put("SourceId", userId);
+            request.put("DestinationId", trackId);
+
+            postObject("methods", request);
+        }
+        catch (Exception e) { }
+    }
+
+    public void addSkillToUser(String skillId, String userId)
+    {
+        JSONObject request = new JSONObject();
+
+        try
+        {
+            request.put("Method", "addSkillToUser");
+            request.put("SourceId", skillId);
+            request.put("DestinationId", userId);
+
+            postObject("methods", request);
+        }
+        catch (Exception e) { }
+    }
+
+    public void addLanguageToUser(String languageId, String userId)
+    {
+        JSONObject request = new JSONObject();
+
+        try
+        {
+            request.put("Method", "addLanguageToUser");
+            request.put("SourceId", languageId);
+            request.put("DestinationId", userId);
+
+            postObject("methods", request);
+        }
+        catch (Exception e) { }
+    }
+
+    public void addCategoryToTrack(String categoryId, String trackId)
+    {
+        JSONObject request = new JSONObject();
+
+        try
+        {
+            request.put("Method", "addCategoryToTrack");
+            request.put("SourceId", categoryId);
+            request.put("DestinationId", trackId);
+
+            postObject("methods", request);
+        }
+        catch (Exception e) { }
+    }
+
+    public JSONObject getUserById(String id)
+    {
+        JSONObject request = new JSONObject();
+        try {
+            request.put("id", id);
+
+            return postObject("users", request);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    public JSONObject getGroupById(String id)
+    {
+        JSONObject request = new JSONObject();
+        try {
+            request.put("id", id);
+
+            return postObject("groups", request);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    public JSONObject getTrackById(String id)
+    {
+        JSONObject request = new JSONObject();
+        try {
+            request.put("id", id);
+
+            return postObject("tracks", request);
+        }catch(Exception e){
+            return null;
+        }
+    }
+
+    private JSONArray postArray(String entity, JSONObject json)
+    {
+        String url = SERVER_URL + entity;
+
+        RequestFuture<JSONArray> future = RequestFuture.newFuture();
+        TrailMeRequest request = new TrailMeRequest(Request.Method.POST, url, json, future, future);
+        addToRequestQueue(request);
+
+        try {
+            return future.get(30, TimeUnit.SECONDS);
+        }
+        catch (Exception e) {}
+
+        return null;
+    }
+
+    private JSONObject postObject(String entity, JSONObject json)
+    {
+        String url = SERVER_URL + entity;
+
+        RequestFuture<JSONObject> future = RequestFuture.newFuture();
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, json, future, future);
+        addToRequestQueue(request);
+
+        try {
+            return  future.get(30, TimeUnit.SECONDS);
+        }
+        catch (Exception e) {}
+
+        return null;
+    }
 
     private void delete(String entity, JSONObject json)
     {

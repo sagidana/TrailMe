@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,7 +20,7 @@ import java.util.List;
 
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
-import depton.trailme.data.AsyncResponse;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
@@ -31,7 +32,7 @@ import depton.trailme.models.User;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HikersFragment extends Fragment implements AsyncResponse {
+public class HikersFragment extends Fragment implements TrailMeListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -82,14 +83,14 @@ public class HikersFragment extends Fragment implements AsyncResponse {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            //restCaller.execute("http://trailmedev.cloudapp.net:9100/users");
+            restCaller.execute(this.getContext(), "getUsers");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
 
     @Override
-    public void processFinish(JSONArray output) {
+    public void processFinish(JSONObject output) {
         try{
             if(output != null) {
 
