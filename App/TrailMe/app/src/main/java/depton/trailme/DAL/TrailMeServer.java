@@ -159,6 +159,10 @@ public class TrailMeServer
     }
 
 
+    // TODO: add getById and add links (addUserToGroup, addSkillToUser , etc...)
+
+    //TODO: add post.
+
     private void delete(String entity, JSONObject json)
     {
         String url = SERVER_URL + entity;
