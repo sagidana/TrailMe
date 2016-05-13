@@ -60,10 +60,14 @@ public class RegisterActivity extends AppCompatActivity implements TrailMeListen
 
                     rest.execute(mCtx, "addUser", user);
 
+                    Thread.sleep(20*1000);
+
                     rest.execute(mCtx, "getUsers");
 
                 }
-                catch(Exception e){ }
+                catch(Exception e){
+
+                }
 
             }
         });
