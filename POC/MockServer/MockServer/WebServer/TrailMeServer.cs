@@ -127,6 +127,9 @@ namespace TrailMe.WebServer
         private JObject getJsonFromRequest(Microsoft.Owin.IOwinContext context)
         {
             string body = new StreamReader(context.Request.Body).ReadToEnd();
+            //body = body.Replace("\\\"", "\"");
+            //body = body.Remove(body.IndexOf("\""), 1);
+            //body = body.Remove(body.LastIndexOf("\""), 1);
             JObject jsonRequest = JObject.Parse(body);
             return jsonRequest;
         }
@@ -195,144 +198,160 @@ namespace TrailMe.WebServer
 
         private void handleMethods(IOwinContext context)
         {
-            JObject jsonRequest = getJsonFromRequest(context);
-
-            string method = jsonRequest.GetValue("Method").Value<string>();
-
-            switch (method)
+            try
             {
-                case ("getTracksByUserId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbTracks = TrackRepository.GetTracksByUserId(id);
-                        var jTracks = convertDbTracksToJson(dbTracks);
-                        createWebResponse(context, JSON_TYPE, jTracks.ToString());
-                        break;
-                    }
-                case ("getTracksByEventId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbTracks = TrackRepository.GetTracksByEventId(id);
-                        var jTracks = convertDbTracksToJson(dbTracks);
-                        createWebResponse(context, JSON_TYPE, jTracks.ToString());
-                        break;
-                    }
-                case ("getUsersByGroupId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbUsers= UserRepository.getUsersByGroupId(id);
-                        var jUsers = convertDbUsersToJson(dbUsers);
-                        createWebResponse(context, JSON_TYPE, jUsers.ToString());
-                        break;
-                    }
-                case ("getUsersByTrackId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbUsers = UserRepository.getUsersByTrackId(id);
-                        var jUsers = convertDbUsersToJson(dbUsers);
-                        createWebResponse(context, JSON_TYPE, jUsers.ToString());
-                        break;
-                    }
-                case ("getGroupsByUserId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbGroups = GroupRepository.getGroupsByUserId(id);
-                        var jGroups = convertDbGroupsToJson(dbGroups);
-                        createWebResponse(context, JSON_TYPE, jGroups.ToString());
-                        break;
-                    }
-                case ("getGroupsByEventId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbGroups = GroupRepository.getGroupsByEventId(id);
-                        var jGroups = convertDbGroupsToJson(dbGroups);
-                        createWebResponse(context, JSON_TYPE, jGroups.ToString());
-                        break;
-                    }
-                case ("getEventsByGroupId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbEvents = EventRepository.getEventsByGroupId(id);
-                        var jEvents = convertDbEventsToJson(dbEvents);
-                        createWebResponse(context, JSON_TYPE, jEvents.ToString());
-                        break;
-                    }
-                case ("getEventsByTrackId"):
-                    {
-                        Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
-                        var dbEvents = EventRepository.getEventsByTrackId(id);
-                        var jEvents = convertDbEventsToJson(dbEvents);
-                        createWebResponse(context, JSON_TYPE, jEvents.ToString());
-                        break;
-                    }
-                case ("addUserToGroup"):
-                    {
-                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
-                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
-                        GroupRepository.AddUserToGroup(source, destination);
-                        break;
-                    }
-                case ("addUserToTrack"):
-                    {
-                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
-                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
-                        TrackRepository.AddUserToTrack(source, destination);
-                        break;
-                    }
-                case ("addSkillToUser"):
-                    {
-                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
-                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
-                        UserRepository.AddSkillToUser(source, destination);
-                        break;
-                    }
-                case ("addLanguageToUser"):
-                    {
-                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
-                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
-                        UserRepository.AddLanguageToUser(source, destination);
-                        break;
-                    }
-                case ("addCategoryToTrack"):
-                    {
-                        Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
-                        Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
-                        TrackRepository.AddCategoryToTrack(source, destination);
-                        break;
-                    }
+                JObject jsonRequest = getJsonFromRequest(context);
+
+                string method = jsonRequest.GetValue("Method").Value<string>();
+
+                switch (method)
+                {
+                    case ("getTracksByUserId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbTracks = TrackRepository.GetTracksByUserId(id);
+                            var jTracks = convertDbTracksToJson(dbTracks);
+                            createWebResponse(context, JSON_TYPE, jTracks.ToString());
+                            break;
+                        }
+                    case ("getTracksByEventId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbTracks = TrackRepository.GetTracksByEventId(id);
+                            var jTracks = convertDbTracksToJson(dbTracks);
+                            createWebResponse(context, JSON_TYPE, jTracks.ToString());
+                            break;
+                        }
+                    case ("getUsersByGroupId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbUsers = UserRepository.getUsersByGroupId(id);
+                            var jUsers = convertDbUsersToJson(dbUsers);
+                            createWebResponse(context, JSON_TYPE, jUsers.ToString());
+                            break;
+                        }
+                    case ("getUsersByTrackId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbUsers = UserRepository.getUsersByTrackId(id);
+                            var jUsers = convertDbUsersToJson(dbUsers);
+                            createWebResponse(context, JSON_TYPE, jUsers.ToString());
+                            break;
+                        }
+                    case ("getGroupsByUserId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbGroups = GroupRepository.getGroupsByUserId(id);
+                            var jGroups = convertDbGroupsToJson(dbGroups);
+                            createWebResponse(context, JSON_TYPE, jGroups.ToString());
+                            break;
+                        }
+                    case ("getGroupsByEventId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbGroups = GroupRepository.getGroupsByEventId(id);
+                            var jGroups = convertDbGroupsToJson(dbGroups);
+                            createWebResponse(context, JSON_TYPE, jGroups.ToString());
+                            break;
+                        }
+                    case ("getEventsByGroupId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbEvents = EventRepository.getEventsByGroupId(id);
+                            var jEvents = convertDbEventsToJson(dbEvents);
+                            createWebResponse(context, JSON_TYPE, jEvents.ToString());
+                            break;
+                        }
+                    case ("getEventsByTrackId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbEvents = EventRepository.getEventsByTrackId(id);
+                            var jEvents = convertDbEventsToJson(dbEvents);
+                            createWebResponse(context, JSON_TYPE, jEvents.ToString());
+                            break;
+                        }
+                    case ("addUserToGroup"):
+                        {
+                            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
+                            GroupRepository.AddUserToGroup(source, destination);
+                            break;
+                        }
+                    case ("addUserToTrack"):
+                        {
+                            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
+                            TrackRepository.AddUserToTrack(source, destination);
+                            break;
+                        }
+                    case ("addSkillToUser"):
+                        {
+                            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
+                            UserRepository.AddSkillToUser(source, destination);
+                            break;
+                        }
+                    case ("addLanguageToUser"):
+                        {
+                            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
+                            UserRepository.AddLanguageToUser(source, destination);
+                            break;
+                        }
+                    case ("addCategoryToTrack"):
+                        {
+                            Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
+                            Guid destination = Guid.Parse(jsonRequest.GetValue("DestinationId").Value<string>());
+                            TrackRepository.AddCategoryToTrack(source, destination);
+                            break;
+                        }
+                }
             }
+            catch (Exception) { }
         }
 
         private void registerClient(Microsoft.Owin.IOwinContext context)
         {
-            JObject jsonRequest = getJsonFromRequest(context);
-            string token = jsonRequest.GetValue("registerationID").Value<string>();
+            try
+            {
+                JObject jsonRequest = getJsonFromRequest(context);
+                string token = jsonRequest.GetValue("registerationID").Value<string>();
 
-            m_GcmManager.RegisterClient(token);
+                m_GcmManager.RegisterClient(token);
+            }
+            catch (Exception) { }
         }
 
         private void getRecommendations(Microsoft.Owin.IOwinContext context)
         {
-            JObject request = getJsonFromRequest(context);
+            try
+            {
+                JObject request = getJsonFromRequest(context);
 
-            Guid userId = Guid.Parse(request.GetValue("UserId").Value<string>());
+                Guid userId = Guid.Parse(request.GetValue("UserId").Value<string>());
 
-            var recommendedTracks = m_AprioriManager.GetRecommendations(userId);
-            JArray jRecommendedTracks = convertTracksToJson(recommendedTracks);
+                var recommendedTracks = m_AprioriManager.GetRecommendations(userId);
+                JArray jRecommendedTracks = convertTracksToJson(recommendedTracks);
 
-            createWebResponse(context, JSON_TYPE, jRecommendedTracks.ToString());
+                createWebResponse(context, JSON_TYPE, jRecommendedTracks.ToString());
+            }
+            catch (Exception) { }
         }
 
         private void getUser(Microsoft.Owin.IOwinContext context)
         {
-            JObject request = getJsonFromRequest(context);
-            Guid userId = Guid.Parse(request["id"].ToString());
+            try 
+            { 
+                JObject request = getJsonFromRequest(context);
+                Guid userId = Guid.Parse(request["id"].ToString());
 
-            var dbUser = UserRepository.GetUserById(userId);
+                var dbUser = UserRepository.GetUserById(userId);
 
-            JObject user = convertDbUserToJson(dbUser);
+                JObject user = convertDbUserToJson(dbUser);
 
-            createWebResponse(context, JSON_TYPE, user.ToString());
+                createWebResponse(context, JSON_TYPE, user.ToString());
+            }
+            catch (Exception) { }
         }
 
         private void getTrack(Microsoft.Owin.IOwinContext context)
@@ -773,7 +792,7 @@ namespace TrailMe.WebServer
                 LastName = user["LastName"].Value<string>(),
                 MailAddress = user["MailAddress"].Value<string>(),
                 City = user["City"].Value<string>(),
-                Birthdate = user["Birthdate"].Value<DateTime>()
+                Birthdate = DateTime.Parse(user["Birthdate"].Value<string>())
             };
 
             return dbUser;
