@@ -90,10 +90,22 @@ public class HikersFragment extends Fragment implements TrailMeListener {
     }
 
     @Override
-    public void processFinish(JSONObject output) {
+    public void processFinish(JSONObject response) {
         try{
-            if(output != null) {
+            if(response != null) {
+                JSONArray jUsers = response.getJSONArray("users");
+                ArrayList<User> users = new ArrayList<>(jUsers.length());
 
+                for (int i = 0; i < jUsers.length(); i++)
+                {
+                    User user = new User();
+                    user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
+                    user.SurName = jUsers.getJSONObject(i).getString("LastName");
+                    user.ID= jUsers.getJSONObject(i).getString("Id");
+
+                    users.add(user);
+                }
+                mAdapter.updateList(users);
 //                ArrayList<User> users = new ArrayList<>(output.length);
 //
 //                for (int i = 0; i < output.length; i++) {

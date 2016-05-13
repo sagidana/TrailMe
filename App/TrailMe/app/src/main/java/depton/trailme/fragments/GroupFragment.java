@@ -110,20 +110,20 @@ public class GroupFragment extends Fragment implements TrailMeListener {
     }
 
     @Override
-    public void processFinish(JSONObject output) {
+    public void processFinish(JSONObject response) {
         try{
-            if(output != null) {
+            if(response != null) {
+                JSONArray jGroups = response.getJSONArray("groups");
+                ArrayList<Group> groups = new ArrayList<>(jGroups.length());
 
-//                ArrayList<Group> groups = new ArrayList<>(output.length);
-//
-//                for (int i = 0; i < output.length; i++) {
-//                    Group g = new Group();
-//                    g.Id = output[i].get("Id");
-//                    g.Name = output[i].get("Name");
-//                    groups.add(g);
-//                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
-//                }
-//                mAdapter.updateList(groups);
+                for (int i = 0; i < jGroups.length(); i++) {
+                    Group g = new Group();
+                    g.Id = jGroups.getJSONObject(i).getString("Id");
+                    g.Name = jGroups.getJSONObject(i).getString("Name");
+                    groups.add(g);
+                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
+                }
+                mAdapter.updateList(groups);
             }
             else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");

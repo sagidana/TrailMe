@@ -119,22 +119,19 @@ public class TracksFragment extends Fragment implements TrailMeListener{
     public void processFinish(JSONObject response) {
         try{
             if(response != null) {
+                JSONArray jTracks = response.getJSONArray("tracks");
 
-//                ArrayList<Track> tracks = new ArrayList<>(output.length);
-//
-//                for (int i = 0; i < output.length; i++) {
-//                    Track t = new Track();
-//                    t.ID = output[i].get("Id");
-//                    //Log.d("longtitude", "processFinish: "+output[i].get("Longitude"));
-//                    //t.longitude = (Double) output[i].get("Longitude");
-//                    //t.latitude = Double.parseDouble(output[i].get("Latitude"));
-//                    t.Name = output[i].get("Name");
-//                    t.Difficulty = Enums.Difficulty.valueOf(output[i].get("Difficulty"));
-//                    //t.Length = Integer.parseInt(output[i].get("Kilometers"));
-//                    tracks.add(t);
-//                    Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
-//                }
-//                mAdapter.updateList(tracks);
+                ArrayList<Track> tracks = new ArrayList<>(jTracks.length());
+
+                for (int i = 0; i < jTracks.length(); i++) {
+                    Track t = new Track();
+                    t.ID = jTracks.getJSONObject(i).getString("Id");
+                    t.Name = jTracks.getJSONObject(i).getString("Name");
+                    t.Difficulty = Enums.Difficulty.valueOf(jTracks.getJSONObject(i).getString("Difficulty"));
+                    tracks.add(t);
+                    Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
+                }
+                mAdapter.updateList(tracks);
             }
             else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");
