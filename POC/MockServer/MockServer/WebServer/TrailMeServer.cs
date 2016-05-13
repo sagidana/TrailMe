@@ -368,13 +368,8 @@ namespace TrailMe.WebServer
 
         private void getUser(Microsoft.Owin.IOwinContext context)
         {
-<<<<<<< HEAD
             try
             {
-=======
-            try 
-            { 
->>>>>>> 06e9e346b07f81f3f52bd0696faf2a9246e879d3
                 JObject request = getJsonFromRequest(context);
                 Guid userId = Guid.Parse(request["id"].ToString());
 
