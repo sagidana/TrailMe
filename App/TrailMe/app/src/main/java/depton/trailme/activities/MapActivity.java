@@ -31,10 +31,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TracksFragment;
@@ -46,6 +49,7 @@ import depton.trailme.models.User;
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
+        TrailMeListener,
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
         GroupFragment.OnListFragmentInteractionListener
@@ -54,7 +58,7 @@ public class MapActivity extends AppCompatActivity
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private String mUsername;
+    private JSONObject mCurrentUser;
     public RestCaller restCaller = new RestCaller();
 
     @Override
@@ -70,7 +74,11 @@ public class MapActivity extends AppCompatActivity
         setContentView(R.layout.activity_map);
 
         Bundle extras = getIntent().getExtras();
-        mUsername = extras.getString("Username");
+        String userId = extras.getString("currentUser");
+
+        restCaller.delegate = this;
+        restCaller.execute(this, "getUserById", userId);
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -132,7 +140,11 @@ public class MapActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         TextView userExtendedName = (TextView)findViewById(R.id.userExtendedName);
-        userExtendedName.setText(mUsername);
+
+        try{
+            userExtendedName.setText(mCurrentUser.getString("MailAddress"));
+        }
+        catch (Exception e){ }
 
         getMenuInflater().inflate(R.menu.map, menu);
         return true;
@@ -229,5 +241,13 @@ public class MapActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+    public void processFinish(JSONObject response)
+    {
+        mCurrentUser = response;
+        try {
+            TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
+            displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+        }catch (Exception e){}
     }
 }

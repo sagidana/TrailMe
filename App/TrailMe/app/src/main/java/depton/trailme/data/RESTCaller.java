@@ -271,6 +271,7 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
 
     @Override
     protected void onPostExecute(JSONObject jsonResponse) {
-        delegate.processFinish(jsonResponse);
+        if (jsonResponse != null && jsonResponse.length() != 0 && delegate != null)
+            delegate.processFinish(jsonResponse);
     }
 }

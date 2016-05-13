@@ -22,32 +22,22 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.android.volley.Response;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import depton.net.trailme.R;
-import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.authenticator.AuthenticationManager;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
-import depton.trailme.fragments.CreateUserFragment;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -67,6 +57,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     private UserLoginTask mAuthTask = null;
 
     // UI references.
+    private String mUsername;
     private AutoCompleteTextView mEmailView;
     private View mProgressView;
     private View mLoginFormView;
@@ -104,9 +95,29 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     }
 
 
-    public void processFinish(JSONObject output){
-        Log.d("Called from Activity",
-                "Hey");
+    public void processFinish(JSONObject response){
+
+        try{
+            JSONArray users = response.getJSONArray("users");
+            String currentUserId = null;
+
+            for (int i = 0; i < users.length(); i++)
+            {
+                if (users.getJSONObject(i).getString("MailAddress").equals(mUsername))
+                {
+                    currentUserId = users.getJSONObject(i).getString("Id");
+                }
+            }
+
+            if (currentUserId != null)
+            {
+                Intent intent = new Intent(this, MapActivity.class);
+                intent.putExtra("currentUser", currentUserId);
+                finish();
+                startActivity(intent);
+            }
+        }
+        catch (Exception e) {}
     }
 
     private boolean mayRequestContacts() {
@@ -159,14 +170,14 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
         mEmailView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mEmailView.getText().toString();
+        mUsername = mEmailView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(username)) {
+        if (TextUtils.isEmpty(mUsername)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
@@ -180,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(this,username);
+            mAuthTask = new UserLoginTask(this,mUsername);
             mAuthTask.execute((Void) null);
         }
     }
@@ -294,9 +305,9 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mUsername;
-        private Context mCtx;
+        private LoginActivity mCtx;
 
-        UserLoginTask(Context ctx, String username) {
+        UserLoginTask(LoginActivity ctx, String username) {
             mUsername = username;
             mCtx = ctx;
         }
@@ -322,12 +333,15 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(mCtx, MapActivity.class);
+
+                restCaller.delegate = mCtx;
+                restCaller.execute(mCtx, "getUsers");
+
+            }else {
+                Intent intent = new Intent(mCtx, RegisterActivity.class);
                 intent.putExtra("Username", mUsername);
                 finish();
                 startActivity(intent);
-            }else {
-
                 // TODO: call CreateUserFragment with the user mail.
             }
 
