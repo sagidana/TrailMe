@@ -54,15 +54,12 @@ public class RegisterActivity extends AppCompatActivity implements TrailMeListen
 
                     user.put("Birthdate", "2016-05-12T20:04:49");
 
-                    RestCaller rest = new RestCaller();
+                    RestCaller rest1 = new RestCaller();
+                    rest1.execute(mCtx, "addUser", user);
 
-                    rest.delegate = mCtx;
-
-                    rest.execute(mCtx, "addUser", user);
-
-                    Thread.sleep(20*1000);
-
-                    rest.execute(mCtx, "getUsers");
+                    RestCaller rest2 = new RestCaller();
+                    rest2.delegate = mCtx;
+                    rest2.execute(mCtx, "getUsers");
 
                 }
                 catch(Exception e){
