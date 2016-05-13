@@ -127,6 +127,9 @@ namespace TrailMe.WebServer
         private JObject getJsonFromRequest(Microsoft.Owin.IOwinContext context)
         {
             string body = new StreamReader(context.Request.Body).ReadToEnd();
+            //body = body.Replace("\\\"", "\"");
+            //body = body.Remove(body.IndexOf("\""), 1);
+            //body = body.Remove(body.LastIndexOf("\""), 1);
             JObject jsonRequest = JObject.Parse(body);
             return jsonRequest;
         }
@@ -365,8 +368,13 @@ namespace TrailMe.WebServer
 
         private void getUser(Microsoft.Owin.IOwinContext context)
         {
+<<<<<<< HEAD
             try
             {
+=======
+            try 
+            { 
+>>>>>>> 06e9e346b07f81f3f52bd0696faf2a9246e879d3
                 JObject request = getJsonFromRequest(context);
                 Guid userId = Guid.Parse(request["id"].ToString());
 
@@ -881,7 +889,7 @@ namespace TrailMe.WebServer
                 LastName = user["LastName"].Value<string>(),
                 MailAddress = user["MailAddress"].Value<string>(),
                 City = user["City"].Value<string>(),
-                Birthdate = user["Birthdate"].Value<DateTime>()
+                Birthdate = DateTime.Parse(user["Birthdate"].Value<string>())
             };
 
             return dbUser;
