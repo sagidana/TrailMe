@@ -33,7 +33,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.RestCaller;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TracksFragment;
@@ -53,7 +53,7 @@ public class MapActivity extends AppCompatActivity
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    public RESTCaller restCaller = new RESTCaller();
+    public RestCaller restCaller = new RestCaller();
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -129,15 +129,15 @@ public class MapActivity extends AppCompatActivity
     }
     public void onListFragmentInteraction(User item)
     {
-        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT).show();
     }
     public void onListFragmentInteraction(Track item)
     {
-        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT).show();
     }
     public void onListFragmentInteraction(Group item)
     {
-        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -11,13 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyGroupRecyclerViewAdapter;
 import depton.trailme.data.AsyncResponse;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.RestCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
 import depton.trailme.models.Group;
@@ -36,7 +38,7 @@ public class GroupFragment extends Fragment implements AsyncResponse {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyGroupRecyclerViewAdapter mAdapter = null;
-    private RESTCaller restCaller = new RESTCaller();
+    private RestCaller restCaller = new RestCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,7 +81,7 @@ public class GroupFragment extends Fragment implements AsyncResponse {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            restCaller.execute("http://trailmedev.cloudapp.net:9100/groups");
+            //restCaller.execute("http://trailmedev.cloudapp.net:9100/groups");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -105,20 +107,20 @@ public class GroupFragment extends Fragment implements AsyncResponse {
     }
 
     @Override
-    public void processFinish(LinkedHashMap<String,String>[] output) {
+    public void processFinish(JSONArray output) {
         try{
             if(output != null) {
 
-                ArrayList<Group> groups = new ArrayList<>(output.length);
-
-                for (int i = 0; i < output.length; i++) {
-                    Group g = new Group();
-                    g.Id = output[i].get("Id");
-                    g.Name = output[i].get("Name");
-                    groups.add(g);
-                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
-                }
-                mAdapter.updateList(groups);
+//                ArrayList<Group> groups = new ArrayList<>(output.length);
+//
+//                for (int i = 0; i < output.length; i++) {
+//                    Group g = new Group();
+//                    g.Id = output[i].get("Id");
+//                    g.Name = output[i].get("Name");
+//                    groups.add(g);
+//                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
+//                }
+//                mAdapter.updateList(groups);
             }
             else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");

@@ -30,7 +30,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Response;
+
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -38,9 +42,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import depton.net.trailme.R;
+import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.authenticator.AuthenticationManager;
 import depton.trailme.data.AsyncResponse;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.RestCaller;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -64,12 +69,13 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private RESTCaller  restCaller = new RESTCaller();
+    private RestCaller restCaller = new RestCaller();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -135,7 +141,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
     }
 
 
-    public void processFinish(LinkedHashMap<String,String>[] output){
+    public void processFinish(JSONArray output){
         Log.d("Called from Activity",
                 "Hey");
     }

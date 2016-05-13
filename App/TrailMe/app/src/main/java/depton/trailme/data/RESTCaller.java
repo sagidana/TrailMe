@@ -1,9 +1,11 @@
 package depton.trailme.data;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,47 +19,33 @@ import java.util.List;
 import java.util.Objects;
 
 import depton.net.trailme.R;
+import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.models.Track;
 
 /**
  * Created by Yotam on 5/6/2016.
  */
-public class RESTCaller extends AsyncTask<String, Void, LinkedHashMap<String,String>[]>  {
+public class RestCaller extends AsyncTask<Object, Void, JSONArray>  {
     public AsyncResponse delegate = null;
 
         @Override
-    protected LinkedHashMap<String,String>[] doInBackground(String... params) {
+    protected JSONArray doInBackground(Object... params) {
 
-            LinkedHashMap<String,String>[] lhm = null;
-            try {
-            final String url = params[0];
-            RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            //Track[] jsonResponse = restTemplate.getForObject(url, Track[].class);
+        Context ctx = (Context)params[0];
 
-            ResponseEntity<Object[]> responseEntity = restTemplate.getForEntity(url, Object[].class);
-            Object[] objects = responseEntity.getBody();
-            MediaType contentType = responseEntity.getHeaders().getContentType();
-            HttpStatus statusCode = responseEntity.getStatusCode();
-
-
-            lhm = new LinkedHashMap[objects.length];
-
-            for(int i=0; i<objects.length; i++)
+        switch ((String)params[1])
+        {
+            case ("tracks"):
             {
-                lhm[i]=(LinkedHashMap)objects[i];
+                return TrailMeServer.getInstance(ctx).getTracks();
             }
-
-            return lhm;
-        } catch (Exception e) {
-            Log.e("RestCaller", e.getMessage(), e);
         }
 
-        return lhm;
+        return null;
     }
 
     @Override
-    protected void onPostExecute(LinkedHashMap<String,String>[] jsonResponse) {
+    protected void onPostExecute(JSONArray jsonResponse) {
         delegate.processFinish(jsonResponse);
     }
 }
