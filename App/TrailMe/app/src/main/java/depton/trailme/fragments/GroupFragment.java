@@ -11,13 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyGroupRecyclerViewAdapter;
-import depton.trailme.data.AsyncResponse;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
 import depton.trailme.models.Group;
@@ -28,7 +31,7 @@ import depton.trailme.models.Group;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class GroupFragment extends Fragment implements AsyncResponse {
+public class GroupFragment extends Fragment implements TrailMeListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -36,7 +39,7 @@ public class GroupFragment extends Fragment implements AsyncResponse {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyGroupRecyclerViewAdapter mAdapter = null;
-    private RESTCaller restCaller = new RESTCaller();
+    private RestCaller restCaller = new RestCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -79,7 +82,9 @@ public class GroupFragment extends Fragment implements AsyncResponse {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            restCaller.execute("http://trailmedev.cloudapp.net:9100/groups");
+
+            restCaller.execute(this.getContext(), "getGroups");
+
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -105,16 +110,16 @@ public class GroupFragment extends Fragment implements AsyncResponse {
     }
 
     @Override
-    public void processFinish(LinkedHashMap<String,String>[] output) {
+    public void processFinish(JSONObject response) {
         try{
-            if(output != null) {
+            if(response != null) {
+                JSONArray jGroups = response.getJSONArray("groups");
+                ArrayList<Group> groups = new ArrayList<>(jGroups.length());
 
-                ArrayList<Group> groups = new ArrayList<>(output.length);
-
-                for (int i = 0; i < output.length; i++) {
+                for (int i = 0; i < jGroups.length(); i++) {
                     Group g = new Group();
-                    g.Id = output[i].get("Id");
-                    g.Name = output[i].get("Name");
+                    g.Id = jGroups.getJSONObject(i).getString("Id");
+                    g.Name = jGroups.getJSONObject(i).getString("Name");
                     groups.add(g);
                     Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
                 }

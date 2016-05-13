@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,10 +31,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TracksFragment;
@@ -45,6 +49,7 @@ import depton.trailme.models.User;
 public class MapActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
+        TrailMeListener,
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
         GroupFragment.OnListFragmentInteractionListener
@@ -53,7 +58,8 @@ public class MapActivity extends AppCompatActivity
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    public RESTCaller restCaller = new RESTCaller();
+    private JSONObject mCurrentUser;
+    public RestCaller restCaller = new RestCaller();
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -66,29 +72,18 @@ public class MapActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        Bundle extras = getIntent().getExtras();
+        String userId = extras.getString("currentUser");
+
+        restCaller.delegate = this;
+        restCaller.execute(this, "getUserById", userId);
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        startGCMRegistration();
-
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
-        // This line loads the actual map (looks for the map )
-        // We want to load the fragment of the map over here.
-       // MapFragment mapFragment = (MapFragment) getFragmentManager()
-               // .findFragmentById(R.id.map);
-       // mapFragment.getMapAsync(this);
-
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-//
+        //startGCMRegistration();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -97,19 +92,20 @@ public class MapActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
+//        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+//                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
     }
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
     }
 
@@ -129,20 +125,27 @@ public class MapActivity extends AppCompatActivity
     }
     public void onListFragmentInteraction(User item)
     {
-        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT).show();
     }
     public void onListFragmentInteraction(Track item)
     {
-        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT).show();
     }
     public void onListFragmentInteraction(Group item)
     {
-        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT);
+        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        TextView userExtendedName = (TextView)findViewById(R.id.userExtendedName);
+
+        try{
+            userExtendedName.setText(mCurrentUser.getString("MailAddress"));
+        }
+        catch (Exception e){ }
+
         getMenuInflater().inflate(R.menu.map, menu);
         return true;
     }
@@ -238,5 +241,13 @@ public class MapActivity extends AppCompatActivity
             return false;
         }
         return true;
+    }
+    public void processFinish(JSONObject response)
+    {
+        mCurrentUser = response;
+        try {
+            TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
+            displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+        }catch (Exception e){}
     }
 }

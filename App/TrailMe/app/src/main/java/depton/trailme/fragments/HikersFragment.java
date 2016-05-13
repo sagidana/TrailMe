@@ -11,14 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
-import depton.trailme.data.AsyncResponse;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.TrailMeListener;
+import depton.trailme.data.RestCaller;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
 import depton.trailme.models.User;
@@ -29,7 +32,7 @@ import depton.trailme.models.User;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HikersFragment extends Fragment implements AsyncResponse {
+public class HikersFragment extends Fragment implements TrailMeListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -37,7 +40,7 @@ public class HikersFragment extends Fragment implements AsyncResponse {
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
     private MyHikerRecyclerViewAdapter mAdapter = null;
-    private RESTCaller restCaller = new RESTCaller();
+    private RestCaller restCaller = new RestCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -80,28 +83,40 @@ public class HikersFragment extends Fragment implements AsyncResponse {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            restCaller.execute("http://trailmedev.cloudapp.net:9100/users");
+            restCaller.execute(this.getContext(), "getUsers");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
 
     @Override
-    public void processFinish(LinkedHashMap<String,String>[] output) {
+    public void processFinish(JSONObject response) {
         try{
-            if(output != null) {
+            if(response != null) {
+                JSONArray jUsers = response.getJSONArray("users");
+                ArrayList<User> users = new ArrayList<>(jUsers.length());
 
-                ArrayList<User> users = new ArrayList<>(output.length);
+                for (int i = 0; i < jUsers.length(); i++)
+                {
+                    User user = new User();
+                    user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
+                    user.SurName = jUsers.getJSONObject(i).getString("LastName");
+                    user.ID= jUsers.getJSONObject(i).getString("Id");
 
-                for (int i = 0; i < output.length; i++) {
-                    User u = new User();
-                    u.ID = output[i].get("Id");
-                    u.FirstName = output[i].get("FirstName");
-                    u.SurName = output[i].get("LastName");
-                    users.add(u);
-                    Log.d("Hikers", "HikerFragment - processFinish: Added track " + u.FirstName + " in ID" + String.valueOf(i) + " ");
+                    users.add(user);
                 }
                 mAdapter.updateList(users);
+//                ArrayList<User> users = new ArrayList<>(output.length);
+//
+//                for (int i = 0; i < output.length; i++) {
+//                    User u = new User();
+//                    u.ID = output[i].get("Id");
+//                    u.FirstName = output[i].get("FirstName");
+//                    u.SurName = output[i].get("LastName");
+//                    users.add(u);
+//                    Log.d("Hikers", "HikerFragment - processFinish: Added track " + u.FirstName + " in ID" + String.valueOf(i) + " ");
+//                }
+//                mAdapter.updateList(users);
             }
             else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");
