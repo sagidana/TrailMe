@@ -321,13 +321,13 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             mAuthTask = null;
             showProgress(false);
 
-
-
             if (success) {
                 Intent intent = new Intent(mCtx, MapActivity.class);
+                intent.putExtra("Username", mUsername);
                 finish();
                 startActivity(intent);
             }else {
+
                 // TODO: call CreateUserFragment with the user mail.
             }
 
