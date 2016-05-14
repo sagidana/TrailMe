@@ -11,6 +11,9 @@ public class User implements Parcelable {
     public String ID;
     public String FirstName;
     public String SurName;
+    public String Email;
+    public String City;
+    public String Birthdate;
     public Image[] Images;
     public Skill[] Skills;
     public Enums.Languages[] Languages;
@@ -25,6 +28,9 @@ public class User implements Parcelable {
         dest.writeString(this.ID);
         dest.writeString(this.FirstName);
         dest.writeString(this.SurName);
+        dest.writeString(this.Email);
+        dest.writeString(this.City);
+        dest.writeString(this.Birthdate);
         //dest.writeParcelable(this.Images, flags);
         //dest.writeParcelable(this.Skills, flags);
         //dest.writeParcelable(this.Languages, flags);
@@ -37,6 +43,10 @@ public class User implements Parcelable {
         this.ID = in.readString();
         this.FirstName = in.readString();
         this.SurName = in.readString();
+        this.Email = in.readString();
+        this.City = in.readString();
+        this.Birthdate = in.readString();
+
         //this.Images = in.readParcelable(Image[].class.getClassLoader());
         //this.Skills = in.readParcelable(Skill[].class.getClassLoader());
         //this.Languages = in.readParcelable(Enums.Languages[].class.getClassLoader());
