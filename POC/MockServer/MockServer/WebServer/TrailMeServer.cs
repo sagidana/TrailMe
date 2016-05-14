@@ -639,13 +639,7 @@ namespace TrailMe.WebServer
             JArray arrayTracks = new JArray();
 
             foreach (var track in tracks)
-            {
-                JObject jTrack = new JObject();
-
-                jTrack.Add("Id", track.TrackId);
-
-                arrayTracks.Add(jTrack);
-            }
+                arrayTracks.Add(convertDbTrackToJson(TrackRepository.GetTrackById(track.TrackId)));
 
             return arrayTracks;
         }

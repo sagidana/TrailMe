@@ -40,6 +40,7 @@ import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
+import depton.trailme.fragments.RecommendedTracksFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.models.Group;
@@ -185,19 +186,21 @@ public class MapActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_inbox) {
             fragmentClass = MapFragment.class;
-        } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
-
+        }else if (id == R.id.nav_recommended_tracks){
+            fragmentClass = RecommendedTracksFragment.class;
         }
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            Bundle arguments = new Bundle();
+            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            fragment.setArguments(arguments);
+
+        }catch(Exception e) {}
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
