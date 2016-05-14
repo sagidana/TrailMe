@@ -151,5 +151,12 @@
 
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/addUserToTrackBtn"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="150dp"
+            android:text="Done it!"/>
+
     </LinearLayout>
 </FrameLayout>

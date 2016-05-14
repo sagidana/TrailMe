@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Track item)
     {
         try {
-            Fragment fragment = (Fragment) TrackDetails.newInstance(item);
+            Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.getString("Id"));
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
