@@ -29,9 +29,7 @@ public class TrackDetails extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TrackDetails() {
-        // Required empty public constructor
-    }
+    public TrackDetails() { }
 
     public static TrackDetails newInstance(Track track) {
         TrackDetails fragment = new TrackDetails();
@@ -46,10 +44,6 @@ public class TrackDetails extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             track = getArguments().getParcelable("track");
-            if(track != null)
-            {
-
-            }
         }
     }
 
@@ -58,8 +52,24 @@ public class TrackDetails extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_track_details, container, false);
-        TextView TrackName = (TextView) v.findViewById(R.id.TrackName);
+
+        TextView TrackName = (TextView) v.findViewById(R.id.trackName);
         TrackName.setText(track.Name);
+
+        TextView kilometers = (TextView) v.findViewById(R.id.kilometers);
+        kilometers.setText(Double.toString(track.Length));
+
+        TextView difficulty = (TextView) v.findViewById(R.id.difficulty);
+        difficulty.setText(track.Difficulty.toString());
+
+        TextView zone = (TextView) v.findViewById(R.id.zone);
+        zone.setText(track.Zone);
+
+        TextView latitude = (TextView) v.findViewById(R.id.latitude);
+        latitude.setText(Double.toString(track.latitude));
+
+        TextView longitude = (TextView) v.findViewById(R.id.longitude);
+        longitude.setText(Double.toString(track.longitude));
         return v;
     }
 
