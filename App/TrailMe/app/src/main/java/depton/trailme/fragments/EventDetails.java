@@ -7,8 +7,13 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONObject;
 
 import depton.net.trailme.R;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
 
 /**
@@ -19,17 +24,13 @@ import depton.trailme.models.Event;
  * Use the {@link EventDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventDetails extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class EventDetails extends Fragment implements TrailMeListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private Event event;
     private OnFragmentInteractionListener mListener;
+    private RestCaller restUsersCaller = new RestCaller();
+    private RestCaller restTracksCaller = new RestCaller();
+
 
     public EventDetails() {
         // Required empty public constructor
@@ -47,16 +48,24 @@ public class EventDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            event = getArguments().getParcelable("event");
+
+
+            /*restTracksCaller.delegate=this;
+            restUsersCaller.delegate=this;
+            restTracksCaller.execute(this.getContext(), "getUsersByGroupId",group.Id);
+            restUsersCaller.execute(this.getContext(), "getEventsByGroupId", group.Id);*/
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details, container, false);
+
+        View v =inflater.inflate(R.layout.fragment_event_details, container, false);
+        TextView EventName = (TextView)v.findViewById(R.id.EventName);
+        EventName.setText(event.Name);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -81,6 +90,11 @@ public class EventDetails extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+
     }
 
     /**

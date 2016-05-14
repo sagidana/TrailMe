@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity
         EventFragment.OnListFragmentInteractionListener,
         TrackDetails.OnFragmentInteractionListener,
         GroupDetails.OnFragmentInteractionListener,
+        EventDetails.OnFragmentInteractionListener,
         UserDetails.OnFragmentInteractionListener
 {
 
