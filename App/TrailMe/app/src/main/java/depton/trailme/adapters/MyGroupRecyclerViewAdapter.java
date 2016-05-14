@@ -31,7 +31,7 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_group, parent, false);
+                .inflate(R.layout.fragment_group_item, parent, false);
         return new ViewHolder(view);
     }
 

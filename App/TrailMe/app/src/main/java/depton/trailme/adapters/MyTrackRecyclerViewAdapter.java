@@ -1,9 +1,5 @@
 package depton.trailme.adapters;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.LayerDrawable;
-import android.media.Rating;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +9,8 @@ import android.widget.TextView;
 
 import depton.net.trailme.R;
 import depton.trailme.fragments.TracksFragment.OnListFragmentInteractionListener;
-import depton.trailme.fragments.dummy.DummyContent.DummyTrack;
 import depton.trailme.models.Track;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecyclerViewAdapter.ViewHolder> {
@@ -38,7 +32,7 @@ public class MyTrackRecyclerViewAdapter extends RecyclerView.Adapter<MyTrackRecy
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_track, parent, false);
+                .inflate(R.layout.fragment_track_item, parent, false);
         return new ViewHolder(view);
     }
 

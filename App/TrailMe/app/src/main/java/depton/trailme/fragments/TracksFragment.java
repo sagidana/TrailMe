@@ -85,7 +85,7 @@ public class TracksFragment extends Fragment implements AsyncResponse{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            restCaller.execute("http://trailmedev.cloudapp.net:9100/tracks");
+            restCaller.execute("Get","http://trailmedev.cloudapp.net:9100/tracks");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -153,6 +153,6 @@ public class TracksFragment extends Fragment implements AsyncResponse{
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(Track item);
+        public void onListFragmentInteraction(Track item);
     }
 }
