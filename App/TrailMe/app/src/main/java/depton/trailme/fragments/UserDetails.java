@@ -27,10 +27,7 @@ public class UserDetails extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public UserDetails() {
-        // Required empty public constructor
-    }
-
+    public UserDetails() { }
 
     public static UserDetails newInstance(User user) {
         UserDetails fragment = new UserDetails();
@@ -51,10 +48,28 @@ public class UserDetails extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View v = inflater.inflate(R.layout.fragment_user_details, container, false);
-        TextView UserName = (TextView)v.findViewById(R.id.UserName);
-        UserName.setText(user.ID);
+
+        TextView username = (TextView)v.findViewById(R.id.userName);
+        username.setText(user.Email);
+
+        TextView firstname = (TextView)v.findViewById(R.id.firstname);
+        firstname.setText(user.FirstName);
+
+        TextView lastname = (TextView)v.findViewById(R.id.lastname);
+        lastname.setText(user.SurName);
+
+        TextView city = (TextView)v.findViewById(R.id.city);
+        city.setText(user.City);
+
+        TextView email = (TextView)v.findViewById(R.id.email);
+        email.setText(user.Email);
+
+        TextView birthdate = (TextView)v.findViewById(R.id.birthdate);
+        birthdate.setText(user.Birthdate);
+
+
         return v;
     }
 

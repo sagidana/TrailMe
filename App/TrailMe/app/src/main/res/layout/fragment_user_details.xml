@@ -4,39 +4,151 @@
     android:layout_height="match_parent"
     tools:context="depton.trailme.fragments.UserDetails">
 
-    <!-- TODO: Update blank fragment layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.25">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/empty_profile"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:id="@+id/MainPic"
-                />
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/empty_profile"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:id="@+id/MainPic" />
+
+                <TextView
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="User Name"
+                    android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                    android:textSize="25sp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
             <TextView
-                android:id="@+id/UserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
                 android:gravity="bottom"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="50dp"/>
+                android:text="First name:"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/firstname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:text="10"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
 
         </RelativeLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.75"
-            />
-    </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="Last name:"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/lastname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:text="10"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="City"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:text="10"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="Email:"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:text="10"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom"
+                android:text="Birthdate:"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+            <TextView
+                android:id="@+id/birthdate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="120dp"
+                android:text="10"
+                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                android:textSize="20sp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
 </FrameLayout>

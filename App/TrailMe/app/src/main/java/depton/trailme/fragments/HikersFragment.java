@@ -101,22 +101,15 @@ public class HikersFragment extends Fragment implements TrailMeListener {
                     User user = new User();
                     user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
                     user.SurName = jUsers.getJSONObject(i).getString("LastName");
-                    user.ID= jUsers.getJSONObject(i).getString("Id");
+                    user.ID = jUsers.getJSONObject(i).getString("Id");
+                    user.Email = jUsers.getJSONObject(i).getString("MailAddress");
+                    user.City = jUsers.getJSONObject(i).getString("City");
+                    user.Birthdate = jUsers.getJSONObject(i).getString("BirthDate");
 
                     users.add(user);
                 }
+
                 mAdapter.updateList(users);
-//                ArrayList<User> users = new ArrayList<>(output.length);
-//
-//                for (int i = 0; i < output.length; i++) {
-//                    User u = new User();
-//                    u.ID = output[i].get("Id");
-//                    u.FirstName = output[i].get("FirstName");
-//                    u.SurName = output[i].get("LastName");
-//                    users.add(u);
-//                    Log.d("Hikers", "HikerFragment - processFinish: Added track " + u.FirstName + " in ID" + String.valueOf(i) + " ");
-//                }
-//                mAdapter.updateList(users);
             }
             else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");
