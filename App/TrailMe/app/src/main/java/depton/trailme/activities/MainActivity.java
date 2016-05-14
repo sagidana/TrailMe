@@ -44,6 +44,8 @@ import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
+import depton.trailme.fragments.EventDetails;
+import depton.trailme.fragments.EventFragment;
 import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
@@ -51,6 +53,7 @@ import depton.trailme.fragments.TrackDetails;
 import depton.trailme.fragments.RecommendedTracksFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.UserDetails;
+import depton.trailme.models.Event;
 import depton.trailme.models.Group;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
         GroupFragment.OnListFragmentInteractionListener,
+        EventFragment.OnListFragmentInteractionListener,
         TrackDetails.OnFragmentInteractionListener,
         GroupDetails.OnFragmentInteractionListener,
         UserDetails.OnFragmentInteractionListener
@@ -167,6 +171,17 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onListFragmentInteraction(Event item)
+    {
+        try {
+            Fragment fragment = (Fragment) EventDetails.newInstance(item);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -212,6 +227,8 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
             fragmentClass = HikersFragment.class;
+        }else if (id == R.id.nav_events) {
+            fragmentClass = EventFragment.class;
         }else if (id == R.id.nav_recommended_tracks){
             fragmentClass = RecommendedTracksFragment.class;
         }
