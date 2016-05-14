@@ -4,6 +4,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import depton.net.trailme.R;
+import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Enums;
@@ -37,6 +41,7 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     private OnFragmentInteractionListener mListener;
     private RestCaller restUsersCaller = new RestCaller();
     private RestCaller restTracksCaller = new RestCaller();
+    private MyHikerRecyclerViewAdapter mUsersAdapter;
 
     public GroupDetails() {
         // Required empty public constructor
@@ -55,12 +60,6 @@ public class GroupDetails extends Fragment implements TrailMeListener {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             group = getArguments().getParcelable("group");
-
-
-            restTracksCaller.delegate=this;
-            restUsersCaller.delegate=this;
-            restTracksCaller.execute(this.getContext(), "getUsersByGroupId",group.Id);
-            restUsersCaller.execute(this.getContext(), "getEventsByGroupId", group.Id);
         }
     }
 
@@ -68,8 +67,25 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v =inflater.inflate(R.layout.fragment_group_details, container, false);
-        TextView GroupName = (TextView)v.findViewById(R.id.GroupName);
-        GroupName.setText(group.Id);
+        TextView GroupName = (TextView)v.findViewById(R.id.groupName);
+        GroupName.setText(group.Name);
+
+        View usersList = v.findViewById(R.id.users);
+
+        // Set the adapter
+        if (usersList instanceof RecyclerView) {
+            Context context = usersList.getContext();
+            RecyclerView recyclerView = (RecyclerView) usersList;
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+            restTracksCaller.delegate = this;
+            restUsersCaller.delegate = this;
+            restTracksCaller.execute(this.getContext(), "getUsersByGroupId", group.Id);
+            restUsersCaller.execute(this.getContext(), "getEventsByGroupId", group.Id);
+
+            recyclerView.setAdapter(mUsersAdapter);
+        }
+
         return v;
     }
 
@@ -120,6 +136,8 @@ public class GroupDetails extends Fragment implements TrailMeListener {
 
                         users.add(user);
                     }
+                    
+                    mUsersAdapter.updateList(users);
                 }
             }
         }

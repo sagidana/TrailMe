@@ -7,36 +7,79 @@
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.25">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/track_holder"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
-                android:id="@+id/MainPic"
-                />
-            <TextView
-                android:id="@+id/GroupName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
-                android:gravity="bottom"
-                android:textColor="#00ff00"
-                android:textSize="50dp"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
 
-        </RelativeLayout>
-        <View
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.75"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.25">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_weight="1.25">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/track_holder"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:id="@+id/MainPic" />
+
+                <TextView
+                    android:id="@+id/groupName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="100dp"
+                    android:text="SagisGroup"
+                    android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                    android:textSize="40sp"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
+            android:gravity="bottom"
+            android:text="Users:"
+            android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+            android:textSize="20sp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/users"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.4"
+            android:gravity="bottom"
+            android:text="Events:"
+            android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+            android:textSize="20sp"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/groups"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/joinGroup"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1.3"
+            android:text="Join"
             />
+
     </LinearLayout>
 
 </FrameLayout>
