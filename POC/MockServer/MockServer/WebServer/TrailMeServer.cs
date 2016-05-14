@@ -8,6 +8,7 @@ using TrailMe.DAL;
 using TrailMe.GoogleCloudMessaging;
 using TrailMe.DAL.Model;
 using Microsoft.Owin;
+using System.Linq;
 
 namespace TrailMe.WebServer
 {
@@ -349,6 +350,31 @@ namespace TrailMe.WebServer
             }
             catch (Exception) { }
         }
+
+        //TODO: Complete it after 15.5
+
+        ///// <summary>
+        ///// Get all the tracks which are closer than spesific distance from the user
+        ///// </summary>
+        ///// <param name="context"></param>
+        //private void GetNearByTracks(Microsoft.Owin.IOwinContext context)
+        //{
+        //    JObject request = getJsonFromRequest(context);
+
+        //    Guid userId = Guid.Parse(request.GetValue("UserId").Value<string>());
+
+        //    var nearByTracks = NearByTracks(0, 0, 20);
+        //    JArray jNearByTracks = convertTracksToJson(nearByTracks);
+
+        //    createWebResponse(context, JSON_TYPE, jNearByTracks.ToString());
+        //}
+
+        //private List<Common.Track> NearByTracks(double latitude, double longitude, int distance)
+        //{
+        //    IEnumerable<Track> allTracks = TrackRepository.GetTracks();
+
+        //    return null;
+        //}
 
         private void getRecommendations(Microsoft.Owin.IOwinContext context)
         {
