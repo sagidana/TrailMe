@@ -4,12 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import depton.net.trailme.R;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
+import depton.trailme.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,17 +29,13 @@ import depton.trailme.models.Event;
  * Use the {@link EventDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventDetails extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class EventDetails extends Fragment implements TrailMeListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private Event event;
     private OnFragmentInteractionListener mListener;
+    private RestCaller restGroupsCaller = new RestCaller();
+    private RestCaller restTracksCaller = new RestCaller();
+
 
     public EventDetails() {
         // Required empty public constructor
@@ -47,16 +53,24 @@ public class EventDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            event = getArguments().getParcelable("event");
+
+
+            restTracksCaller.delegate=this;
+            restGroupsCaller.delegate=this;
+            restTracksCaller.execute(this.getContext(), "getTracksByEventId",event.ID);
+            restGroupsCaller.execute(this.getContext(), "getGroupsByEventId", event.ID);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details, container, false);
+
+        View v =inflater.inflate(R.layout.fragment_event_details, container, false);
+        TextView EventName = (TextView)v.findViewById(R.id.EventName);
+        EventName.setText(event.Name);
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -81,6 +95,43 @@ public class EventDetails extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+
+        Log.d("ProcessFinishDetails", response.toString());
+
+        try {
+            if (response != null) {
+                if(response.has("groups"))
+                {
+                    JSONArray jGroups = response.getJSONArray("groups");
+                }
+                else if (response.has("tracks"))
+                {
+                    JSONArray jTracks = response.getJSONArray("tracks");
+                }
+                /*else if(response.has("users")) {
+                    JSONArray jUsers = response.getJSONArray("users");
+                    ArrayList<User> users = new ArrayList<>(jUsers.length());
+
+                    for (int i = 0; i < jUsers.length(); i++) {
+                        User user = new User();
+                        user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
+                        user.SurName = jUsers.getJSONObject(i).getString("LastName");
+                        user.ID = jUsers.getJSONObject(i).getString("Id");
+
+                        users.add(user);
+                    }
+                }*/
+            }
+        }
+        catch (Exception Ex)
+        {
+            Log.d("REST", "Rest response: Failed to init groups\tracks by event id");
+        }
+
     }
 
     /**
