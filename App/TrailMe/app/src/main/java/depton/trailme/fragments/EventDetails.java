@@ -4,17 +4,22 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
+import depton.trailme.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +33,7 @@ public class EventDetails extends Fragment implements TrailMeListener {
 
     private Event event;
     private OnFragmentInteractionListener mListener;
-    private RestCaller restUsersCaller = new RestCaller();
+    private RestCaller restGroupsCaller = new RestCaller();
     private RestCaller restTracksCaller = new RestCaller();
 
 
@@ -51,10 +56,10 @@ public class EventDetails extends Fragment implements TrailMeListener {
             event = getArguments().getParcelable("event");
 
 
-            /*restTracksCaller.delegate=this;
-            restUsersCaller.delegate=this;
-            restTracksCaller.execute(this.getContext(), "getUsersByGroupId",group.Id);
-            restUsersCaller.execute(this.getContext(), "getEventsByGroupId", group.Id);*/
+            restTracksCaller.delegate=this;
+            restGroupsCaller.delegate=this;
+            restTracksCaller.execute(this.getContext(), "getTracksByEventId",event.ID);
+            restGroupsCaller.execute(this.getContext(), "getGroupsByEventId", event.ID);
         }
     }
 
@@ -94,6 +99,38 @@ public class EventDetails extends Fragment implements TrailMeListener {
 
     @Override
     public void processFinish(JSONObject response) {
+
+        Log.d("ProcessFinishDetails", response.toString());
+
+        try {
+            if (response != null) {
+                if(response.has("groups"))
+                {
+                    JSONArray jGroups = response.getJSONArray("groups");
+                }
+                else if (response.has("tracks"))
+                {
+                    JSONArray jTracks = response.getJSONArray("tracks");
+                }
+                /*else if(response.has("users")) {
+                    JSONArray jUsers = response.getJSONArray("users");
+                    ArrayList<User> users = new ArrayList<>(jUsers.length());
+
+                    for (int i = 0; i < jUsers.length(); i++) {
+                        User user = new User();
+                        user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
+                        user.SurName = jUsers.getJSONObject(i).getString("LastName");
+                        user.ID = jUsers.getJSONObject(i).getString("Id");
+
+                        users.add(user);
+                    }
+                }*/
+            }
+        }
+        catch (Exception Ex)
+        {
+            Log.d("REST", "Rest response: Failed to init groups\tracks by event id");
+        }
 
     }
 
