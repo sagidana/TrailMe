@@ -47,7 +47,7 @@ import depton.trailme.models.Group;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
 
-public class MapActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
         TrailMeListener,
@@ -95,7 +95,13 @@ public class MapActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
-    }
+
+
+
+
+
+
+}
 
     @Override
     protected void onResume() {
@@ -124,6 +130,7 @@ public class MapActivity extends AppCompatActivity
     {
 
     }
+
     public void onListFragmentInteraction(User item)
     {
         Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT).show();
@@ -178,15 +185,10 @@ public class MapActivity extends AppCompatActivity
 
         if (id == R.id.nav_tracks) {
             fragmentClass = TracksFragment.class;
-            // Handle the camera action
         } else if (id == R.id.nav_groups) {
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
             fragmentClass = HikersFragment.class;
-
-        } else if (id == R.id.nav_inbox) {
-            fragmentClass = MapFragment.class;
-
         }else if (id == R.id.nav_recommended_tracks){
             fragmentClass = RecommendedTracksFragment.class;
         }
@@ -205,6 +207,7 @@ public class MapActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -251,6 +254,19 @@ public class MapActivity extends AppCompatActivity
         try {
             TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
             displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+
+            Fragment fragment = TracksFragment.class.newInstance();
+            Bundle arguments = new Bundle();
+            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            fragment.setArguments(arguments);
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            
         }catch (Exception e){}
     }
 }

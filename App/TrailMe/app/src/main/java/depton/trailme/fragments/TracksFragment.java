@@ -11,22 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Response;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import depton.net.trailme.R;
-import depton.trailme.DAL.TrailMeServer;
-import depton.trailme.activities.MapActivity;
 import depton.trailme.adapters.MyTrackRecyclerViewAdapter;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
-import depton.trailme.fragments.dummy.DummyContent;
-import depton.trailme.fragments.dummy.DummyContent.DummyItem;
 import depton.trailme.models.Enums;
 import depton.trailme.models.Track;
 

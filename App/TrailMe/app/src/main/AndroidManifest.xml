@@ -69,7 +69,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="depton.trailme.activities.MapActivity"
+            android:name="depton.trailme.activities.MainActivity"
             android:label="@string/title_activity_map"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
