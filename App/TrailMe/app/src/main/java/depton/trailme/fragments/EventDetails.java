@@ -4,12 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import depton.net.trailme.R;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
+import depton.trailme.models.Track;
+import depton.trailme.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,17 +30,19 @@ import depton.trailme.models.Event;
  * Use the {@link EventDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class EventDetails extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class EventDetails extends Fragment implements TrailMeListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Event event;
+    private EventDetails mCtx;
+    private EventFragment.OnListFragmentInteractionListener mListener;
 
-    private OnFragmentInteractionListener mListener;
+    private TracksFragment.OnListFragmentInteractionListener mTrackListener;
+    private GroupFragment.OnListFragmentInteractionListener mGroupListener;
+
+    private RestCaller restGroupsCaller = new RestCaller();
+    private RestCaller restTracksCaller = new RestCaller();
+    private View mTrackItem = null;
+    private View mGroupItem = null;
 
     public EventDetails() {
         // Required empty public constructor
@@ -47,30 +60,39 @@ public class EventDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mCtx = this;
+            event = getArguments().getParcelable("event");
+
+
+            restTracksCaller.delegate=mCtx;
+            restGroupsCaller.delegate=mCtx;
+
+            restTracksCaller.execute(mCtx.getContext(), "getTracksByEventId",event.ID);
+            restGroupsCaller.execute(mCtx.getContext(), "getGroupsByEventId", event.ID);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_event_details, container, false);
-    }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        View v =inflater.inflate(R.layout.fragment_event_details, container, false);
+        mTrackItem = v.findViewById(R.id.event_track);
+        mGroupItem = v.findViewById(R.id.event_group);
+
+        //mTrackItem.setOnClickListener(mListener);
+        TextView EventName = (TextView)v.findViewById(R.id.event_name);
+        EventName.setText(event.Name);
+
+        return v;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof EventFragment.OnListFragmentInteractionListener && context instanceof GroupFragment.OnListFragmentInteractionListener && context instanceof TracksFragment.OnListFragmentInteractionListener) {
+
+            mListener = (EventFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -81,6 +103,39 @@ public class EventDetails extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+
+        Log.d("ProcessFinishDetails", response.toString());
+
+        try {
+            if (response != null) {
+                if(response.has("groups"))
+                {
+                    JSONArray jGroups = response.getJSONArray("groups");
+                    JSONObject jGroup = jGroups.getJSONObject(0);
+
+                    TextView groupName = (TextView)mGroupItem.findViewById(R.id.name);
+                    groupName.setText(jGroup.getString("Name"));
+                }
+                else if (response.has("tracks"))
+                {
+                    JSONArray jTracks = response.getJSONArray("tracks");
+                    JSONObject jTrack = jTracks.getJSONObject(0);
+
+                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.name);
+                    trackName.setText(jTrack.getString("Name"));
+
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            Log.d("REST", "Rest response: Failed to init groups\tracks by event id");
+        }
+
     }
 
     /**

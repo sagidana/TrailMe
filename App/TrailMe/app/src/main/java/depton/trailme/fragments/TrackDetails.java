@@ -7,12 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONObject;
 
 import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Track;
 
 /**
@@ -23,20 +25,22 @@ import depton.trailme.models.Track;
  * Use the {@link TrackDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrackDetails extends Fragment {
+public class TrackDetails extends Fragment implements TrailMeListener{
 
     private Track track;
+    private TrackDetails mCtx;
+    private RestCaller addUserToTrack = new RestCaller();
+    private String mCurrentUserId;
 
     private OnFragmentInteractionListener mListener;
 
-    public TrackDetails() {
-        // Required empty public constructor
-    }
+    public TrackDetails() { }
 
-    public static TrackDetails newInstance(Track track) {
+    public static TrackDetails newInstance(Track track, String userId) {
         TrackDetails fragment = new TrackDetails();
         Bundle args = new Bundle();
         args.putParcelable("track", track);
+        args.putString("currentUser", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,21 +49,46 @@ public class TrackDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mCtx = this;
             track = getArguments().getParcelable("track");
-            if(track != null)
-            {
-
-            }
+            mCurrentUserId = getArguments().getString("currentUser");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        addUserToTrack.delegate = mCtx;
+
         View v = inflater.inflate(R.layout.fragment_track_details, container, false);
-        TextView TrackName = (TextView) v.findViewById(R.id.TrackName);
+
+        TextView TrackName = (TextView) v.findViewById(R.id.trackName);
         TrackName.setText(track.Name);
+
+        TextView kilometers = (TextView) v.findViewById(R.id.kilometers);
+        kilometers.setText(Double.toString(track.Length));
+
+        TextView difficulty = (TextView) v.findViewById(R.id.difficulty);
+        difficulty.setText(track.Difficulty.toString());
+
+        TextView zone = (TextView) v.findViewById(R.id.zone);
+        zone.setText(track.Zone);
+
+        TextView latitude = (TextView) v.findViewById(R.id.latitude);
+        latitude.setText(Double.toString(track.latitude));
+
+        TextView longitude = (TextView) v.findViewById(R.id.longitude);
+        longitude.setText(Double.toString(track.longitude));
+
+        Button addUserToTrackbtn = (Button) v.findViewById(R.id.addUserToTrackBtn);
+        addUserToTrackbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUserToTrack.execute(mCtx.getContext(), "addUserToTrack", track.ID, mCurrentUserId);
+            }
+        });
+
         return v;
     }
 
@@ -87,16 +116,10 @@ public class TrackDetails extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public void processFinish(JSONObject response) {
+        // TODO:
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
