@@ -44,6 +44,7 @@ import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
+import depton.trailme.fragments.CreateGroupFragment;
 import depton.trailme.fragments.EventDetails;
 import depton.trailme.fragments.EventFragment;
 import depton.trailme.fragments.GroupDetails;
@@ -233,6 +234,8 @@ public class MainActivity extends AppCompatActivity
             fragmentClass = EventFragment.class;
         }else if (id == R.id.nav_recommended_tracks){
             fragmentClass = RecommendedTracksFragment.class;
+        }else if (id == R.id.nav_create_group){
+            fragmentClass = CreateGroupFragment.class;
         }
 
         try {
