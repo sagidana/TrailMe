@@ -19,10 +19,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import depton.net.trailme.R;
+import depton.trailme.adapters.MyEventRecyclerViewAdapter;
 import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Enums;
+import depton.trailme.models.Event;
 import depton.trailme.models.Group;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
@@ -41,7 +43,8 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     private OnFragmentInteractionListener mListener;
     private RestCaller restUsersCaller = new RestCaller();
     private RestCaller restTracksCaller = new RestCaller();
-    private MyHikerRecyclerViewAdapter mUsersAdapter;
+    private MyHikerRecyclerViewAdapter mUsersAdapter = null;
+    private MyEventRecyclerViewAdapter mEventsAdapter = null;
 
     public GroupDetails() {
         // Required empty public constructor
@@ -71,36 +74,38 @@ public class GroupDetails extends Fragment implements TrailMeListener {
         GroupName.setText(group.Name);
 
         View usersList = v.findViewById(R.id.users);
+        View eventsList = v.findViewById(R.id.events);
 
         // Set the adapter
-        if (usersList instanceof RecyclerView) {
-            Context context = usersList.getContext();
-            RecyclerView recyclerView = (RecyclerView) usersList;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        if (usersList instanceof RecyclerView && eventsList instanceof RecyclerView) {
+
+            Context eventsCtx = eventsList.getContext();
+            RecyclerView eventsRecyclerView = (RecyclerView) eventsList;
+            eventsRecyclerView.setLayoutManager(new LinearLayoutManager(eventsCtx));
+
+            Context usersCtx = usersList.getContext();
+            RecyclerView usersRecyclerView = (RecyclerView) usersList;
+            usersRecyclerView.setLayoutManager(new LinearLayoutManager(usersCtx));
 
             restTracksCaller.delegate = this;
             restUsersCaller.delegate = this;
             restTracksCaller.execute(this.getContext(), "getUsersByGroupId", group.Id);
             restUsersCaller.execute(this.getContext(), "getEventsByGroupId", group.Id);
 
-            recyclerView.setAdapter(mUsersAdapter);
+            usersRecyclerView.setAdapter(mUsersAdapter);
+            eventsRecyclerView.setAdapter(mEventsAdapter);
         }
 
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof HikersFragment.OnListFragmentInteractionListener && context instanceof EventFragment.OnListFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+            mUsersAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), (HikersFragment.OnListFragmentInteractionListener) context);
+            mEventsAdapter = new MyEventRecyclerViewAdapter(new ArrayList<Event>(), (EventFragment.OnListFragmentInteractionListener) context);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -123,6 +128,19 @@ public class GroupDetails extends Fragment implements TrailMeListener {
                 if(response.has("events"))
                 {
                     JSONArray jEvents = response.getJSONArray("events");
+
+                    ArrayList<Event> events = new ArrayList<>(jEvents.length());
+
+                    for (int i = 0; i < jEvents.length(); i++) {
+                        Event event = new Event();
+
+                        event.ID = jEvents.getJSONObject(i).getString("Id");
+                        event.Name = jEvents.getJSONObject(i).getString("Name");
+
+                        events.add(event);
+                    }
+
+                    mEventsAdapter.updateList(events);
                 }
                 else if(response.has("users")) {
                     JSONArray jUsers = response.getJSONArray("users");
@@ -136,7 +154,7 @@ public class GroupDetails extends Fragment implements TrailMeListener {
 
                         users.add(user);
                     }
-                    
+
                     mUsersAdapter.updateList(users);
                 }
             }
