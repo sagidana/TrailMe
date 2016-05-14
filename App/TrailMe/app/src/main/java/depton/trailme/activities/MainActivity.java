@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
@@ -133,14 +134,12 @@ public class MainActivity extends AppCompatActivity
 
     public void onFragmentInteraction(Uri uri)
     {
-
     }
 
     public void onListFragmentInteraction(User item)
     {
         try {
-            Fragment fragment = null;
-            fragment = (Fragment) UserDetails.newInstance(item);
+            Fragment fragment = (Fragment) UserDetails.newInstance(item);
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
@@ -150,8 +149,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Track item)
     {
         try {
-            Fragment fragment = null;
-            fragment = (Fragment) TrackDetails.newInstance(item);
+            Fragment fragment = (Fragment) TrackDetails.newInstance(item);
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
@@ -161,8 +159,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Group item)
     {
         try {
-            Fragment fragment = null;
-            fragment = (Fragment) GroupDetails.newInstance(item);
+            Fragment fragment = (Fragment) GroupDetails.newInstance(item);
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)

@@ -4,13 +4,24 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import depton.net.trailme.R;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
+import depton.trailme.models.Enums;
 import depton.trailme.models.Group;
+import depton.trailme.models.Track;
+import depton.trailme.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,10 +31,12 @@ import depton.trailme.models.Group;
  * Use the {@link GroupDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GroupDetails extends Fragment {
+public class GroupDetails extends Fragment implements TrailMeListener {
 
     private Group group;
     private OnFragmentInteractionListener mListener;
+    private RestCaller restUsersCaller = new RestCaller();
+    private RestCaller restTracksCaller = new RestCaller();
 
     public GroupDetails() {
         // Required empty public constructor
@@ -42,6 +55,12 @@ public class GroupDetails extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             group = getArguments().getParcelable("group");
+
+
+            restTracksCaller.delegate=this;
+            restUsersCaller.delegate=this;
+            restTracksCaller.execute(this.getContext(), "getUsersByGroupId",group.Id);
+            restUsersCaller.execute(this.getContext(), "getEventsByGroupId", group.Id);
         }
     }
 
@@ -76,6 +95,38 @@ public class GroupDetails extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+
+        Log.d("ProcessFpDetails", response.toString());
+
+        try {
+            if (response != null) {
+                if(response.has("events"))
+                {
+                    JSONArray jEvents = response.getJSONArray("events");
+                }
+                else if(response.has("users")) {
+                    JSONArray jUsers = response.getJSONArray("users");
+                    ArrayList<User> users = new ArrayList<>(jUsers.length());
+
+                    for (int i = 0; i < jUsers.length(); i++) {
+                        User user = new User();
+                        user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
+                        user.SurName = jUsers.getJSONObject(i).getString("LastName");
+                        user.ID = jUsers.getJSONObject(i).getString("Id");
+
+                        users.add(user);
+                    }
+                }
+            }
+        }
+        catch (Exception Ex)
+        {
+            Log.d("REST", "Rest response: Failed to init users\tracks by group id");
+        }
     }
 
     /**
