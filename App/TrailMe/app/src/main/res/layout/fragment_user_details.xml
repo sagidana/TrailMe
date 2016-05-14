@@ -5,9 +5,38 @@
     tools:context="depton.trailme.fragments.UserDetails">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.25">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/empty_profile"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:id="@+id/MainPic"
+                />
+            <TextView
+                android:id="@+id/UserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentBottom="true"
+                android:gravity="bottom"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="50dp"/>
+
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.75"
+            />
+    </LinearLayout>
 
 </FrameLayout>

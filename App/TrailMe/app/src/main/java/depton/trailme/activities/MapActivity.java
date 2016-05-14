@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -33,14 +34,21 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
 
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.util.List;
+
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
+import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
+import depton.trailme.fragments.TrackDetails;
 import depton.trailme.fragments.TracksFragment;
+import depton.trailme.fragments.UserDetails;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.models.Group;
 import depton.trailme.models.Track;
@@ -52,7 +60,10 @@ public class MapActivity extends AppCompatActivity
         TrailMeListener,
         HikersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
-        GroupFragment.OnListFragmentInteractionListener
+        GroupFragment.OnListFragmentInteractionListener,
+        TrackDetails.OnFragmentInteractionListener,
+        GroupDetails.OnFragmentInteractionListener,
+        UserDetails.OnFragmentInteractionListener
 {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -60,6 +71,7 @@ public class MapActivity extends AppCompatActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private JSONObject mCurrentUser;
     public RestCaller restCaller = new RestCaller();
+    FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -125,15 +137,36 @@ public class MapActivity extends AppCompatActivity
     }
     public void onListFragmentInteraction(User item)
     {
-        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT).show();
+        try {
+            Fragment fragment = null;
+            fragment = (Fragment) UserDetails.newInstance(item);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
     }
     public void onListFragmentInteraction(Track item)
     {
-        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT).show();
+        try {
+            Fragment fragment = null;
+            fragment = (Fragment) TrackDetails.newInstance(item);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
     }
     public void onListFragmentInteraction(Group item)
     {
-        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT).show();
+        try {
+            Fragment fragment = null;
+            fragment = (Fragment) GroupDetails.newInstance(item);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     @Override
@@ -197,7 +230,7 @@ public class MapActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

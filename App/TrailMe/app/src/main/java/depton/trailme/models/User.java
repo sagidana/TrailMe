@@ -1,15 +1,56 @@
 package depton.trailme.models;
 
 import android.media.Image;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 /**
  * Created by Yotam on 4/2/2016.
  */
-public class User {
+public class User implements Parcelable {
     public String ID;
     public String FirstName;
     public String SurName;
     public Image[] Images;
     public Skill[] Skills;
     public Enums.Languages[] Languages;
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.ID);
+        dest.writeString(this.FirstName);
+        dest.writeString(this.SurName);
+        //dest.writeParcelable(this.Images, flags);
+        //dest.writeParcelable(this.Skills, flags);
+        //dest.writeParcelable(this.Languages, flags);
+    }
+
+    public User() {
+    }
+
+    protected User(Parcel in) {
+        this.ID = in.readString();
+        this.FirstName = in.readString();
+        this.SurName = in.readString();
+        //this.Images = in.readParcelable(Image[].class.getClassLoader());
+        //this.Skills = in.readParcelable(Skill[].class.getClassLoader());
+        //this.Languages = in.readParcelable(Enums.Languages[].class.getClassLoader());
+    }
+
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel source) {
+            return new User(source);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
 }
