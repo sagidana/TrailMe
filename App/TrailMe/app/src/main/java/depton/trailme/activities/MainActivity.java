@@ -47,14 +47,14 @@ import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TrackDetails;
+import depton.trailme.fragments.RecommendedTracksFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.UserDetails;
-import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.models.Group;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
 
-public class MapActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
         TrailMeListener,
@@ -106,7 +106,13 @@ public class MapActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
-    }
+
+
+
+
+
+
+}
 
     @Override
     protected void onResume() {
@@ -135,6 +141,7 @@ public class MapActivity extends AppCompatActivity
     {
 
     }
+
     public void onListFragmentInteraction(User item)
     {
         try {
@@ -210,31 +217,27 @@ public class MapActivity extends AppCompatActivity
 
         if (id == R.id.nav_tracks) {
             fragmentClass = TracksFragment.class;
-            // Handle the camera action
         } else if (id == R.id.nav_groups) {
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
             fragmentClass = HikersFragment.class;
-
-        } else if (id == R.id.nav_inbox) {
-            fragmentClass = MapFragment.class;
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        }else if (id == R.id.nav_recommended_tracks){
+            fragmentClass = RecommendedTracksFragment.class;
         }
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            Bundle arguments = new Bundle();
+            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            fragment.setArguments(arguments);
 
-        fragmentManager = getSupportFragmentManager();
+        }catch(Exception e) {}
+
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -281,6 +284,16 @@ public class MapActivity extends AppCompatActivity
         try {
             TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
             displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+
+            Fragment fragment = TracksFragment.class.newInstance();
+            Bundle arguments = new Bundle();
+            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            fragment.setArguments(arguments);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            
         }catch (Exception e){}
     }
 }

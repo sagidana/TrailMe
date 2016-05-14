@@ -40,7 +40,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(mValues.get(position).FirstName + " " + mValues.get(position).SurName);
-        holder.mAboutView.setText(mValues.get(position).ID);
+        //holder.mAboutView.setText(mValues.get(position).ID);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

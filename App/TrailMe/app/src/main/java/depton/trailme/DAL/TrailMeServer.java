@@ -61,6 +61,21 @@ public class TrailMeServer
         getRequestQueue().add(req);
     }
 
+    public JSONArray getRcommendations(String userId)
+    {
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("UserId", userId);
+
+            return postArray("recommendations", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+
     public JSONArray getUsers()
     {
         return get("users");

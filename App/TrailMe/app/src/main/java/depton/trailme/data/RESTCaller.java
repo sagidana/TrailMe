@@ -37,6 +37,14 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
 
         switch ((String)params[1])
         {
+            case ("getRecommendations"):
+            {
+                JSONArray tracks = TrailMeServer.getInstance(ctx).getRcommendations((String)params[2]);
+                try {
+                    response.put("tracks", tracks);
+                }catch(Exception e){ }
+                break;
+            }
             case ("getTracks"):
             {
                 JSONArray tracks = TrailMeServer.getInstance(ctx).getTracks();
