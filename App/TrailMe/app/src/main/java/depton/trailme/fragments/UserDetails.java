@@ -27,14 +27,6 @@ import depton.trailme.models.Enums;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link UserDetails.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link UserDetails#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class UserDetails extends Fragment  implements TrailMeListener{
 
     private TracksFragment.OnListFragmentInteractionListener mTrackListener;
