@@ -19,6 +19,7 @@ import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
+import depton.trailme.models.Track;
 import depton.trailme.models.User;
 
 /**
@@ -34,6 +35,10 @@ public class EventDetails extends Fragment implements TrailMeListener {
     private Event event;
     private EventDetails mCtx;
     private EventFragment.OnListFragmentInteractionListener mListener;
+
+    private TracksFragment.OnListFragmentInteractionListener mTrackListener;
+    private GroupFragment.OnListFragmentInteractionListener mGroupListener;
+
     private RestCaller restGroupsCaller = new RestCaller();
     private RestCaller restTracksCaller = new RestCaller();
     private View mTrackItem = null;
@@ -75,6 +80,7 @@ public class EventDetails extends Fragment implements TrailMeListener {
         mTrackItem = v.findViewById(R.id.event_track);
         mGroupItem = v.findViewById(R.id.event_group);
 
+        //mTrackItem.setOnClickListener(mListener);
         TextView EventName = (TextView)v.findViewById(R.id.event_name);
         EventName.setText(event.Name);
 
@@ -84,7 +90,8 @@ public class EventDetails extends Fragment implements TrailMeListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof EventFragment.OnListFragmentInteractionListener) {
+        if (context instanceof EventFragment.OnListFragmentInteractionListener && context instanceof GroupFragment.OnListFragmentInteractionListener && context instanceof TracksFragment.OnListFragmentInteractionListener) {
+
             mListener = (EventFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
