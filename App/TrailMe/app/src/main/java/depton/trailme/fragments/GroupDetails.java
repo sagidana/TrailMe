@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -40,7 +41,10 @@ import depton.trailme.models.User;
 public class GroupDetails extends Fragment implements TrailMeListener {
 
     private Group group;
+    private GroupDetails mCtx;
+    private String mCurrentUserId;
     private OnFragmentInteractionListener mListener;
+    private RestCaller restAddUserToGroup = new RestCaller();
     private RestCaller restUsersCaller = new RestCaller();
     private RestCaller restTracksCaller = new RestCaller();
     private MyHikerRecyclerViewAdapter mUsersAdapter = null;
@@ -50,10 +54,11 @@ public class GroupDetails extends Fragment implements TrailMeListener {
         // Required empty public constructor
     }
 
-    public static GroupDetails newInstance(Group group) {
+    public static GroupDetails newInstance(Group group , String userId) {
         GroupDetails fragment = new GroupDetails();
         Bundle args = new Bundle();
         args.putParcelable("group", group);
+        args.putString("currentUser", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,7 +66,9 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCtx = this;
         if (getArguments() != null) {
+            mCurrentUserId = getArguments().getString("currentUser");
             group = getArguments().getParcelable("group");
         }
     }
@@ -72,6 +79,15 @@ public class GroupDetails extends Fragment implements TrailMeListener {
         View v =inflater.inflate(R.layout.fragment_group_details, container, false);
         TextView GroupName = (TextView)v.findViewById(R.id.groupName);
         GroupName.setText(group.Name);
+
+        Button joinGroup = (Button)v.findViewById(R.id.joinGroup);
+        joinGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                restAddUserToGroup.delegate = mCtx;
+                restAddUserToGroup.execute(mCtx.getContext(),"addUserToGroup", group.Id, mCurrentUserId);
+            }
+        });
 
         View usersList = v.findViewById(R.id.users);
         View eventsList = v.findViewById(R.id.events);

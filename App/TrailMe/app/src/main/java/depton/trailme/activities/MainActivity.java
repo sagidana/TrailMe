@@ -163,7 +163,8 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Group item)
     {
         try {
-            Fragment fragment = (Fragment) GroupDetails.newInstance(item);
+            Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.getString("Id"));
+
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
