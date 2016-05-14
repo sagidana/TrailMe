@@ -32,10 +32,12 @@ import depton.trailme.models.User;
 public class EventDetails extends Fragment implements TrailMeListener {
 
     private Event event;
-    private OnFragmentInteractionListener mListener;
+    private EventDetails mCtx;
+    private EventFragment.OnListFragmentInteractionListener mListener;
     private RestCaller restGroupsCaller = new RestCaller();
     private RestCaller restTracksCaller = new RestCaller();
-
+    private View mTrackItem = null;
+    private View mGroupItem = null;
 
     public EventDetails() {
         // Required empty public constructor
@@ -53,13 +55,15 @@ public class EventDetails extends Fragment implements TrailMeListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            mCtx = this;
             event = getArguments().getParcelable("event");
 
 
-            restTracksCaller.delegate=this;
-            restGroupsCaller.delegate=this;
-            restTracksCaller.execute(this.getContext(), "getTracksByEventId",event.ID);
-            restGroupsCaller.execute(this.getContext(), "getGroupsByEventId", event.ID);
+            restTracksCaller.delegate=mCtx;
+            restGroupsCaller.delegate=mCtx;
+
+            restTracksCaller.execute(mCtx.getContext(), "getTracksByEventId",event.ID);
+            restGroupsCaller.execute(mCtx.getContext(), "getGroupsByEventId", event.ID);
         }
     }
 
@@ -68,23 +72,20 @@ public class EventDetails extends Fragment implements TrailMeListener {
                              Bundle savedInstanceState) {
 
         View v =inflater.inflate(R.layout.fragment_event_details, container, false);
-        TextView EventName = (TextView)v.findViewById(R.id.EventName);
-        EventName.setText(event.Name);
-        return v;
-    }
+        mTrackItem = v.findViewById(R.id.event_track);
+        mGroupItem = v.findViewById(R.id.event_group);
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        TextView EventName = (TextView)v.findViewById(R.id.event_name);
+        EventName.setText(event.Name);
+
+        return v;
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof EventFragment.OnListFragmentInteractionListener) {
+            mListener = (EventFragment.OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -107,24 +108,20 @@ public class EventDetails extends Fragment implements TrailMeListener {
                 if(response.has("groups"))
                 {
                     JSONArray jGroups = response.getJSONArray("groups");
+                    JSONObject jGroup = jGroups.getJSONObject(0);
+
+                    TextView groupName = (TextView)mGroupItem.findViewById(R.id.name);
+                    groupName.setText(jGroup.getString("Name"));
                 }
                 else if (response.has("tracks"))
                 {
                     JSONArray jTracks = response.getJSONArray("tracks");
+                    JSONObject jTrack = jTracks.getJSONObject(0);
+
+                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.name);
+                    trackName.setText(jTrack.getString("Name"));
+
                 }
-                /*else if(response.has("users")) {
-                    JSONArray jUsers = response.getJSONArray("users");
-                    ArrayList<User> users = new ArrayList<>(jUsers.length());
-
-                    for (int i = 0; i < jUsers.length(); i++) {
-                        User user = new User();
-                        user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
-                        user.SurName = jUsers.getJSONObject(i).getString("LastName");
-                        user.ID = jUsers.getJSONObject(i).getString("Id");
-
-                        users.add(user);
-                    }
-                }*/
             }
         }
         catch (Exception Ex)
