@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import org.json.JSONObject;
 
 import depton.net.trailme.R;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.RestCaller;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +71,7 @@ public class TrackDetails extends Fragment {
 
 
 
-        new RESTCaller().execute("Post","http://trailmedev.cloudapp.net:9100/users","a0283d29-1aff-4555-b7d3-2c98f4ee5926");
+        new RestCaller().execute("Post","http://trailmedev.cloudapp.net:9100/users","a0283d29-1aff-4555-b7d3-2c98f4ee5926");
 
         return inflater.inflate(R.layout.fragment_track_details, container, false);
     }

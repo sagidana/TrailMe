@@ -77,7 +77,7 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                return dbContext.Events.Where(dbEvent => dbEvent.Group.Id == id).ToList();
+                return dbContext.Events.Include("Group").Include("Track").Where(dbEvent => dbEvent.Group.Id == id).ToList();
             }
         }
 
@@ -85,7 +85,7 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                return dbContext.Events.Where(dbEvent => dbEvent.Track.Id == id).ToList();
+                return dbContext.Events.Include("Group").Include("Track").Where(dbEvent => dbEvent.Track.Id == id).ToList();
             }
         }
 

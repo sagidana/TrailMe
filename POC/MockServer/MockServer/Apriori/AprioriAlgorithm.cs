@@ -60,17 +60,17 @@ namespace TrailMe.Apriori
         {
             List<Item> allFrequentItems = getAllFrequentItems(minSupport, items, transactions);
 
-            printItems(allFrequentItems);
+            //printItems(allFrequentItems);
             
             List<Rule> rules = generateRules(allFrequentItems);
             
-            Console.WriteLine("RULES______________________________________");
-            printRules(rules);
+            //Console.WriteLine("RULES______________________________________");
+            //printRules(rules);
             
             List<Rule> strongRules = getStrongRules(rules, minConfidence, allFrequentItems);
             
-            Console.WriteLine("STRONG RULES_____________________________________________");
-            printRules(strongRules);
+            //Console.WriteLine("STRONG RULES_____________________________________________");
+            //printRules(strongRules);
 
             Result result = new Result()
             {

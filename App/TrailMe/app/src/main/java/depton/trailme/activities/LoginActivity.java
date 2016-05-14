@@ -3,6 +3,7 @@ package depton.trailme.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -21,33 +22,29 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 
 import depton.net.trailme.R;
 import depton.trailme.authenticator.AuthenticationManager;
-import depton.trailme.data.AsyncResponse;
-import depton.trailme.data.RESTCaller;
+import depton.trailme.data.TrailMeListener;
+import depton.trailme.data.RestCaller;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements AsyncResponse,LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements TrailMeListener,LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -60,33 +57,22 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
     private UserLoginTask mAuthTask = null;
 
     // UI references.
+    private String mUsername;
     private AutoCompleteTextView mEmailView;
-    private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private RESTCaller  restCaller = new RESTCaller();
+    private RestCaller restCaller = new RestCaller();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
         restCaller.delegate=this;
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
 
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
@@ -98,32 +84,6 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-
-
-
-        try{
-            JSONObject jsonObject = new JSONObject("{Tracks=[{Id=23e47bbd-a47f-4005-b603-00d67bbe842a, Name=River Hamud, Latitude=32.874865, Longitude=35.515653, Zone=Kineret, Difficulty=Medium, DistanceKM=4, Events=[{Id=d88a9255-be10-4b17-a12e-cc79491776b9, Name=My Family, StartDate=2016-04-01T00:00:00, EndDate=2016-04-02T00:00:00}, {Id=0b62264d-cfd0-4373-b3a7-e35274f42770, Name=Passover 2016, StartDate=2016-02-05T00:00:00, EndDate=2016-05-05T00:00:00}]}, {Id=e8eecbea-5a47-45f9-b6da-b6e220dfaa0d, Name=River Shofet, Latitude=32.633706, Longitude=35.103318, Zone=Yokneam, Difficulty=Easy, DistanceKM=2, Events=[]}]}");
-        }
-        catch(Exception e){}
-
-        try{
-            JSONObject jsonObject = new JSONObject("{Tracks:[{Id:23e47bbd-a47f-4005-b603-00d67bbe842a, Name:River Hamud, Latitude:32.874865, Longitude:35.515653, Zone:Kineret, Difficulty:Medium, DistanceKM:4, Events:[{Id:d88a9255-be10-4b17-a12e-cc79491776b9, Name:My Family, StartDate:2016-04-01T00:00:00, EndDate:2016-04-02T00:00:00}, {Id:0b62264d-cfd0-4373-b3a7-e35274f42770, Name:Passover 2016, StartDate:2016-02-05T00:00:00, EndDate:2016-05-05T00:00:00}]}, {Id:e8eecbea-5a47-45f9-b6da-b6e220dfaa0d, Name:River Shofet, Latitude:32.633706, Longitude:35.103318, Zone:Yokneam, Difficulty:Easy, DistanceKM:2, Events:[]}]}");
-        }
-        catch(Exception e){}
-
-        try{
-            JSONObject jsonObject = new JSONObject("{\"ip\": \"109.64.76.125\"}");
-        }
-        catch(Exception e){}
-        try{
-            JSONObject jsonObject = new JSONObject("{\"Tracks=[{\"Id\"=\"23e47bbd-a47f-4005-b603-00d67bbe842a\", \"Name=River Hamud\", \"Latitude\"=\"32.874865\", \"Longitude\"=\"35.515653\", \"Zone\"=\"Kineret\", \"Difficulty\"=\"Medium\", \"DistanceKM\"=\"4\", \"Events\"=[{\"Id\"=\"d88a9255-be10-4b17-a12e-cc79491776b9\", \"Name\"=\"My Family\", \"StartDate\"=\"2016-04-01T00:00:00\", \"EndDate=2016-04-02T00:00:00\"}, {\"Id\"=\"0b62264d-cfd0-4373-b3a7-e35274f42770\", \"Name\"=\"Passover 2016\", \"StartDate\"=\"2016-02-05T00:00:00\", \"EndDate\"=\"2016-05-05T00:00:00\"}]}, {\"Id\"=\"e8eecbea-5a47-45f9-b6da-b6e220dfaa0d\", \"Name\"=\"River Shofet\", \"Latitude\"=\"32.633706\", \"Longitude\"=\"35.103318\", \"Zone\"=\"Yokneam\", \"Difficulty\"=\"Easy\", \"DistanceKM\"=\"2\", \"Events\"=[]}]}");
-        }
-        catch(Exception e){}
-        try{
-            JSONObject jsonObject = new JSONObject("{\"Tracks:[{\"Id\":\"23e47bbd-a47f-4005-b603-00d67bbe842a\", \"Name:River Hamud\", \"Latitude\":\"32.874865\", \"Longitude\":\"35.515653\", \"Zone\":\"Kineret\", \"Difficulty\":\"Medium\", \"DistanceKM\":\"4\", \"Events\":[{\"Id\":\"d88a9255-be10-4b17-a12e-cc79491776b9\", \"Name\":\"My Family\", \"StartDate\":\"2016-04-01T00:00:00\", \"EndDate:2016-04-02T00:00:00\"}, {\"Id\":\"0b62264d-cfd0-4373-b3a7-e35274f42770\", \"Name\":\"Passover 2016\", \"StartDate\":\"2016-02-05T00:00:00\", \"EndDate\":\"2016-05-05T00:00:00\"}]}, {\"Id\":\"e8eecbea-5a47-45f9-b6da-b6e220dfaa0d\", \"Name\":\"River Shofet\", \"Latitude\":\"32.633706\", \"Longitude\":\"35.103318\", \"Zone\":\"Yokneam\", \"Difficulty\":\"Easy\", \"DistanceKM\":\"2\", \"Events\":[]}]}");
-        }
-        catch(Exception e){}
-
     }
 
     private void populateAutoComplete() {
@@ -135,9 +95,29 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
     }
 
 
-    public void processFinish(LinkedHashMap<String,String>[] output){
-        Log.d("Called from Activity",
-                "Hey");
+    public void processFinish(JSONObject response){
+
+        try{
+            JSONArray users = response.getJSONArray("users");
+            String currentUserId = null;
+
+            for (int i = 0; i < users.length(); i++)
+            {
+                if (users.getJSONObject(i).getString("MailAddress").equals(mUsername))
+                {
+                    currentUserId = users.getJSONObject(i).getString("Id");
+                }
+            }
+
+            if (currentUserId != null)
+            {
+                Intent intent = new Intent(this, MapActivity.class);
+                intent.putExtra("currentUser", currentUserId);
+                finish();
+                startActivity(intent);
+            }
+        }
+        catch (Exception e) {}
     }
 
     private boolean mayRequestContacts() {
@@ -188,29 +168,17 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
 
         // Reset errors.
         mEmailView.setError(null);
-        mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        mUsername = mEmailView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
 
-        // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-            mPasswordView.setError(getString(R.string.error_invalid_password));
-            focusView = mPasswordView;
-            cancel = true;
-        }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(mUsername)) {
             mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
         }
@@ -223,7 +191,7 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(this,mUsername);
             mAuthTask.execute((Void) null);
         }
     }
@@ -328,27 +296,29 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
         int IS_PRIMARY = 1;
     }
 
+
+
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final String mEmail;
-        private final String mPassword;
+        private final String mUsername;
+        private LoginActivity mCtx;
 
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
+        UserLoginTask(LoginActivity ctx, String username) {
+            mUsername = username;
+            mCtx = ctx;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
             boolean IsAuth;
-            AuthenticationManager authMgr = new AuthenticationManager();
+            AuthenticationManager authMgr = new AuthenticationManager(mCtx);
 
             try {
-                IsAuth = authMgr.AuthUser(mEmail, mPassword);
+                IsAuth = authMgr.AuthUser(mUsername, null);
             } catch (Exception e) {
                 IsAuth=false;
             }
@@ -363,13 +333,19 @@ public class LoginActivity extends AppCompatActivity implements AsyncResponse,Lo
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+
+                restCaller.delegate = mCtx;
+                restCaller.execute(mCtx, "getUsers");
+
+            }else {
+                Intent intent = new Intent(mCtx, RegisterActivity.class);
+                intent.putExtra("Username", mUsername);
                 finish();
                 startActivity(intent);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
+                // TODO: call CreateUserFragment with the user mail.
             }
+
+
         }
 
         @Override
