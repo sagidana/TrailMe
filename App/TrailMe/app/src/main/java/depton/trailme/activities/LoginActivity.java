@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,6 +60,8 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     private AutoCompleteTextView mEmailView;
     private View mProgressView;
     private View mLoginFormView;
+    private AutoCompleteTextView mPasswordView;
+    private String mPasswordUser;
     private RestCaller restCaller = new RestCaller();
 
     @Override
@@ -82,6 +85,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        mPasswordView = (AutoCompleteTextView)findViewById(R.id.password_user);
     }
 
     private void populateAutoComplete() {
@@ -169,6 +173,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
 
         // Store values at the time of the login attempt.
         mUsername = mEmailView.getText().toString();
+        mPasswordUser = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -189,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(this,mUsername);
+            mAuthTask = new UserLoginTask(this,mUsername,mPasswordUser);
             mAuthTask.execute((Void) null);
         }
     }
@@ -303,11 +308,13 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mUsername;
+        private final String mPassword;
         private LoginActivity mCtx;
 
-        UserLoginTask(LoginActivity ctx, String username) {
+        UserLoginTask(LoginActivity ctx, String username, String password) {
             mUsername = username;
             mCtx = ctx;
+            mPassword = password;
         }
 
         @Override
@@ -316,7 +323,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             AuthenticationManager authMgr = new AuthenticationManager(mCtx);
 
             try {
-                IsAuth = authMgr.AuthUser(mUsername, null);
+                IsAuth = authMgr.AuthUser(mUsername, mPassword);
             } catch (Exception e) {
                 IsAuth=false;
             }

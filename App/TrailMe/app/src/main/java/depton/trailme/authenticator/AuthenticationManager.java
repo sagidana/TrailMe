@@ -3,6 +3,7 @@ package depton.trailme.authenticator;
 import android.content.Context;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
@@ -20,20 +21,14 @@ public class AuthenticationManager {
         mCtx = ctx;
     }
 
+    /**
+     * Changed by alon
+     * @param username
+     * @param password
+     * @return
+     */
     public boolean AuthUser(String username,String password)
     {
-        try {
-            JSONArray users = TrailMeServer.getInstance(mCtx).getUsers();
-
-            for (int i = 0; i < users.length(); i++) {
-                String currUsername = users.getJSONObject(i).getString("MailAddress");
-
-                if (currUsername.equals(username))
-                    return true;
-            }
-            return false;
-        }catch (Exception e){
-            return false;
-        }
+        return TrailMeServer.getInstance(mCtx).isUser(username, password);
     }
 }

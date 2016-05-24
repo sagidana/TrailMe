@@ -8,10 +8,15 @@ import android.support.v7.widget.ButtonBarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
 
 import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
@@ -43,16 +48,20 @@ public class RegisterActivity extends AppCompatActivity implements TrailMeListen
                 String mail= ((EditText) findViewById(R.id.email_address)).getText().toString();
                 String firstname = ((EditText) findViewById(R.id.first_name)).getText().toString();
                 String lastname = ((EditText) findViewById(R.id.last_name)).getText().toString();
+                String passwordUser = ((EditText) findViewById(R.id.password_user)).getText().toString();
                 String city = ((EditText) findViewById(R.id.city)).getText().toString();
+                Date birthDate = getDateFromDatePicker((DatePicker)findViewById(R.id.datePicker));
 
                 try{
                     JSONObject user = new JSONObject();
                     user.put("FirstName", firstname);
                     user.put("LastName", lastname);
                     user.put("MailAddress", mail);
+                    user.put("Password",passwordUser);
                     user.put("City", city);
+                    user.put("Birthdate", birthDate);
 
-                    user.put("Birthdate", "2016-05-12T20:04:49");
+                    //user.put("Birthdate", "2016-05-12T20:04:49");
 
                     RestCaller rest1 = new RestCaller();
                     rest1.execute(mCtx, "addUser", user);
@@ -68,6 +77,17 @@ public class RegisterActivity extends AppCompatActivity implements TrailMeListen
 
             }
         });
+    }
+
+    public static java.util.Date getDateFromDatePicker(DatePicker datePicker){
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+
+        return calendar.getTime();
     }
 
     public void processFinish(JSONObject response)

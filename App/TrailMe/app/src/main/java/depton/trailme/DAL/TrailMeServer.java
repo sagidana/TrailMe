@@ -119,6 +119,29 @@ public class TrailMeServer
         catch (Exception e) {return;}
         delete("users", json);
     }
+
+    public boolean isUser(String username, String password)
+    {
+        JSONObject userData = new JSONObject();
+        try {
+            userData.put("username",username);
+            userData.put("password",password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONObject result = postObject("login", userData);
+
+        boolean isUser = false;
+
+        try {
+            isUser = result.getBoolean("isAutorizeUser");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return isUser;
+    }
+
     public void deleteGroup(String id)
     {
         JSONObject json;
