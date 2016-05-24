@@ -137,8 +137,6 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     @Override
     public void processFinish(JSONObject response) {
 
-        Log.d("ProcessFpDetails", response.toString());
-
         try {
             if (response != null) {
                 if(response.has("events"))

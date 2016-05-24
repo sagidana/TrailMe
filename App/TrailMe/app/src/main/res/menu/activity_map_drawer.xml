@@ -23,6 +23,10 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Recommendations" />
         <item
+            android:id="@+id/nav_create_event"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Create Event" />
+        <item
             android:id="@+id/nav_create_group"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Create Group" />

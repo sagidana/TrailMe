@@ -85,7 +85,7 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         addUserToTrackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addUserToTrack.execute(mCtx.getContext(), "addUserToTrack", mCurrentUserId, track.ID);
+                addUserToTrack.execute(mCtx.getContext(), "addUserToTrack", track.ID, mCurrentUserId);
             }
         });
 
