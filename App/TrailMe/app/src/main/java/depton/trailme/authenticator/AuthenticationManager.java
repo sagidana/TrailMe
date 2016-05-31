@@ -9,6 +9,8 @@ import org.json.JSONObject;
 import java.util.Date;
 
 import depton.trailme.DAL.TrailMeServer;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 
 /**
  * Created by Yotam on 5/5/2016.
@@ -27,8 +29,10 @@ public class AuthenticationManager {
      * @param password
      * @return
      */
-    public boolean AuthUser(String username,String password)
+    public void AuthUser(String username,String password)
     {
-        return TrailMeServer.getInstance(mCtx).isUser(username, password);
+        RestCaller caller = new RestCaller();
+        caller.delegate = (TrailMeListener)mCtx;
+        caller.execute(mCtx, "isAutorized", username, password);
     }
 }

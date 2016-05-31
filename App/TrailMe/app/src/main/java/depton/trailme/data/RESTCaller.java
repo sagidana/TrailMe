@@ -37,6 +37,12 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
 
         switch ((String)params[1])
         {
+            case ("isAutorized"):
+            {
+                response = TrailMeServer.getInstance(ctx).isAutorizeUser((String) params[2], (String) params[3]);
+                break;
+            }
+
             case ("getRecommendations"):
             {
                 JSONArray tracks = TrailMeServer.getInstance(ctx).getRcommendations((String)params[2]);

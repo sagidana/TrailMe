@@ -3,7 +3,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#01b24b</item>
+        <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
@@ -14,7 +14,33 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
+    
+    <style name="FontArCena">
+        <item name="android:fontFamily"></item>
+    </style>
+    
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DummyItem" parent="Base.V12.Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textColor">#ececec</item>
+        <item name="android:colorBackground">#000</item>
+    </style>
+
+    <style name="TrailMeRegisterField">
+        <item name="android:textColorHint">#ffffff</item>
+        <item name="colorControlNormal">#fff</item>
+        <item name="colorControlActivated">#fff</item>
+        <item name="colorControlHighlight">#fff</item>
+        <item name="android:background">@drawable/white_bottom_border</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <style name="RegisterButton">
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">#fff</item>
+        <!-- #80000000 is value for transperent -->
+        <item name="android:background">#80000000</item>
+    </style>
 
 </resources>

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="depton.trailme.activities.RegisterActivity">
+    tools:context="depton.trailme.activities.RegisterActivity"
+    android:background="@drawable/register_bg">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -25,9 +26,14 @@
 
     <Button
         android:id="@+id/register"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="55dp"
         android:layout_marginTop="510dp"
-        android:text="Register"/>
+        android:text="Register"
+        android:textSize="35dp"
+        style="@style/RegisterButton"/>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:id="@+id/TrackMainPiece"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:layout_marginBottom="10dp">
 
     <!--<ImageView
         android:background="@drawable/track_holder"
@@ -11,48 +12,69 @@
         android:layout_width="match_parent"
         android:alpha="0.3" /> -->
     <LinearLayout
+        android:id="@+id/whiteContainer"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:background="@color/trailsItemBackground">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="90dp"
             android:id="@+id/TrackImage"
             android:src="@drawable/track_holder"
             android:layout_margin="@dimen/text_margin"/>
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:baselineAligned="false">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:layout_gravity="top|right">
 
             <TextView
                 android:id="@+id/name"
+                android:text="test big"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/text_margin"
-                android:textAppearance="?attr/textAppearanceListItem"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
                 android:singleLine="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:text="test"
+                android:textSize="16dp"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/city"/>
 
             <RatingBar
                 android:id="@+id/ratingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
                 android:numStars="5"
                 android:stepSize="1"
                 android:rating="2.0"
+                style="?android:attr/ratingBarStyleIndicator"
                 android:layout_gravity="bottom|left"/>
         </LinearLayout>
 
-        <TextView
+<!--        <TextView
             android:id="@+id/Description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:textAppearance="?attr/textAppearanceListItem"
-            android:singleLine="true" />
+            android:singleLine="true" />-->
     </LinearLayout>
 </FrameLayout>

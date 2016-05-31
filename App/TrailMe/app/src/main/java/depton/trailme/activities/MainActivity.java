@@ -95,10 +95,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_map);
 
         Bundle extras = getIntent().getExtras();
-        String userId = extras.getString("currentUser");
+        //String userId = extras.getString("currentUser");
 
         restCaller.delegate = this;
-        restCaller.execute(this, "getUserById", userId);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
+
+        String userName = sharedPreferences.getString("TrailMe","userName");
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

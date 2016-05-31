@@ -3,7 +3,9 @@ package depton.trailme.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -28,6 +30,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -53,7 +56,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
-    private UserLoginTask mAuthTask = null;
+    /*private UserLoginTask mAuthTask = null;*/
 
     // UI references.
     private String mUsername;
@@ -99,7 +102,29 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
 
     public void processFinish(JSONObject response){
 
-        try{
+        boolean isAuthorzied = false;
+
+        try {
+            isAuthorzied = response.getBoolean("isAutorizeUser");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        showProgress(false);
+
+        if(isAuthorzied){
+            SaveUserName(mUsername);
+            Intent intent = new Intent(this, MainActivity.class);
+            finish();
+            startActivity(intent);
+
+        } else {
+            Intent intent = new Intent(this, RegisterActivity.class);
+            finish();
+            startActivity(intent);
+        }
+
+        /*try{
             JSONArray users = response.getJSONArray("users");
             String currentUserId = null;
 
@@ -111,15 +136,16 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
                 }
             }
 
-            if (currentUserId != null)
-            {
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra("currentUser", currentUserId);
-                finish();
-                startActivity(intent);
-            }
+
         }
-        catch (Exception e) {}
+        catch (Exception e) {}*/
+    }
+
+    private void SaveUserName(String user){
+        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString("userName", user);
     }
 
     private boolean mayRequestContacts() {
@@ -164,9 +190,6 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -193,9 +216,9 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
-            mAuthTask = new UserLoginTask(this,mUsername,mPasswordUser);
-            mAuthTask.execute((Void) null);
+            //showProgress(true);
+            AuthenticationManager authenticationManager = new AuthenticationManager(this);
+            authenticationManager.AuthUser(mUsername, mPasswordUser);
         }
     }
 
@@ -305,7 +328,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    /*public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
         private final String mUsername;
         private final String mPassword;
@@ -358,6 +381,6 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             mAuthTask = null;
             showProgress(false);
         }
-    }
+    }*/
 }
 

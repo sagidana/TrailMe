@@ -120,7 +120,7 @@ public class TrailMeServer
         delete("users", json);
     }
 
-    public boolean isUser(String username, String password)
+    public JSONObject isAutorizeUser(String username, String password)
     {
         JSONObject userData = new JSONObject();
         try {
@@ -129,17 +129,8 @@ public class TrailMeServer
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        JSONObject result = postObject("login", userData);
 
-        boolean isUser = false;
-
-        try {
-            isUser = result.getBoolean("isAutorizeUser");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return isUser;
+        return postObject("login", userData);
     }
 
     public void deleteGroup(String id)

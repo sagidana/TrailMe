@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="depton.net.trailme.permission.C2D_MESSAGE" />
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
 
     <permission
         android:name="depton.net.trailme.permission.C2D_MESSAGE"
