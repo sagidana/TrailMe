@@ -1,5 +1,7 @@
 package depton.trailme.adapters;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -17,6 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.android.gms.internal.zzir;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +35,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Handler;
 
 public class MyTrackRecyclerViewAdapter
         extends RecyclerView.Adapter<MyTrackRecyclerViewAdapter.ViewHolder>
@@ -37,47 +43,11 @@ public class MyTrackRecyclerViewAdapter
 
     private List<Track> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private Context context;
 
     @Override
     public Filter getFilter() {
         return new TracksFilter();
-    }
-
-    public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
-
-        private String url;
-        private ImageView imageView;
-
-        public ImageLoadTask(String url, ImageView imageView) {
-            this.url = url;
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(Void... params) {
-            try {
-                URL urlConnection = new URL(url);
-                HttpURLConnection connection = (HttpURLConnection) urlConnection
-                        .openConnection();
-                connection.setDoInput(true);
-                connection.connect();
-                InputStream input = connection.getInputStream();
-                Bitmap myBitmap = BitmapFactory.decodeStream(input);
-                connection.disconnect();
-                return myBitmap;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            super.onPostExecute(result);
-            if(result != null)
-                imageView.setImageBitmap(result);
-        }
-
     }
 
     public MyTrackRecyclerViewAdapter(List<Track> items, OnListFragmentInteractionListener listener) {
@@ -95,6 +65,7 @@ public class MyTrackRecyclerViewAdapter
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_track_item, parent, false);
+        context = view.getContext();
         return new ViewHolder(view);
     }
 
@@ -112,9 +83,8 @@ public class MyTrackRecyclerViewAdapter
         holder.zone.setText(currentTrack.Zone);
 
         /* TODO: get the url from the db */
-        /*String url = "https://www.imperial.ac.uk/ImageCropToolT4/imageTool/uploaded-images/LONDON_shutterstock_229478404--tojpeg_1417791048879_x1.jpg";
-        ImageLoadTask imageLoadTask = new ImageLoadTask(url,holder.mTrackImg);
-        imageLoadTask.execute();*/
+        String url = "https://lh5.ggpht.com/wytWRnRbbGxX7aI1U8w3tQM1PRdLOZ3LO7ZfdUtwIyCG44nYiWdmvthaXkzUQJ7Cg7Q=w300";
+        Picasso.with(context).load(url).into(holder.mTrackImg);
 
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -147,10 +117,10 @@ public class MyTrackRecyclerViewAdapter
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.nameAndAge);/*
+            mIdView = (TextView) view.findViewById(R.id.genderAndAge);/*
             mDescriptionView = (TextView) view.findViewById(R.id.Description);*/
             mRatingBar = (RatingBar) view.findViewById(R.id.ratingBar);
-            mTrackImg = (ImageView) view.findViewById(R.id.ProfileImage);
+            mTrackImg = (ImageView) view.findViewById(R.id.trackImage);
             mContainer = (LinearLayout) view.findViewById(R.id.whiteContainer);
             zone = (TextView) view.findViewById(R.id.zone);
         }

@@ -15,15 +15,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import depton.net.trailme.R;
 import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
-import depton.trailme.fragments.dummy.DummyContent;
-import depton.trailme.fragments.dummy.DummyContent.DummyItem;
 import depton.trailme.models.User;
 
 /**
@@ -32,7 +28,7 @@ import depton.trailme.models.User;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HikersFragment extends Fragment implements TrailMeListener {
+public class UsersFragment extends Fragment implements TrailMeListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -46,13 +42,13 @@ public class HikersFragment extends Fragment implements TrailMeListener {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HikersFragment() {
+    public UsersFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static HikersFragment newInstance(int columnCount) {
-        HikersFragment fragment = new HikersFragment();
+    public static UsersFragment newInstance(int columnCount) {
+        UsersFragment fragment = new UsersFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -105,6 +101,8 @@ public class HikersFragment extends Fragment implements TrailMeListener {
                     user.Email = jUsers.getJSONObject(i).getString("MailAddress");
                     user.City = jUsers.getJSONObject(i).getString("City");
                     user.Birthdate = jUsers.getJSONObject(i).getString("BirthDate");
+                    user.Gender = jUsers.getJSONObject(i).getString("Gender");
+                    user.Languages = getLanguagesArr(jUsers.getJSONObject(i).getJSONArray("Languages"));
 
                     users.add(user);
                 }
@@ -118,6 +116,22 @@ public class HikersFragment extends Fragment implements TrailMeListener {
         catch (Exception e){
             Log.d("Sd", "processFinish: " + e.toString());
         }
+    }
+
+    public String[] getLanguagesArr(JSONArray jsonArray){
+        String [] list = new String[jsonArray.length()];
+        try {
+            if (jsonArray != null) {
+                int len = jsonArray.length();
+                for (int i=0;i<len;i++){
+                    list[i] = jsonArray.getJSONObject(i).getString("Name");
+                }
+            }
+        }
+        catch (Exception ex){
+        }
+
+        return list;
     }
 
     @Override

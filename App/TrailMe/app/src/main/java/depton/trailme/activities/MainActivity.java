@@ -3,7 +3,6 @@ package depton.trailme.activities;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,37 +10,25 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONObject;
-
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.UUID;
 
 import depton.net.trailme.R;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
@@ -54,7 +41,7 @@ import depton.trailme.fragments.EventDetails;
 import depton.trailme.fragments.EventFragment;
 import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
-import depton.trailme.fragments.HikersFragment;
+import depton.trailme.fragments.UsersFragment;
 import depton.trailme.fragments.TrackDetails;
 import depton.trailme.fragments.RecommendedTracksFragment;
 import depton.trailme.fragments.TracksFilterFragment;
@@ -71,7 +58,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
         TrailMeListener,
-        HikersFragment.OnListFragmentInteractionListener,
+        UsersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
         GroupFragment.OnListFragmentInteractionListener,
         EventFragment.OnListFragmentInteractionListener,
@@ -112,6 +99,8 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
 
         String userName = sharedPreferences.getString("TrailMe","userName");
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.nav_header);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -253,7 +242,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_groups) {
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
-            fragmentClass = HikersFragment.class;
+            fragmentClass = UsersFragment.class;
         }else if (id == R.id.nav_events) {
             fragmentClass = EventFragment.class;
         }else if (id == R.id.nav_recommended_tracks){

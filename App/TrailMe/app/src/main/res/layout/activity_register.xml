@@ -25,6 +25,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Lets"/>
+
     <include layout="@layout/content_register" />
 
     <Button
@@ -32,11 +38,12 @@
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="false"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="55dp"
         android:layout_marginTop="510dp"
         android:text="Register"
         android:textSize="35dp"
+        android:background="@drawable/register_button"
         style="@style/RegisterButton"/>
 
 </android.support.design.widget.CoordinatorLayout>

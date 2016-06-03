@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,10 +23,8 @@ import depton.trailme.adapters.MyEventRecyclerViewAdapter;
 import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
-import depton.trailme.models.Enums;
 import depton.trailme.models.Event;
 import depton.trailme.models.Group;
-import depton.trailme.models.Track;
 import depton.trailme.models.User;
 
 /**
@@ -118,9 +115,9 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof HikersFragment.OnListFragmentInteractionListener && context instanceof EventFragment.OnListFragmentInteractionListener) {
+        if (context instanceof UsersFragment.OnListFragmentInteractionListener && context instanceof EventFragment.OnListFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            mUsersAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), (HikersFragment.OnListFragmentInteractionListener) context);
+            mUsersAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), (UsersFragment.OnListFragmentInteractionListener) context);
             mEventsAdapter = new MyEventRecyclerViewAdapter(new ArrayList<Event>(), (EventFragment.OnListFragmentInteractionListener) context);
         } else {
             throw new RuntimeException(context.toString()

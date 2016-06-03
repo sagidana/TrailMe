@@ -4,6 +4,117 @@
     android:layout_height="match_parent"
     tools:context="depton.trailme.fragments.TrackDetails">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#ececec"
+        >
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            android:background="#000"
+            android:layout_alignParentTop="true"
+            android:id="@+id/info_container">
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="12dp"
+                android:numStars="5"
+                android:stepSize="1"
+                android:rating="2.0"
+                style="?android:attr/ratingBarStyleIndicator"
+                android:layout_alignParentRight="true"
+                android:background="#A6ffffff"
+                android:padding="10dp"
+                android:layout_alignParentTop="true"/>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="65dp"
+                android:background="@color/opacityBlack"
+                android:orientation="vertical"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingBottom="10dp"
+                style="@style/singleTrackInfoBar"
+                android:layout_alignParentBottom="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rmat-Agolan"
+                    android:textSize="20dp"
+                    android:id="@+id/zone"
+                    android:layout_alignParentTop="true"
+                    style="@style/singleTrackInfoBar"
+                    android:layout_alignParentStart="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mount Ben-Tal"
+                    android:layout_above="@id/zone"
+                    style="@style/singleTrackInfoBar"
+                    android:layout_alignParentBottom="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100 km"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    style="@style/singleTrackInfoBar"
+                    />
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/info_container">
+
+            <RelativeLayout
+                android:layout_height="20dp"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:id="@+id/picContainer">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="gfdgfd"/>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_below="@id/picContainer">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="asdsasd"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"

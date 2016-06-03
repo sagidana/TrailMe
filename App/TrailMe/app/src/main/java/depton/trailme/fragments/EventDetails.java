@@ -113,7 +113,7 @@ public class EventDetails extends Fragment implements TrailMeListener {
                     JSONArray jGroups = response.getJSONArray("groups");
                     JSONObject jGroup = jGroups.getJSONObject(0);
 
-                    TextView groupName = (TextView)mGroupItem.findViewById(R.id.nameAndAge);
+                    TextView groupName = (TextView)mGroupItem.findViewById(R.id.genderAndAge);
                     groupName.setText(jGroup.getString("Name"));
                 }
                 else if (response.has("tracks"))
@@ -121,7 +121,7 @@ public class EventDetails extends Fragment implements TrailMeListener {
                     JSONArray jTracks = response.getJSONArray("tracks");
                     JSONObject jTrack = jTracks.getJSONObject(0);
 
-                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.nameAndAge);
+                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.genderAndAge);
                     trackName.setText(jTrack.getString("Name"));
 
                 }

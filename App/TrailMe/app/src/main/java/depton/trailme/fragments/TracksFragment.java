@@ -150,6 +150,7 @@ public class TracksFragment extends Fragment implements TrailMeListener{
                     t.Length = Double.parseDouble(jTracks.getJSONObject(i).getString("Kilometers"));
                     t.longitude = Double.parseDouble(jTracks.getJSONObject(i).getString("Longitude"));
                     t.Difficulty = Enums.Difficulty.valueOf(jTracks.getJSONObject(i).getString("Difficulty"));
+                    t.Zone = jTracks.getJSONObject(i).getString("Zone");
                     tracks.add(t);
                     Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
                 }

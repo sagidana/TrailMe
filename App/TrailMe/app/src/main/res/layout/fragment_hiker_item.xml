@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:weightSum="1">
+    android:layout_margin="10dp">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -19,6 +19,7 @@
             android:id="@+id/ProfileImage"
             android:src="@drawable/empty_profile"
             android:layout_margin="@dimen/text_margin"
+            android:scaleType="centerCrop"
             android:layout_gravity="center_vertical"/>
 
         <LinearLayout
@@ -33,11 +34,11 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="35dp"
                 android:textSize="25dp"
-                android:text="Andry Lenny"
+                android:id="@+id/fullName"
                 android:textColor="@color/colorAccent"/>
 
             <TextView
-                android:id="@+id/nameAndAge"
+                android:id="@+id/genderAndAge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
@@ -48,15 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="English, French"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="15dp"
-                android:text="100 km"
-                android:layout_marginRight="8dp"
-                android:layout_gravity="right|bottom"/>
+                android:text="No language"/>
 
         </LinearLayout>
     </LinearLayout>
