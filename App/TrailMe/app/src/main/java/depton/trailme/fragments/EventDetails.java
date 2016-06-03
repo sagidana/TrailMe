@@ -13,14 +13,10 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
-import depton.trailme.models.Track;
-import depton.trailme.models.User;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,7 +113,7 @@ public class EventDetails extends Fragment implements TrailMeListener {
                     JSONArray jGroups = response.getJSONArray("groups");
                     JSONObject jGroup = jGroups.getJSONObject(0);
 
-                    TextView groupName = (TextView)mGroupItem.findViewById(R.id.name);
+                    TextView groupName = (TextView)mGroupItem.findViewById(R.id.nameAndAge);
                     groupName.setText(jGroup.getString("Name"));
                 }
                 else if (response.has("tracks"))
@@ -125,7 +121,7 @@ public class EventDetails extends Fragment implements TrailMeListener {
                     JSONArray jTracks = response.getJSONArray("tracks");
                     JSONObject jTrack = jTracks.getJSONObject(0);
 
-                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.name);
+                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.nameAndAge);
                     trackName.setText(jTrack.getString("Name"));
 
                 }

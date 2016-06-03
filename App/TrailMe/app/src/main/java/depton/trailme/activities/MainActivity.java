@@ -17,10 +17,14 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Filterable;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,12 +57,15 @@ import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.HikersFragment;
 import depton.trailme.fragments.TrackDetails;
 import depton.trailme.fragments.RecommendedTracksFragment;
+import depton.trailme.fragments.TracksFilterFragment;
 import depton.trailme.fragments.TracksFragment;
 import depton.trailme.fragments.UserDetails;
 import depton.trailme.models.Event;
 import depton.trailme.models.Group;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -72,7 +79,8 @@ public class MainActivity extends AppCompatActivity
         GroupDetails.OnFragmentInteractionListener,
         CreateEvent.OnFragmentInteractionListener,
         EventDetails.OnFragmentInteractionListener,
-        UserDetails.OnFragmentInteractionListener
+        UserDetails.OnFragmentInteractionListener,
+        TracksFilterFragment.OnFragmentInteractionListener
 {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -81,6 +89,8 @@ public class MainActivity extends AppCompatActivity
     private JSONObject mCurrentUser;
     public RestCaller restCaller = new RestCaller();
     FragmentManager fragmentManager = getSupportFragmentManager();
+
+    public MenuItem menuItem;
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -118,6 +128,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/Berthold.otf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
 }
 
     @Override
@@ -201,6 +218,7 @@ public class MainActivity extends AppCompatActivity
         catch (Exception e){ }
 
         getMenuInflater().inflate(R.menu.map, menu);
+        menuItem = menu.findItem(R.id.filter);
         return true;
     }
 
@@ -231,6 +249,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_tracks) {
             fragmentClass = TracksFragment.class;
+
         } else if (id == R.id.nav_groups) {
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
@@ -283,6 +302,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void setFilterAction(MenuItem.OnMenuItemClickListener action){
+        menuItem.setOnMenuItemClickListener(action);
+    }
+
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
@@ -315,5 +338,10 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
 
         }catch (Exception e){}
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

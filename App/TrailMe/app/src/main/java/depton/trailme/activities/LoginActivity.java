@@ -3,6 +3,7 @@ package depton.trailme.activities;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -40,13 +41,15 @@ import depton.net.trailme.R;
 import depton.trailme.authenticator.AuthenticationManager;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements TrailMeListener,LoaderCallbacks<Cursor> {
+public class LoginActivity extends Activity implements TrailMeListener,LoaderCallbacks<Cursor> {
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -65,6 +68,7 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
     private View mLoginFormView;
     private AutoCompleteTextView mPasswordView;
     private String mPasswordUser;
+    private Button mRegisterBtnView;
     private RestCaller restCaller = new RestCaller();
 
     @Override
@@ -89,6 +93,24 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
         mPasswordView = (AutoCompleteTextView)findViewById(R.id.password_user);
+        mRegisterBtnView = (Button) findViewById(R.id.register_btn);
+
+        final Activity act = this;
+
+        mRegisterBtnView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(act, RegisterActivity.class);
+                finish();
+                startActivity(intent);
+            }
+        });
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/Berthold.otf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
     }
 
     private void populateAutoComplete() {
@@ -119,9 +141,9 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             startActivity(intent);
 
         } else {
-            Intent intent = new Intent(this, RegisterActivity.class);
-            finish();
-            startActivity(intent);
+            TextView textView = (TextView)findViewById(R.id.loginErrorMessages);
+            textView.setText("Username or password incorrect");
+            textView.setVisibility(View.VISIBLE);
         }
 
         /*try{
@@ -382,5 +404,10 @@ public class LoginActivity extends AppCompatActivity implements TrailMeListener,
             showProgress(false);
         }
     }*/
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 }
 

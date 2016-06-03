@@ -18,7 +18,6 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import depton.net.trailme.R;
@@ -78,7 +77,7 @@ public class RegisterActivity extends AppCompatActivity implements TrailMeListen
                 String firstname = ((BertholdTextView) findViewById(R.id.first_name)).getText().toString();
                 String lastname = ((BertholdTextView) findViewById(R.id.last_name)).getText().toString();
                 String passwordUser = ((EditText) findViewById(R.id.password_user)).getText().toString();
-                String city = ((BertholdTextView) findViewById(R.id.city)).getText().toString();
+                String city = ((BertholdTextView) findViewById(R.id.zone)).getText().toString();
                 //Date birthDate = getDateFromDatePicker(fromDatePickerDialog.getDatePicker());
 
                 try{

@@ -48,7 +48,7 @@
         style="@style/TrailMeRegisterField"
         />
     <depton.trailme.customViews.BertholdTextView
-        android:id="@+id/city"
+        android:id="@+id/zone"
         android:layout_width="match_parent"
         android:hint="City"
         android:layout_height="50dp"

@@ -10,4 +10,6 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="depton.trailme.fragments.HikersFragment"
-    tools:listitem="@layout/fragment_hiker_item" />
+    tools:listitem="@layout/fragment_hiker_item"
+    android:background="@drawable/trail_background"
+    />

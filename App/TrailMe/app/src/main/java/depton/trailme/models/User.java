@@ -17,6 +17,7 @@ public class User implements Parcelable {
     public Image[] Images;
     public Skill[] Skills;
     public Enums.Languages[] Languages;
+    public String Gender;
 
     @Override
     public int describeContents() {
@@ -31,6 +32,7 @@ public class User implements Parcelable {
         dest.writeString(this.Email);
         dest.writeString(this.City);
         dest.writeString(this.Birthdate);
+        dest.writeString(this.Gender);
         //dest.writeParcelable(this.Images, flags);
         //dest.writeParcelable(this.Skills, flags);
         //dest.writeParcelable(this.Languages, flags);
@@ -46,6 +48,7 @@ public class User implements Parcelable {
         this.Email = in.readString();
         this.City = in.readString();
         this.Birthdate = in.readString();
+        this.Gender = in.readString();
 
         //this.Images = in.readParcelable(Image[].class.getClassLoader());
         //this.Skills = in.readParcelable(Skill[].class.getClassLoader());

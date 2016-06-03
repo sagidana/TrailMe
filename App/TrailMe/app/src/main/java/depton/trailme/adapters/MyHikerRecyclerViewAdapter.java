@@ -75,8 +75,8 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mNameView = (TextView) view.findViewById(R.id.name);
-            mAboutView = (TextView) view.findViewById(R.id.about);
+            mNameView = (TextView) view.findViewById(R.id.nameAndAge);
+            mAboutView = (TextView) view.findViewById(R.id.languages);
             mProfilePic = (ImageView) view.findViewById(R.id.ProfileImage);
         }
 

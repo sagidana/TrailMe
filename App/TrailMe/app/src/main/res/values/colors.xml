@@ -5,4 +5,5 @@
     <color name="colorAccent">#3c812d</color>
     <color name="colorDatePicker">#FFFFFF</color>
     <color name="trailsItemBackground">#fff</color>
+    <color name="loginTextColor">#3c812d</color>
 </resources>

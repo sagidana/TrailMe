@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="depton.trailme.fragments.TracksFilterFragment">
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/star1_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/star1_checkbox_text">
+    </android.support.v7.widget.AppCompatCheckBox>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/star2_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/star2_checkbox_text">
+    </android.support.v7.widget.AppCompatCheckBox>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/star3_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/star3_checkbox_text">
+    </android.support.v7.widget.AppCompatCheckBox>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/star4_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/star4_checkbox_text">
+    </android.support.v7.widget.AppCompatCheckBox>
+
+    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/star5_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/star5_checkbox_text">
+    </android.support.v7.widget.AppCompatCheckBox>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/saveFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Filter"/>
+
+</LinearLayout>

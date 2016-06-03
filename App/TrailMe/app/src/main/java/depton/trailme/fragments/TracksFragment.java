@@ -1,6 +1,8 @@
 package depton.trailme.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,8 +10,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import depton.net.trailme.R;
+import depton.trailme.activities.MainActivity;
 import depton.trailme.adapters.MyTrackRecyclerViewAdapter;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
@@ -39,11 +45,16 @@ public class TracksFragment extends Fragment implements TrailMeListener{
     private MyTrackRecyclerViewAdapter mAdapter = null;
     private RestCaller restCaller = new RestCaller();
 
+    private TracksFilterFragment filterFragment;
+
+    private View filterMenuItem;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
     public TracksFragment() {
+        filterFragment = TracksFilterFragment.newInstance(null, null);
     }
 
     // TODO: Customize parameter initialization
@@ -54,6 +65,10 @@ public class TracksFragment extends Fragment implements TrailMeListener{
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public MyTrackRecyclerViewAdapter getAdapter(){
+        return mAdapter;
     }
 
     @Override
@@ -71,6 +86,8 @@ public class TracksFragment extends Fragment implements TrailMeListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_track_list, container, false);
+
+
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -90,7 +107,7 @@ public class TracksFragment extends Fragment implements TrailMeListener{
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(final Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
@@ -99,6 +116,16 @@ public class TracksFragment extends Fragment implements TrailMeListener{
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
+
+        final MainActivity act = (MainActivity)context;
+
+        act.setFilterAction(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                filterFragment.show(getFragmentManager(), "filterTag");
+                return true;
+            }
+        });
     }
 
     @Override

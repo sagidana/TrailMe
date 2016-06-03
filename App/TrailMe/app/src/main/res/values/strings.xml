@@ -26,4 +26,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_register">Register</string>
     <string name="default_user">No User</string>
+    <string name="filter">Filter Items</string>
+
+    <!-- Stars checkboxes -->
+    <string name="star1_checkbox_text">Star 1</string>
+    <string name="star2_checkbox_text">Star 2</string>
+    <string name="star3_checkbox_text">Star 3</string>
+    <string name="star4_checkbox_text">Star 4</string>
+    <string name="star5_checkbox_text">Star 5</string>
 </resources>

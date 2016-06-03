@@ -4,10 +4,8 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -70,7 +67,7 @@ public class UserDetails extends Fragment  implements TrailMeListener{
         TextView lastname = (TextView)v.findViewById(R.id.lastname);
         lastname.setText(user.SurName);
 
-        TextView city = (TextView)v.findViewById(R.id.city);
+        TextView city = (TextView)v.findViewById(R.id.zone);
         city.setText(user.City);
 
         TextView email = (TextView)v.findViewById(R.id.email);
