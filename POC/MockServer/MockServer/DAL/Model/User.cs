@@ -27,7 +27,10 @@ namespace TrailMe.DAL.Model
         public string LastName { get; set; }
         public string City { get; set; }
         public string MailAddress { get; set; }
-        public System.DateTime Birthdate { get; set; }
+        public Nullable<System.DateTime> Birthdate { get; set; }
+        public string PasswordUser { get; set; }
+        public Nullable<int> Rating { get; set; }
+        public string Gender { get; set; }
     
         public virtual ICollection<Language> Languages { get; set; }
         public virtual ICollection<Skill> Skills { get; set; }

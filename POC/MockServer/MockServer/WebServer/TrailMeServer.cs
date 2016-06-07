@@ -9,6 +9,7 @@ using TrailMe.GoogleCloudMessaging;
 using TrailMe.DAL.Model;
 using Microsoft.Owin;
 using System.Linq;
+using System.Globalization;
 
 namespace TrailMe.WebServer
 {
@@ -24,6 +25,7 @@ namespace TrailMe.WebServer
         const string DELETE_METHOD = "DELETE";
 
         const string USERS_URL = "/users";
+        const string LOGIN_URL = "/login";
         const string GROUPS_URL = "/groups";
         const string TRACKS_URL = "/tracks";
         const string EVENTS_URL = "/events";
@@ -92,9 +94,11 @@ namespace TrailMe.WebServer
             Startup.Resources.Add(new WebResource { Path = CATEGORIES_URL, Method = GET_METHOD, Handler = getAllCategories });
             Startup.Resources.Add(new WebResource { Path = EVENTS_URL, Method = GET_METHOD, Handler = getAllEvents });
 
+
             // posts.
             Startup.Resources.Add(new WebResource { Path = REGISTER_URL, Method = POST_METHOD, Handler = registerClient });
             Startup.Resources.Add(new WebResource { Path = USERS_URL, Method = POST_METHOD, Handler = getUser });
+            Startup.Resources.Add(new WebResource { Path = LOGIN_URL, Method = POST_METHOD, Handler = isAuthorizedUser });
             Startup.Resources.Add(new WebResource { Path = GROUPS_URL, Method = POST_METHOD, Handler = getGroup });
             Startup.Resources.Add(new WebResource { Path = TRACKS_URL, Method = POST_METHOD, Handler = getTrack });
             Startup.Resources.Add(new WebResource { Path = RECOMMENDATIONS_URL, Method = POST_METHOD, Handler = getRecommendations });
@@ -125,14 +129,27 @@ namespace TrailMe.WebServer
             context.Response.Write(data);
         }
 
+        private JObject getJsonErrro()
+        {
+            JObject errorJson = new JObject();
+            errorJson.Add("error",true);
+            return errorJson;
+        }
+
         private JObject getJsonFromRequest(Microsoft.Owin.IOwinContext context)
         {
             string body = new StreamReader(context.Request.Body).ReadToEnd();
+            
+            if(body != string.Empty)
+            {
+                JObject jsonRequest = JObject.Parse(body);
+                return jsonRequest;
+            }
             //body = body.Replace("\\\"", "\"");
             //body = body.Remove(body.IndexOf("\""), 1);
             //body = body.Remove(body.LastIndexOf("\""), 1);
-            JObject jsonRequest = JObject.Parse(body);
-            return jsonRequest;
+
+            return getJsonErrro();
         }
 
         #region Get
@@ -299,6 +316,14 @@ namespace TrailMe.WebServer
                             createWebResponse(context, JSON_TYPE, jEvents.ToString());
                             break;
                         }
+                    case ("getLanguagesByUserId"):
+                        {
+                            Guid id = Guid.Parse(jsonRequest.GetValue("Id").Value<string>());
+                            var dbLanguages = LanguageRepository.GetLanguagesByUserId(id);
+                            var jLanguages = convertDbLanguagesToJson(dbLanguages);
+                            createWebResponse(context, JSON_TYPE, jLanguages.ToString());
+                            break;
+                        }
                     case ("addUserToGroup"):
                         {
                             Guid source = Guid.Parse(jsonRequest.GetValue("SourceId").Value<string>());
@@ -408,6 +433,35 @@ namespace TrailMe.WebServer
             catch (Exception) { }
         }
 
+        private void isAuthorizedUser(Microsoft.Owin.IOwinContext context)
+        {
+            try
+            {
+                JObject request = getJsonFromRequest(context);
+                string userName = request["username"].ToString();
+                string PassUser = request["password"].ToString();
+
+                var dbUser = UserRepository.GetUserByName(userName);
+                bool isAuthorized = false;
+                if (dbUser != null)
+                {
+                    isAuthorized = dbUser.PasswordUser.Equals(PassUser);
+                }
+               
+
+                JObject authorizedUser = new JObject();
+
+                //authorizedUser.Add("Id", dbUser.Id);
+                authorizedUser.Add("isAutorizeUser", isAuthorized);
+
+                createWebResponse(context, JSON_TYPE, authorizedUser.ToString());
+            }
+            catch (Exception ex) 
+            {
+                Console.WriteLine(ex.ToString());
+            }
+        }
+
         private void getTrack(Microsoft.Owin.IOwinContext context)
         {
             try
@@ -506,9 +560,13 @@ namespace TrailMe.WebServer
                                         dbUser.LastName,
                                         dbUser.FirstName,
                                         dbUser.City,
-                                        dbUser.Birthdate);
+                                        dbUser.Birthdate,
+                                        dbUser.PasswordUser,
+                                        dbUser.Gender);
             }
-            catch (Exception) { }
+            catch (Exception ex) {
+                Console.WriteLine(ex);
+            }
         }
 
         private void addTrack(Microsoft.Owin.IOwinContext context)
@@ -522,8 +580,9 @@ namespace TrailMe.WebServer
                                             dbTrack.Zone,
                                             dbTrack.Kilometers,
                                             dbTrack.Difficulty,
-                                            dbTrack.Latitude,
-                                            dbTrack.Longitude);
+                                            dbTrack.Latitude.Value,
+                                            dbTrack.Longitude.Value,
+                                            dbTrack.Rating);
             }
             catch (Exception) { }
         }
@@ -709,8 +768,14 @@ namespace TrailMe.WebServer
             user.Add("FirstName", dbUser.FirstName);
             user.Add("LastName", dbUser.LastName);
             user.Add("MailAddress", dbUser.MailAddress);
+            user.Add("Password", dbUser.PasswordUser);
             user.Add("City", dbUser.City);
+            int userAge = UserRepository.getAgeByUserId(dbUser.Id);
+            user.Add("Age", userAge);
             user.Add("BirthDate", dbUser.Birthdate);
+            user.Add("Gender", dbUser.Gender);
+            var jLanguages = convertDbLanguagesToJson(LanguageRepository.GetLanguagesByUserId(dbUser.Id));
+            user.Add("Languages", jLanguages);
 
             return user;
         }
@@ -726,6 +791,7 @@ namespace TrailMe.WebServer
             track.Add("Zone", dbTrack.Zone);
             track.Add("Difficulty", dbTrack.Difficulty);
             track.Add("Kilometers", dbTrack.Kilometers);
+            track.Add("Rating",dbTrack.Rating);
 
             return track;
         }
@@ -812,7 +878,7 @@ namespace TrailMe.WebServer
             {
                 JObject language = new JObject();
 
-                language.Add("Id", dbLanguage.Id);
+                //language.Add("Id", dbLanguage.Id);
                 language.Add("Name", dbLanguage.Name);
 
                 arrayLanguages.Add(language);
@@ -903,8 +969,11 @@ namespace TrailMe.WebServer
                 FirstName = user["FirstName"].Value<string>(),
                 LastName = user["LastName"].Value<string>(),
                 MailAddress = user["MailAddress"].Value<string>(),
+                PasswordUser = user["Password"].Value<string>(),
                 City = user["City"].Value<string>(),
-                Birthdate = DateTime.Parse(user["Birthdate"].Value<string>())
+               Birthdate = DateTime.ParseExact(user["Birthdate"].Value<string>(),"ddd MMMM dd HH:mm:ss GMT+00:00 yyyy",CultureInfo.CurrentCulture),
+             //   Birthdate = DateTime.ParseExact(user["Birthdate"].Value<string>(), "ddd, MMMM dd HH:mm:ss GMT+00:00 yyyy", CultureInfo.CurrentCulture),
+                Gender = user["Gender"].Value<string>()
             };
 
             return dbUser;
@@ -919,7 +988,8 @@ namespace TrailMe.WebServer
                 Kilometers = track["Kilometers"].Value<int>(),
                 Difficulty = track["Difficulty"].Value<string>(),
                 Latitude = track["Latitude"].Value<double>(),
-                Longitude = track["Longitude"].Value<double>()
+                Longitude = track["Longitude"].Value<double>(),
+                Rating = track["Rating"].Value<int>()
             };
 
             return dbTrack;

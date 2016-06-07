@@ -42,6 +42,14 @@ namespace TrailMe.DAL
             }
         }
 
+        public static IEnumerable<Language> GetLanguagesByUserId(Guid id)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                return dbContext.Languages.Where(language => language.Users.Where(user => user.Id == id).Any()).ToList();
+            }
+        }
+
         #endregion
     }
 }

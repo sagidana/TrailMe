@@ -39,7 +39,7 @@ namespace TrailMe.DAL
             }
         }
 
-        public static bool AddTrack(string track_name, string location_zone, int distance_km, string level_of_diffuclty, double latitude_, double longitude_)
+        public static bool AddTrack(string track_name, string location_zone, int distance_km, string level_of_diffuclty, double latitude_, double longitude_,int? rating)
         {
             // Create the database context
             using (var dbContext = new TrailMeModelContainer())
@@ -52,7 +52,8 @@ namespace TrailMe.DAL
                     Kilometers = distance_km,
                     Difficulty = level_of_diffuclty,
                     Latitude = latitude_,
-                    Longitude = longitude_
+                    Longitude = longitude_,
+                    Rating = rating
                 };
 
                 dbContext.Tracks.Add(newTrack);
