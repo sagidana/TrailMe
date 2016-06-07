@@ -30,7 +30,7 @@
                 style="?android:attr/ratingBarStyleIndicator"
                 android:layout_alignParentRight="true"
                 android:background="#A6ffffff"
-                android:padding="10dp"
+                android:padding="2dp"
                 android:layout_alignParentTop="true"/>
 
             <RelativeLayout
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:text="Rmat-Agolan"
                     android:textSize="20dp"
-                    android:id="@+id/zone"
+                    android:id="@+id/trackName"
                     android:layout_alignParentTop="true"
                     style="@style/singleTrackInfoBar"
                     android:layout_alignParentStart="true" />
@@ -70,7 +70,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     style="@style/singleTrackInfoBar"
-                    />
+                    android:id="@+id/kilometers" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -81,193 +81,78 @@
             android:layout_below="@id/info_container">
 
             <RelativeLayout
-                android:layout_height="20dp"
+                android:layout_height="100dp"
                 android:layout_width="match_parent"
                 android:layout_alignParentTop="true"
-                android:id="@+id/picContainer">
+                android:id="@+id/picContainer"
+                >
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="gfdgfd"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="gfdgfd"
+                    android:textAlignment="viewStart"/>
             </RelativeLayout>
+
+            <View
+                android:background="#FF000000"
+                android:layout_height="2dp"
+                android:layout_below="@id/picContainer"
+                android:id="@+id/blackBorder1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"/>
 
 
             <RelativeLayout
-                android:layout_height="wrap_content"
+                android:id="@+id/descriptionContainer"
+                android:layout_height="120dp"
                 android:layout_width="match_parent"
-                android:layout_below="@id/picContainer">
+                android:layout_below="@id/blackBorder1">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="asdsasd"/>
             </RelativeLayout>
 
+            <View
+                android:background="#FF000000"
+                android:layout_height="2dp"
+                android:layout_below="@id/descriptionContainer"
+                android:id="@+id/blackBorder2"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_width="match_parent"/>
+
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <TextView
+                android:orientation="vertical"
+                android:id="@+id/footer"
+                android:layout_below="@id/blackBorder2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""/>
+                    android:id="@+id/bootContainer"
+                    android:orientation="horizontal"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true">
+                </LinearLayout>
+
+                <Button
+                    android:layout_alignParentBottom="true"
+                    android:layout_below="@id/bootContainer"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/addUserToTrackBtn"
+                    android:text="Done it"
+                    />
+
             </RelativeLayout>
 
         </RelativeLayout>
 
     </RelativeLayout>
-
-    <!-- TODO: Update blank fragment layout -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/track_holder"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:id="@+id/MainPic" />
-
-                <TextView
-                    android:id="@+id/trackName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:text="Track Name"
-                    android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                    android:textSize="40sp"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_marginTop="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Kilometers:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/kilometers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Zone:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/zone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Difficulty:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/difficulty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Longitude:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/longitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Latitude:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/latitude"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/addUserToTrackBtn"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="150dp"
-            android:text="Done it!"/>
-
-    </LinearLayout>
 </FrameLayout>

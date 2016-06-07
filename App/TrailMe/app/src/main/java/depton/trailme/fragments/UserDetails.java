@@ -58,25 +58,22 @@ public class UserDetails extends Fragment  implements TrailMeListener{
 
         View v = inflater.inflate(R.layout.fragment_user_details, container, false);
 
-        TextView username = (TextView)v.findViewById(R.id.userName);
-        username.setText(user.Email);
+        /*TextView username = (TextView)v.findViewById(R.id.userName);
+        username.setText(user.Email);*/
 
-        TextView firstname = (TextView)v.findViewById(R.id.firstname);
-        firstname.setText(user.FirstName);
+        TextView fullName = (TextView) v.findViewById(R.id.fullName);
+        fullName.setText(user.FirstName + " " + user.SurName);
 
-        TextView lastname = (TextView)v.findViewById(R.id.lastname);
-        lastname.setText(user.SurName);
-
-        TextView city = (TextView)v.findViewById(R.id.zone);
+        TextView city = (TextView)v.findViewById(R.id.city);
         city.setText(user.City);
 
-        TextView email = (TextView)v.findViewById(R.id.email);
-        email.setText(user.Email);
+        /*TextView email = (TextView)v.findViewById(R.id.email);
+        email.setText(user.Email);*/
 
         TextView birthdate = (TextView)v.findViewById(R.id.birthdate);
         birthdate.setText(user.Birthdate);
 
-        RecyclerView trackView = (RecyclerView) v.findViewById(R.id.tracks);
+        /*RecyclerView trackView = (RecyclerView) v.findViewById(R.id.tracks);
 
         Context context = trackView.getContext();
 
@@ -85,6 +82,7 @@ public class UserDetails extends Fragment  implements TrailMeListener{
         mRestCaller.execute(this.getContext(),"getTracksByUserId", user.ID);
 
         trackView.setAdapter(mAdapter);
+        */
 
         return v;
     }

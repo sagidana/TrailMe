@@ -3,14 +3,24 @@ package depton.trailme.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
@@ -31,6 +41,9 @@ public class TrackDetails extends Fragment implements TrailMeListener{
     private TrackDetails mCtx;
     private RestCaller addUserToTrack = new RestCaller();
     private String mCurrentUserId;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     private OnFragmentInteractionListener mListener;
 
@@ -53,6 +66,20 @@ public class TrackDetails extends Fragment implements TrailMeListener{
             track = getArguments().getParcelable("track");
             mCurrentUserId = getArguments().getString("currentUser");
         }
+
+        viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter.addFragment(new TracksFragment(), "Tracks");
+        adapter.addFragment(new TracksFragment(), "Tracks");
+        adapter.addFragment(new TracksFragment(), "Tracks");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
@@ -69,17 +96,16 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         TextView kilometers = (TextView) v.findViewById(R.id.kilometers);
         kilometers.setText(Double.toString(track.Length));
 
-        TextView difficulty = (TextView) v.findViewById(R.id.difficulty);
-        difficulty.setText(track.Difficulty.toString());
+        ShowBoots(track.Difficulty.ordinal());
 
         TextView zone = (TextView) v.findViewById(R.id.zone);
         zone.setText(track.Zone);
 
-        TextView latitude = (TextView) v.findViewById(R.id.latitude);
+/*        TextView latitude = (TextView) v.findViewById(R.id.latitude);
         latitude.setText(Double.toString(track.latitude));
 
         TextView longitude = (TextView) v.findViewById(R.id.longitude);
-        longitude.setText(Double.toString(track.longitude));
+        longitude.setText(Double.toString(track.longitude));*/
 
         Button addUserToTrackbtn = (Button) v.findViewById(R.id.addUserToTrackBtn);
         addUserToTrackbtn.setOnClickListener(new View.OnClickListener() {
@@ -90,6 +116,29 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         });
 
         return v;
+    }
+
+    public void ShowBoots(int level){
+        LinearLayout bootContainer = (LinearLayout)getView().findViewById(R.id.bootContainer);
+
+        ImageView tempImageView;
+
+        // Create imageView with full boot
+        for(int i = 0; i < 5 - level; i++){
+            tempImageView = new ImageView(getContext());
+            tempImageView.setImageResource(R.drawable.empty_boot);
+            tempImageView.getLayoutParams().width = 35;
+            tempImageView.getLayoutParams().height = 35;
+            bootContainer.addView(tempImageView);
+        }
+
+        for(int i = level; i < 6; i++){
+            tempImageView = new ImageView(getContext());
+            tempImageView.setImageResource(R.drawable.full_boot);
+            tempImageView.getLayoutParams().width = 35;
+            tempImageView.getLayoutParams().height = 35;
+            bootContainer.addView(tempImageView);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,5 +172,34 @@ public class TrackDetails extends Fragment implements TrailMeListener{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity
         }
         catch (Exception ex)
         {
+            Log.e("MainActivity", "cant get tracks details fragment");
         }
     }
     public void onListFragmentInteraction(Group item)
