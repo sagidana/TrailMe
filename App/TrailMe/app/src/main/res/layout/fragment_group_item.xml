@@ -22,7 +22,7 @@ android:padding="10dp">
         android:layout_toRightOf="@id/groupImage"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/genderAndAge"
+            android:id="@+id/groupName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30dp"
@@ -31,14 +31,14 @@ android:padding="10dp">
             android:text="Group name"/>
 
         <TextView
-            android:id="@+id/eventItemStartDate"
+            android:id="@+id/groupMembers"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Members: 25"
             android:textSize="18dp" />
 
         <TextView
-            android:id="@+id/eventLanguages"
+            android:id="@+id/groupLanguages"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hebrew, English, French"

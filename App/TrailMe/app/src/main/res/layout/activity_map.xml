@@ -9,22 +9,22 @@
     tools:openDrawer="start"
     android:layoutDirection="ltr">
 
-    <!-- This LinearLayout represents the contents of the screen  -->
+        <!-- This LinearLayout represents the contents of the screen  -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <include
-        layout="@layout/app_bar_map"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        <include
+            layout="@layout/app_bar_map"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
 
-    <!-- The main content view where fragments are loaded -->
-    <FrameLayout
-        android:id="@+id/flContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <!-- The main content view where fragments are loaded -->
+        <FrameLayout
+            android:id="@+id/flContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <android.support.design.widget.NavigationView

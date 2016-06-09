@@ -117,11 +117,9 @@ public class GroupFragment extends Fragment implements TrailMeListener {
                 ArrayList<Group> groups = new ArrayList<>(jGroups.length());
 
                 for (int i = 0; i < jGroups.length(); i++) {
-                    Group g = new Group();
-                    g.Id = jGroups.getJSONObject(i).getString("Id");
-                    g.Name = jGroups.getJSONObject(i).getString("Name");
+                    Group g = new Group(jGroups.getJSONObject(i));
                     groups.add(g);
-                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
+                    Log.d("Group", "GroupFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
                 }
                 mAdapter.updateList(groups);
             }
@@ -134,6 +132,8 @@ public class GroupFragment extends Fragment implements TrailMeListener {
             Log.d("Sd", "processFinish: " + e.toString());
         }
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this

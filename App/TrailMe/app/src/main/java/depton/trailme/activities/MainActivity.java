@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private JSONObject mCurrentUser;
+    private User mCurrentUser;
     public RestCaller restCaller = new RestCaller();
     FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -96,9 +96,7 @@ public class MainActivity extends AppCompatActivity
 
         restCaller.delegate = this;
 
-        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
-
-        String userName = sharedPreferences.getString("TrailMe","userName");
+        mCurrentUser = User.getUserFromSharedPref(this);
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.nav_header);
 
@@ -166,7 +164,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Track item)
     {
         try {
-            Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.getString("Id"));
+            Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.ID);
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Group item)
     {
         try {
-            Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.getString("Id"));
+            Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.ID);
 
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         TextView userExtendedName = (TextView)findViewById(R.id.userExtendedName);
 
         try{
-            userExtendedName.setText(mCurrentUser.getString("MailAddress"));
+            userExtendedName.setText(mCurrentUser.FirstName + " " + mCurrentUser.SurName);
         }
         catch (Exception e){ }
 
@@ -257,7 +255,7 @@ public class MainActivity extends AppCompatActivity
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             Bundle arguments = new Bundle();
-            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            arguments.putString("currentUser", mCurrentUser.ID);
             fragment.setArguments(arguments);
 
         }catch(Exception e) {}
@@ -313,10 +311,9 @@ public class MainActivity extends AppCompatActivity
     }
     public void processFinish(JSONObject response)
     {
-        mCurrentUser = response;
-        try {
+        /*try {
             TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
-            displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+            displayedUserName.setText(mCurrentUser.Email);
 
             Fragment fragment = TracksFragment.class.newInstance();
             Bundle arguments = new Bundle();
@@ -327,7 +324,7 @@ public class MainActivity extends AppCompatActivity
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 
-        }catch (Exception e){}
+        }catch (Exception e){}*/
     }
 
     @Override

@@ -32,6 +32,11 @@ public class Track implements Parcelable {
     public String Zone;
     @JsonProperty("Rating")
     public int Rating;
+    @JsonProperty("Categories")
+    public String [] Categories;
+
+    @JsonProperty("TrackDescription")
+    public String TrackDescription;
 
     @Override
     public int describeContents() {
@@ -48,6 +53,8 @@ public class Track implements Parcelable {
         dest.writeInt(this.Difficulty == null ? -1 : this.Difficulty.ordinal());
         dest.writeString(this.Zone);
         dest.writeInt(this.Rating);
+        dest.writeString(this.TrackDescription);
+        dest.writeStringArray(this.Categories);
     }
 
     protected Track(Parcel in) {
@@ -60,6 +67,8 @@ public class Track implements Parcelable {
         this.Difficulty = tmpDifficulty == -1 ? null : Enums.Difficulty.values()[tmpDifficulty];
         this.Zone = in.readString();
         this.Rating = in.readInt();
+        this.TrackDescription = in.readString();
+        in.writeStringArray(this.Categories);
     }
 
     public static final Parcelable.Creator<Track> CREATOR = new Parcelable.Creator<Track>() {

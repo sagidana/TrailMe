@@ -36,7 +36,7 @@
             <RelativeLayout
 
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
+                android:layout_height="85dp"
                 android:background="@color/opacityBlack"
                 android:orientation="vertical"
                 android:paddingTop="10dp"
@@ -49,19 +49,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rmat-Agolan"
-                    android:textSize="20dp"
+                    android:textSize="35dp"
                     android:id="@+id/trackName"
-                    android:layout_alignParentTop="true"
-                    style="@style/singleTrackInfoBar"
-                    android:layout_alignParentStart="true" />
+                    style="@style/singleTrackInfoBar" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Mount Ben-Tal"
-                    android:layout_above="@id/zone"
+                    android:id="@+id/zone"
+                    android:layout_above="@id/trackName"
                     style="@style/singleTrackInfoBar"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_alignParentBottom="true"
+                    android:textSize="20dp" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +70,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
                     style="@style/singleTrackInfoBar"
-                    android:id="@+id/kilometers" />
+                    android:id="@+id/kilometers"
+                    android:textSize="30dp" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -80,18 +81,30 @@
             android:layout_height="match_parent"
             android:layout_below="@id/info_container">
 
-            <RelativeLayout
-                android:layout_height="100dp"
+            <LinearLayout
+                android:layout_height="50dp"
                 android:layout_width="match_parent"
                 android:layout_alignParentTop="true"
                 android:id="@+id/picContainer"
+                android:orientation="horizontal"
+                android:layout_centerVertical="true"
                 >
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="gfdgfd"
-                    android:textAlignment="viewStart"/>
-            </RelativeLayout>
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10dp"
+                    android:text="Categories: "
+                    android:id="@+id/categoriesPrefix"
+                    android:layout_centerVertical="true"/>
+                <TextView
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/categories"
+                    android:text="No Categories"
+                    android:layout_centerVertical="true"/>
+            </LinearLayout>
 
             <View
                 android:background="#FF000000"
@@ -107,11 +120,14 @@
                 android:id="@+id/descriptionContainer"
                 android:layout_height="120dp"
                 android:layout_width="match_parent"
-                android:layout_below="@id/blackBorder1">
+                android:layout_below="@id/blackBorder1"
+                android:paddingTop="10dp"
+                android:paddingLeft="10dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="asdsasd"/>
+                    android:text="asdsasd"
+                    android:id="@+id/trackDesc" />
             </RelativeLayout>
 
             <View
@@ -129,24 +145,36 @@
                 android:layout_below="@id/blackBorder2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp">
+
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:id="@+id/bootContainer"
                     android:orientation="horizontal"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true">
+
+                    <TextView
+                        android:id="@+id/difficultyText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Difficulty:"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="20dp"
+                        android:layout_marginRight="15dp"/>
                 </LinearLayout>
 
                 <Button
-                    android:layout_alignParentBottom="true"
                     android:layout_below="@id/bootContainer"
-                    android:layout_centerHorizontal="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
                     android:id="@+id/addUserToTrackBtn"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
                     android:text="Done it"
                     />
 

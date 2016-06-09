@@ -1,8 +1,10 @@
 package depton.trailme.fragments;
 
 import android.content.Context;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -67,11 +69,11 @@ public class TrackDetails extends Fragment implements TrailMeListener{
             mCurrentUserId = getArguments().getString("currentUser");
         }
 
-        viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
+        /*viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
+        setupViewPager(viewPager);*/
 
-        tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        /*tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);*/
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -93,10 +95,28 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         TextView TrackName = (TextView) v.findViewById(R.id.trackName);
         TrackName.setText(track.Name);
 
-        TextView kilometers = (TextView) v.findViewById(R.id.kilometers);
-        kilometers.setText(Double.toString(track.Length));
+        TextView trackDesc = (TextView) v.findViewById(R.id.trackDesc);
+        trackDesc.setText(track.TrackDescription);
 
-        ShowBoots(track.Difficulty.ordinal());
+        TextView kilometers = (TextView) v.findViewById(R.id.kilometers);
+        kilometers.setText(Double.toString(track.Length) + " KM");
+
+        TextView trackCategories = (TextView) v.findViewById(R.id.categories);
+
+        String allCategories = "";
+
+        if(track.Categories != null){
+            for(int i = 0; i < track.Categories.length; i++) {
+                if (i != 0)
+                    allCategories += ", ";
+                allCategories += track.Categories[i];
+            }
+        } else {
+            allCategories = "No Categories";
+        }
+        trackCategories.setText(allCategories);
+
+        ShowBoots(track.Difficulty.ordinal(), v);
 
         TextView zone = (TextView) v.findViewById(R.id.zone);
         zone.setText(track.Zone);
@@ -118,25 +138,29 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         return v;
     }
 
-    public void ShowBoots(int level){
-        LinearLayout bootContainer = (LinearLayout)getView().findViewById(R.id.bootContainer);
+    public void ShowBoots(int level, View view){
+        LinearLayout bootContainer = (LinearLayout)view.findViewById(R.id.bootContainer);
 
         ImageView tempImageView;
 
+        LinearLayout.LayoutParams layoutParams = new AppBarLayout.LayoutParams(40, 40);
+
+        final int MAX_LEVEL = 5;
+
         // Create imageView with full boot
-        for(int i = 0; i < 5 - level; i++){
+        for(int i = 1; i < MAX_LEVEL - level; i++){
             tempImageView = new ImageView(getContext());
             tempImageView.setImageResource(R.drawable.empty_boot);
-            tempImageView.getLayoutParams().width = 35;
-            tempImageView.getLayoutParams().height = 35;
+            tempImageView.setLayoutParams(layoutParams);
+            tempImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             bootContainer.addView(tempImageView);
         }
 
-        for(int i = level; i < 6; i++){
+        for(int i = MAX_LEVEL - level; i < MAX_LEVEL + 1; i++){
             tempImageView = new ImageView(getContext());
             tempImageView.setImageResource(R.drawable.full_boot);
-            tempImageView.getLayoutParams().width = 35;
-            tempImageView.getLayoutParams().height = 35;
+            tempImageView.setLayoutParams(layoutParams);
+            tempImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             bootContainer.addView(tempImageView);
         }
     }

@@ -136,8 +136,8 @@ public class TracksFragment extends Fragment implements TrailMeListener{
 
     @Override
     public void processFinish(JSONObject response) {
-        try{
-            if(response != null) {
+        try {
+            if (response != null) {
                 JSONArray jTracks = response.getJSONArray("tracks");
 
                 ArrayList<Track> tracks = new ArrayList<>(jTracks.length());
@@ -150,20 +150,36 @@ public class TracksFragment extends Fragment implements TrailMeListener{
                     t.Length = Double.parseDouble(jTracks.getJSONObject(i).getString("Kilometers"));
                     t.longitude = Double.parseDouble(jTracks.getJSONObject(i).getString("Longitude"));
                     t.Difficulty = Enums.Difficulty.valueOf(jTracks.getJSONObject(i).getString("Difficulty"));
+                    t.TrackDescription = jTracks.getJSONObject(i).getString("TrackDescription");
                     t.Zone = jTracks.getJSONObject(i).getString("Zone");
+                    t.Categories = getCategoriesArr(jTracks.getJSONObject(i).getJSONArray("Categories"));
                     tracks.add(t);
                     Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
                 }
                 mAdapter.updateList(tracks);
-            }
-            else {
+            } else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");
             }
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("Sd", "processFinish: " + e.toString());
         }
+    }
+
+    public String[] getCategoriesArr(JSONArray jsonArray){
+        String [] list = new String[jsonArray.length()];
+        try {
+            if (jsonArray != null) {
+                int len = jsonArray.length();
+                for (int i=0;i<len;i++){
+                    list[i] = jsonArray.getJSONObject(i).getString("Name");
+                }
+            }
+        }
+        catch (Exception ex){
+        }
+
+        return list;
     }
 
     /**

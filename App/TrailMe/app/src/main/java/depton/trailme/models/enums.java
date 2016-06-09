@@ -4,9 +4,11 @@ public class Enums
 {
     public enum Difficulty
     {
+        VERY_EASY,
         EASY,
         MEDIUM,
-        HARD
+        HARD,
+        EXTREME
     }
 
     public enum Languages

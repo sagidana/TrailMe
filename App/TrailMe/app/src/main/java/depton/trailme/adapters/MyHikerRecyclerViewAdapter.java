@@ -49,18 +49,20 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
 
         final User currentUser = mValues.get(position);
 
-        for(int i = 0; i < currentUser.Languages.length; i++){
-            if(i != 0)
-                allLangs += ", ";
-            allLangs += currentUser.Languages[i];
+        if(currentUser.Languages != null){
+            for(int i = 0; i < currentUser.Languages.length; i++) {
+                if (i != 0)
+                    allLangs += ", ";
+                allLangs += currentUser.Languages[i];
+            }
+        } else {
+            allLangs = "No Languages";
         }
-
-        long age = 30;
 
         holder.mItem = mValues.get(position);
         holder.mNameView.setText(currentUser.FirstName + " " + currentUser.SurName);
         holder.mLanguages.setText(allLangs);
-        holder.mGenderAndAge.setText(currentUser.Gender + ", " + age);
+        holder.mGenderAndAge.setText(currentUser.Gender + ", " + currentUser.Age);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,15 +74,6 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
                 }
             }
         });
-    }
-
-    /* TODO: make it work */
-    public long getUserAge(String dateStr) throws ParseException {
-        DateFormat format = new SimpleDateFormat("dd MM yyyy", Locale.US);
-        Date d1 = format.parse(dateStr);
-        Date now = new Date();
-        long diffInMiliseconds = now.getTime() - d1.getTime();
-        return TimeUnit.DAYS.convert(diffInMiliseconds, TimeUnit.MILLISECONDS) / 365;
     }
 
     @Override
@@ -97,7 +90,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
         public final TextView mNameView;
-        public final TextView mAboutView;
+        /*public final TextView mAboutView;*/
         public final ImageView mProfilePic;
         public final TextView mLanguages;
         public final TextView mGenderAndAge;
@@ -108,7 +101,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
             mView = view;
             mNameView = (TextView) view.findViewById(R.id.fullName);
             mGenderAndAge = (TextView) view.findViewById(R.id.genderAndAge);
-            mAboutView = (TextView) view.findViewById(R.id.languages);
+            /*mAboutView = (TextView) view.findViewById(R.id.languages);*/
             mProfilePic = (ImageView) view.findViewById(R.id.ProfileImage);
             mLanguages =(TextView) view.findViewById(R.id.languages);
         }

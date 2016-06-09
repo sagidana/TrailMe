@@ -15,25 +15,47 @@
             android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:padding="15dp"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/common_ic_googleplayservices"
+                    android:src="@drawable/male_profile"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
+                    android:layout_marginRight="25dp"
                     android:id="@+id/MainPic" />
 
                 <TextView
                     android:id="@+id/event_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
                     android:text="Event Name"
                     android:textColor="@color/common_plus_signin_btn_text_light_pressed"
+                    android:layout_toRightOf="@id/MainPic"
+                    android:layout_marginTop="8dp"
                     android:textSize="25sp"/>
+
+                <TextView
+                    android:id="@+id/eventItemStartDate"
+                    android:layout_below="@id/event_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start date: 12/03/2012 00:00:00"
+                    android:layout_toRightOf="@id/MainPic"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/eventItemEndDate"
+                    android:layout_below="@id/eventItemStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/MainPic"
+                    android:text="End date: 12/03/2012  00:00:00"
+                    android:textSize="16dp"/>
 
             </RelativeLayout>
 
@@ -48,9 +70,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="bottom"
-                android:text="Track:"
+                android:text="The track"
+                android:layout_gravity="center_horizontal"
                 android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
+                android:textSize="30dp"
+                android:layout_marginLeft="15dp" />
 
 
 
@@ -68,9 +92,11 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Group:"
+                android:text="Group"
+                android:layout_gravity="center_horizontal"
                 android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
+                android:textSize="30dp"
+                android:layout_marginLeft="15dp" />
 
         </LinearLayout>
 

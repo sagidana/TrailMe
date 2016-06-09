@@ -11,7 +11,7 @@
         android:layout_height="match_parent">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="15dp">
 
             <ImageView
@@ -36,7 +36,7 @@
                 android:layout_toRightOf="@id/profilePicture"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alon Dubov"/>
+                android:text="No User"/>
 
             <TextView
                 android:layout_marginTop="5dp"
@@ -64,23 +64,45 @@
                 android:layout_below="@id/city"
                 android:scaleType="centerInside"
                 android:layout_marginLeft="15dp"
-                android:layout_toRightOf="@id/fullName"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
                 android:src="@drawable/male"/>
 
         </RelativeLayout>
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
+        <LinearLayout
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill"/>
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tracks"
+                android:id="@+id/trackClicker"
+                android:layout_weight=".33"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Groups"
+                android:id="@+id/groupClicker"
+                android:layout_weight=".33"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Events"
+                android:id="@+id/eventsClicker"
+                android:layout_weight=".33"/>
+        </LinearLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
+            android:background="@color/colorAccent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+
     </LinearLayout>
 
 </FrameLayout>

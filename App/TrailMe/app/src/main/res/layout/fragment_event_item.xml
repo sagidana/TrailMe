@@ -37,6 +37,7 @@
             android:text="Start date: 12/03/2012"
             android:textSize="18dp" />
 
+
         <TextView
             android:id="@+id/eventItemEndDays"
             android:layout_width="wrap_content"
