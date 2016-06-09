@@ -20,6 +20,9 @@
           <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
           <Property Name="TrackId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Group_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="EndDate" Type="date" />
+          <Property Name="HourStart" Type="time" Precision="7" />
         </EntityType>
         <EntityType Name="Groups">
           <Key>
@@ -394,6 +397,9 @@
           <NavigationProperty Name="Group" Relationship="TrailMeModel.EventGroup" FromRole="Event" ToRole="Group" />
           <NavigationProperty Name="Track" Relationship="TrailMeModel.TrackEvent" FromRole="Event" ToRole="Track" />
           <Property Name="TrackId" Type="Guid" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="EndDate" Type="DateTime" Precision="0" />
+          <Property Name="HourStart" Type="Time" Precision="7" />
         </EntityType>
         <EntityType Name="Language">
           <Key>
@@ -504,7 +510,10 @@
     <EntitySetMapping Name="Events">
       <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.Event)">
         <MappingFragment StoreEntitySet="Events">
-          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="HourStart" ColumnName="HourStart" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TrackId" ColumnName="TrackId" />
         </MappingFragment>

@@ -443,18 +443,25 @@ namespace TrailMe.WebServer
 
                 var dbUser = UserRepository.GetUserByName(userName);
                 bool isAuthorized = false;
-                if (dbUser != null)
-                {
-                    isAuthorized = dbUser.PasswordUser.Equals(PassUser);
-                }
-               
 
                 JObject authorizedUser = new JObject();
 
-                //authorizedUser.Add("Id", dbUser.Id);
+                if (dbUser != null)
+                {
+                    isAuthorized = dbUser.PasswordUser.Equals(PassUser);
+                    
+
+                    //authorizedUser.Add("Id", dbUser.Id);
+                    authorizedUser.Add("user", convertDbUserToJson(dbUser));
+
+                    
+                }
+
                 authorizedUser.Add("isAutorizeUser", isAuthorized);
 
                 createWebResponse(context, JSON_TYPE, authorizedUser.ToString());
+
+                
             }
             catch (Exception ex) 
             {

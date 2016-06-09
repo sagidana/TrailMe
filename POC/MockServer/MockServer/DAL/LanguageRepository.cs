@@ -50,6 +50,25 @@ namespace TrailMe.DAL
             }
         }
 
+        public static IEnumerable<Language> GetLanguagesByGroupId(Guid groupId)
+        {
+            List<Language> languages = new List<Language>();
+
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                List<User> users = new List<User>(UserRepository.getUsersByGroupId(groupId));
+
+                foreach (var currUser in users)
+                {
+                    languages.AddRange(dbContext.Languages.Where(language => language.Users.Where(user => user.Id == currUser.Id).Any()).ToList());
+                }
+
+                languages = languages.GroupBy(item => item.Id).Select(grp => grp.First()).ToList();
+            }
+
+            return languages;
+        }
+
         #endregion
     }
 }

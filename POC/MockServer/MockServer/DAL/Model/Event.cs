@@ -17,6 +17,9 @@ namespace TrailMe.DAL.Model
         public System.Guid Id { get; set; }
         public string Name { get; set; }
         public System.Guid TrackId { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> EndDate { get; set; }
+        public Nullable<System.TimeSpan> HourStart { get; set; }
     
         public virtual Group Group { get; set; }
         public virtual Track Track { get; set; }
