@@ -3,15 +3,29 @@ package depton.trailme.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
+import depton.trailme.models.Track;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,36 +35,25 @@ import depton.trailme.data.RestCaller;
  * Use the {@link TrackDetails#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrackDetails extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class TrackDetails extends Fragment implements TrailMeListener{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Track track;
+    private TrackDetails mCtx;
+    private RestCaller addUserToTrack = new RestCaller();
+    private String mCurrentUserId;
+
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     private OnFragmentInteractionListener mListener;
 
-    public TrackDetails() {
-        // Required empty public constructor
-    }
+    public TrackDetails() { }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TrackDetails.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TrackDetails newInstance(String param1, String param2) {
+    public static TrackDetails newInstance(Track track, String userId) {
         TrackDetails fragment = new TrackDetails();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putParcelable("track", track);
+        args.putString("currentUser", userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -59,21 +62,83 @@ public class TrackDetails extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mCtx = this;
+            track = getArguments().getParcelable("track");
+            mCurrentUserId = getArguments().getString("currentUser");
         }
+
+        viewPager = (ViewPager) getView().findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        tabLayout = (TabLayout) getView().findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        adapter.addFragment(new TracksFragment(), "Tracks");
+        adapter.addFragment(new TracksFragment(), "Tracks");
+        adapter.addFragment(new TracksFragment(), "Tracks");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
+        addUserToTrack.delegate = mCtx;
 
+        View v = inflater.inflate(R.layout.fragment_track_details, container, false);
 
-        new RestCaller().execute("Post","http://trailmedev.cloudapp.net:9100/users","a0283d29-1aff-4555-b7d3-2c98f4ee5926");
+        TextView TrackName = (TextView) v.findViewById(R.id.trackName);
+        TrackName.setText(track.Name);
 
-        return inflater.inflate(R.layout.fragment_track_details, container, false);
+        TextView kilometers = (TextView) v.findViewById(R.id.kilometers);
+        kilometers.setText(Double.toString(track.Length));
+
+        ShowBoots(track.Difficulty.ordinal());
+
+        TextView zone = (TextView) v.findViewById(R.id.zone);
+        zone.setText(track.Zone);
+
+/*        TextView latitude = (TextView) v.findViewById(R.id.latitude);
+        latitude.setText(Double.toString(track.latitude));
+
+        TextView longitude = (TextView) v.findViewById(R.id.longitude);
+        longitude.setText(Double.toString(track.longitude));*/
+
+        Button addUserToTrackbtn = (Button) v.findViewById(R.id.addUserToTrackBtn);
+        addUserToTrackbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUserToTrack.execute(mCtx.getContext(), "addUserToTrack", track.ID, mCurrentUserId);
+            }
+        });
+
+        return v;
+    }
+
+    public void ShowBoots(int level){
+        LinearLayout bootContainer = (LinearLayout)getView().findViewById(R.id.bootContainer);
+
+        ImageView tempImageView;
+
+        // Create imageView with full boot
+        for(int i = 0; i < 5 - level; i++){
+            tempImageView = new ImageView(getContext());
+            tempImageView.setImageResource(R.drawable.empty_boot);
+            tempImageView.getLayoutParams().width = 35;
+            tempImageView.getLayoutParams().height = 35;
+            bootContainer.addView(tempImageView);
+        }
+
+        for(int i = level; i < 6; i++){
+            tempImageView = new ImageView(getContext());
+            tempImageView.setImageResource(R.drawable.full_boot);
+            tempImageView.getLayoutParams().width = 35;
+            tempImageView.getLayoutParams().height = 35;
+            bootContainer.addView(tempImageView);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -100,18 +165,41 @@ public class TrackDetails extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
+    public void processFinish(JSONObject response) {
+        // TODO:
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 }

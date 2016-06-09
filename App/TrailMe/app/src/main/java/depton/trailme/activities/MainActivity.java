@@ -3,7 +3,6 @@ package depton.trailme.activities;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,13 +18,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -38,22 +35,39 @@ import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
+import depton.trailme.fragments.CreateEvent;
+import depton.trailme.fragments.CreateGroupFragment;
+import depton.trailme.fragments.EventDetails;
+import depton.trailme.fragments.EventFragment;
+import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
-import depton.trailme.fragments.HikersFragment;
+import depton.trailme.fragments.UsersFragment;
+import depton.trailme.fragments.TrackDetails;
 import depton.trailme.fragments.RecommendedTracksFragment;
+import depton.trailme.fragments.TracksFilterFragment;
 import depton.trailme.fragments.TracksFragment;
-import depton.trailme.fragments.dummy.DummyContent;
+import depton.trailme.fragments.UserDetails;
+import depton.trailme.models.Event;
 import depton.trailme.models.Group;
 import depton.trailme.models.Track;
 import depton.trailme.models.User;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MapActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback,
         TrailMeListener,
-        HikersFragment.OnListFragmentInteractionListener,
+        UsersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
-        GroupFragment.OnListFragmentInteractionListener
+        GroupFragment.OnListFragmentInteractionListener,
+        EventFragment.OnListFragmentInteractionListener,
+        TrackDetails.OnFragmentInteractionListener,
+        GroupDetails.OnFragmentInteractionListener,
+        CreateEvent.OnFragmentInteractionListener,
+        EventDetails.OnFragmentInteractionListener,
+        UserDetails.OnFragmentInteractionListener,
+        TracksFilterFragment.OnFragmentInteractionListener
 {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -61,6 +75,9 @@ public class MapActivity extends AppCompatActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
     private JSONObject mCurrentUser;
     public RestCaller restCaller = new RestCaller();
+    FragmentManager fragmentManager = getSupportFragmentManager();
+
+    public MenuItem menuItem;
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -75,10 +92,15 @@ public class MapActivity extends AppCompatActivity
         setContentView(R.layout.activity_map);
 
         Bundle extras = getIntent().getExtras();
-        String userId = extras.getString("currentUser");
+        //String userId = extras.getString("currentUser");
 
         restCaller.delegate = this;
-        restCaller.execute(this, "getUserById", userId);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
+
+        String userName = sharedPreferences.getString("TrailMe","userName");
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.nav_header);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -95,7 +117,14 @@ public class MapActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(this);
-    }
+
+
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                        .setDefaultFontPath("fonts/Berthold.otf")
+                        .setFontAttrId(R.attr.fontPath)
+                        .build()
+        );
+}
 
     @Override
     protected void onResume() {
@@ -122,19 +151,50 @@ public class MapActivity extends AppCompatActivity
 
     public void onFragmentInteraction(Uri uri)
     {
-
     }
+
     public void onListFragmentInteraction(User item)
     {
-        Toast.makeText(getApplicationContext(),"User",Toast.LENGTH_SHORT).show();
+        try {
+            Fragment fragment = (Fragment) UserDetails.newInstance(item);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
     }
     public void onListFragmentInteraction(Track item)
     {
-        Toast.makeText(getApplicationContext(),"Track",Toast.LENGTH_SHORT).show();
+        try {
+            Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.getString("Id"));
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+            Log.e("MainActivity", "cant get tracks details fragment");
+        }
     }
     public void onListFragmentInteraction(Group item)
     {
-        Toast.makeText(getApplicationContext(),"Group",Toast.LENGTH_SHORT).show();
+        try {
+            Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.getString("Id"));
+
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
+    }
+
+    public void onListFragmentInteraction(Event item)
+    {
+        try {
+            Fragment fragment = (Fragment) EventDetails.newInstance(item);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        }
+        catch (Exception ex)
+        {
+        }
     }
 
     @Override
@@ -148,6 +208,7 @@ public class MapActivity extends AppCompatActivity
         catch (Exception e){ }
 
         getMenuInflater().inflate(R.menu.map, menu);
+        menuItem = menu.findItem(R.id.filter);
         return true;
     }
 
@@ -178,17 +239,19 @@ public class MapActivity extends AppCompatActivity
 
         if (id == R.id.nav_tracks) {
             fragmentClass = TracksFragment.class;
-            // Handle the camera action
+
         } else if (id == R.id.nav_groups) {
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
-            fragmentClass = HikersFragment.class;
-
-        } else if (id == R.id.nav_inbox) {
-            fragmentClass = MapFragment.class;
-
+            fragmentClass = UsersFragment.class;
+        }else if (id == R.id.nav_events) {
+            fragmentClass = EventFragment.class;
         }else if (id == R.id.nav_recommended_tracks){
             fragmentClass = RecommendedTracksFragment.class;
+        }else if (id == R.id.nav_create_event) {
+            fragmentClass= CreateEvent.class;
+        }else if (id == R.id.nav_create_group){
+            fragmentClass = CreateGroupFragment.class;
         }
 
         try {
@@ -199,12 +262,11 @@ public class MapActivity extends AppCompatActivity
 
         }catch(Exception e) {}
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
         fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+
         return true;
     }
 
@@ -230,6 +292,10 @@ public class MapActivity extends AppCompatActivity
         }
     }
 
+    public void setFilterAction(MenuItem.OnMenuItemClickListener action){
+        menuItem.setOnMenuItemClickListener(action);
+    }
+
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
@@ -251,6 +317,21 @@ public class MapActivity extends AppCompatActivity
         try {
             TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
             displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+
+            Fragment fragment = TracksFragment.class.newInstance();
+            Bundle arguments = new Bundle();
+            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            fragment.setArguments(arguments);
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+
         }catch (Exception e){}
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

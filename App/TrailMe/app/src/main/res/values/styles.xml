@@ -3,9 +3,16 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#01b24b</item>
+        <item name="colorPrimary">@color/colorAccent</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+        <item name="android:layoutDirection">ltr</item>
+        <item name="android:textDirection">ltr</item>
+    </style>
+
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/Berthold.otf</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -14,7 +21,68 @@
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
+    
+    <style name="FontArCena">
+        <item name="android:fontFamily"></item>
+    </style>
+    
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="DummyItem" parent="Base.V12.Widget.AppCompat.AutoCompleteTextView">
+        <item name="android:textColor">#ececec</item>
+        <item name="android:colorBackground">#000</item>
+    </style>
+
+    <style name="TrailMeRegisterField">
+        <item name="android:textColorHint">@color/registerTextColor</item>
+        <item name="colorControlNormal">@color/registerTextColor</item>
+        <item name="colorControlActivated">@color/registerTextColor</item>
+        <item name="colorControlHighlight">@color/registerTextColor</item>
+        <item name="android:background">@drawable/white_bottom_border</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <style name="TarilMeLoginField">
+        <item name="android:textColorHint">@color/loginTextColor</item>
+        <item name="colorControlNormal">@color/loginTextColor</item>
+        <item name="colorControlActivated">@color/loginTextColor</item>
+        <item name="colorControlHighlight">@color/loginTextColor</item>
+        <item name="android:background">@drawable/green_border_bottom</item>
+        <item name="android:textSize">25dp</item>
+        <item name="android:paddingLeft">16dp</item>
+    </style>
+
+    <style name="RegisterButton">
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">#fff</item>
+        <!-- #80000000 is value for transperent -->
+        <item name="android:background">#00000000</item>
+    </style>
+
+    <style name="menuitemsGroup">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="singleTrackInfoBar">
+        <item name="android:textColor">#fff</item>
+    </style>
+
+    <style name="emptyBoot">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:src">@drawable/empty_boot</item>
+    </style>
+
+    <style name="fullBoot">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:src">@drawable/full_boot</item>
+    </style>
+
+    <style name="uiMargin">
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+    </style>
 
 </resources>

@@ -1,4 +1,4 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,51 +7,60 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="depton.trailme.activities.RegisterFragment"
-    tools:showIn="@layout/activity_register">
+    tools:showIn="@layout/activity_register"
+    android:orientation="vertical"
+    >
 
+<!--    <depton.trailme.customViews.ARCenaTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Let people go"
+        android:textSize="30dp"
+        />-->
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:text="First Name" />
-    <EditText
+    <depton.trailme.customViews.BertholdTextView
         android:id="@+id/first_name"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
+        android:hint="First name"
+        style="@style/TrailMeRegisterField"
         android:layout_height="50dp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="65dp"
-        android:text="Last Name" />
-    <EditText
+    <depton.trailme.customViews.BertholdTextView
         android:id="@+id/last_name"
-        android:layout_marginTop="80dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:hint="Last name"
+        style="@style/TrailMeRegisterField"
+        android:layout_height="50dp"
+         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="130dp"
-        android:text="Email Address (Username)" />
-    <EditText
+    <depton.trailme.customViews.BertholdTextView
         android:id="@+id/email_address"
-        android:layout_marginTop="145dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:hint="Email Address"
+        style="@style/TrailMeRegisterField"/>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="195dp"
-        android:text="City" />
     <EditText
-        android:id="@+id/city"
-        android:layout_marginTop="210dp"
+        android:id="@+id/password_user"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="50dp"
+        android:hint="Password"
+        style="@style/TrailMeRegisterField"
+        />
+    <depton.trailme.customViews.BertholdTextView
+        android:id="@+id/zone"
+        android:layout_width="match_parent"
+        android:hint="City"
+        android:layout_height="50dp"
+        style="@style/TrailMeRegisterField"/>
+    <depton.trailme.customViews.BertholdTextView
+        android:id="@+id/dateTrigger"
+        android:layout_width="match_parent"
+        android:hint="Birth Date"
+        android:layout_height="50dp"
+        style="@style/TrailMeRegisterField"/>
+
+
 
     <!--<TextView-->
         <!--android:layout_width="match_parent"-->
@@ -66,4 +75,4 @@
 
 
 
-</RelativeLayout>
+</LinearLayout>

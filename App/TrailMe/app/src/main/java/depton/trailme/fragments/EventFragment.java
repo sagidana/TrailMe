@@ -15,16 +15,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
 
 import depton.net.trailme.R;
-import depton.trailme.adapters.MyHikerRecyclerViewAdapter;
-import depton.trailme.data.TrailMeListener;
+import depton.trailme.adapters.MyEventRecyclerViewAdapter;
+import depton.trailme.adapters.MyTrackRecyclerViewAdapter;
 import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
 import depton.trailme.fragments.dummy.DummyContent;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
-import depton.trailme.models.User;
+import depton.trailme.models.Enums;
+import depton.trailme.models.Event;
+import depton.trailme.models.Track;
 
 /**
  * A fragment representing a list of Items.
@@ -32,27 +33,27 @@ import depton.trailme.models.User;
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
  */
-public class HikersFragment extends Fragment implements TrailMeListener {
+public class EventFragment extends Fragment implements TrailMeListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
-    private MyHikerRecyclerViewAdapter mAdapter = null;
+    private MyEventRecyclerViewAdapter mAdapter = null;
     private RestCaller restCaller = new RestCaller();
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public HikersFragment() {
+    public EventFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static HikersFragment newInstance(int columnCount) {
-        HikersFragment fragment = new HikersFragment();
+    public static EventFragment newInstance(int columnCount) {
+        EventFragment fragment = new EventFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -66,13 +67,14 @@ public class HikersFragment extends Fragment implements TrailMeListener {
         if (getArguments() != null) {
             mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
         }
+
         restCaller.delegate = this;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_hiker_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_event_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -83,67 +85,58 @@ public class HikersFragment extends Fragment implements TrailMeListener {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            restCaller.execute(this.getContext(), "getUsers");
+
+            restCaller.execute(this.getContext(),"getEvents");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
     }
 
-    @Override
-    public void processFinish(JSONObject response) {
-        try{
-            if(response != null) {
-                JSONArray jUsers = response.getJSONArray("users");
-                ArrayList<User> users = new ArrayList<>(jUsers.length());
-
-                for (int i = 0; i < jUsers.length(); i++)
-                {
-                    User user = new User();
-                    user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
-                    user.SurName = jUsers.getJSONObject(i).getString("LastName");
-                    user.ID= jUsers.getJSONObject(i).getString("Id");
-
-                    users.add(user);
-                }
-                mAdapter.updateList(users);
-//                ArrayList<User> users = new ArrayList<>(output.length);
-//
-//                for (int i = 0; i < output.length; i++) {
-//                    User u = new User();
-//                    u.ID = output[i].get("Id");
-//                    u.FirstName = output[i].get("FirstName");
-//                    u.SurName = output[i].get("LastName");
-//                    users.add(u);
-//                    Log.d("Hikers", "HikerFragment - processFinish: Added track " + u.FirstName + " in ID" + String.valueOf(i) + " ");
-//                }
-//                mAdapter.updateList(users);
-            }
-            else {
-                Log.d("ERROR", "processFinish: Issues Connecting to the server");
-            }
-        }
-        catch (Exception e){
-            Log.d("Sd", "processFinish: " + e.toString());
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
-            mAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), mListener);
+            mAdapter= new MyEventRecyclerViewAdapter(new ArrayList<Event>(), mListener);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
         }
     }
 
-
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+        try{
+            if(response != null) {
+                JSONArray jEvents = response.getJSONArray("events");
+
+                ArrayList<Event> events = new ArrayList<>(jEvents.length());
+
+                for (int i = 0; i < jEvents.length(); i++) {
+                    Event eve = new Event();
+                    eve.ID = jEvents.getJSONObject(i).getString("Id");
+                    eve.Name = jEvents.getJSONObject(i).getString("Name");
+                    //t.Difficulty = Enums.Difficulty.valueOf(jEvents.getJSONObject(i).getString("Difficulty"));
+                    events.add(eve);
+                    Log.d("Events", "EventFragment - processFinish: Added Event " + eve.Name + " in ID" + String.valueOf(i) + " ");
+                }
+                mAdapter.updateList(events);
+            }
+            else {
+                Log.d("ERROR", "processFinish: Issues Connecting to the server");
+            }
+
+        }
+        catch (Exception e){
+            Log.d("Sd", "processFinish: " + e.toString());
+        }
     }
 
     /**
@@ -158,6 +151,6 @@ public class HikersFragment extends Fragment implements TrailMeListener {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(User item);
+        public void onListFragmentInteraction(Event item);
     }
 }

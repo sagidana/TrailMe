@@ -119,6 +119,20 @@ public class TrailMeServer
         catch (Exception e) {return;}
         delete("users", json);
     }
+
+    public JSONObject isAutorizeUser(String username, String password)
+    {
+        JSONObject userData = new JSONObject();
+        try {
+            userData.put("username",username);
+            userData.put("password",password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return postObject("login", userData);
+    }
+
     public void deleteGroup(String id)
     {
         JSONObject json;

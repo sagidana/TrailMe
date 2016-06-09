@@ -5,11 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="depton.trailme.activities.RegisterActivity">
+    tools:context="depton.trailme.activities.RegisterActivity"
+    android:background="@drawable/register_bg"
+    android:layoutDirection="ltr">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
@@ -17,18 +20,30 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:layoutDirection="ltr"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="Lets"/>
+
     <include layout="@layout/content_register" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/star_big_on" />
+    <Button
+        android:id="@+id/register"
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="false"
+        android:layout_width="200dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="510dp"
+        android:text="Register"
+        android:textSize="35dp"
+        android:background="@drawable/register_button"
+        style="@style/RegisterButton"/>
 
 </android.support.design.widget.CoordinatorLayout>

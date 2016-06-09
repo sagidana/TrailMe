@@ -71,7 +71,7 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mNameView = (TextView) view.findViewById(R.id.name);
+            mNameView = (TextView) view.findViewById(R.id.genderAndAge);
         }
 
         @Override
