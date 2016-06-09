@@ -39,7 +39,7 @@ namespace TrailMe.DAL
             }
         }
 
-        public static bool AddUser(string mailaddress, string last_name, string first_name, string city, DateTime birthdate)
+        public static bool AddUser(string mailaddress, string last_name, string first_name, string city, DateTime? birthdate, string password_user, string gender)
         {
             // Create the database context
             using (var dbContext = new TrailMeModelContainer())
@@ -51,7 +51,10 @@ namespace TrailMe.DAL
                     LastName = last_name,
                     FirstName = first_name,
                     City = city,
-                    Birthdate = birthdate
+                    Birthdate = birthdate,
+                    PasswordUser = password_user,
+                    Gender = gender
+
                 };
 
                 dbContext.Users.Add(newUser);
@@ -108,7 +111,20 @@ namespace TrailMe.DAL
         {
             using (var dbContext = new TrailMeModelContainer())
             {
-                return dbContext.Users.Find(user_id);
+                User user = dbContext.Users.Find(user_id);
+                user.Languages = LanguageRepository.GetLanguagesByUserId(user_id).ToList<Language>();
+
+                return user;
+            }
+        }
+
+        public static User GetUserByName(string userName)
+        {
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                User user = dbContext.Users.SingleOrDefault((item) => item.MailAddress == userName);
+                user.Languages = LanguageRepository.GetLanguagesByUserId(user.Id).ToList<Language>();
+                return user;
             }
         }
 
@@ -134,6 +150,27 @@ namespace TrailMe.DAL
             {
                 return dbContext.Users.Where(user => user.Tracks.Where(track => track.Id == id).Any()).ToList();
             }
+        }
+
+        public static int getAgeByUserId(Guid id)
+        {
+            int userAge = 0;
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                User currentUser = dbContext.Users.SingleOrDefault(user => user.Id == id);
+                DateTime? bday = currentUser.Birthdate;
+                
+                if (bday != null)
+                {
+                    DateTime today = DateTime.Today;
+                    userAge = today.Year - bday.Value.Year;
+
+                    if (bday > today.AddYears(-userAge))
+                        userAge--;
+                }
+            }
+
+            return userAge;
         }
 
         #endregion

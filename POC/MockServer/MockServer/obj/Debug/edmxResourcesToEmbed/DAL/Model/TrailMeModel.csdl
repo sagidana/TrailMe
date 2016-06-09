@@ -42,22 +42,25 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="FirstName" Type="String" Nullable="false" />
-    <Property Name="LastName" Type="String" Nullable="false" />
-    <Property Name="City" Type="String" Nullable="false" />
-    <Property Name="MailAddress" Type="String" Nullable="false" />
-    <Property Name="Birthdate" Type="DateTime" Nullable="false" />
+    <Property Name="FirstName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="LastName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="City" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="MailAddress" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+    <Property Name="Birthdate" Type="DateTime" Precision="0" />
     <NavigationProperty Name="Languages" Relationship="TrailMeModel.UserLanguage" FromRole="User" ToRole="Language" />
     <NavigationProperty Name="Skills" Relationship="TrailMeModel.UserSkill" FromRole="User" ToRole="Skill" />
     <NavigationProperty Name="Groups" Relationship="TrailMeModel.UserGroup" FromRole="User" ToRole="Group" />
     <NavigationProperty Name="Tracks" Relationship="TrailMeModel.TrackUser" FromRole="User" ToRole="Track" />
+    <Property Name="PasswordUser" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Rating" Type="Int32" />
+    <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Group">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <Property Name="EventId" Type="Guid" Nullable="false" />
     <NavigationProperty Name="Events" Relationship="TrailMeModel.EventGroup" FromRole="Group" ToRole="Event" />
     <NavigationProperty Name="Users" Relationship="TrailMeModel.UserGroup" FromRole="Group" ToRole="User" />
@@ -67,17 +70,20 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="Group" Relationship="TrailMeModel.EventGroup" FromRole="Event" ToRole="Group" />
     <NavigationProperty Name="Track" Relationship="TrailMeModel.TrackEvent" FromRole="Event" ToRole="Track" />
     <Property Name="TrackId" Type="Guid" Nullable="false" />
+    <Property Name="StartDate" Type="DateTime" Precision="0" />
+    <Property Name="EndDate" Type="DateTime" Precision="0" />
+    <Property Name="HourStart" Type="Time" Precision="7" />
   </EntityType>
   <EntityType Name="Language">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="Users" Relationship="TrailMeModel.UserLanguage" FromRole="Language" ToRole="User" />
   </EntityType>
   <EntityType Name="Category">
@@ -85,7 +91,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="Tracks" Relationship="TrailMeModel.TrackCategory" FromRole="Category" ToRole="Track" />
   </EntityType>
   <EntityType Name="Skill">
@@ -93,7 +99,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="Name" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <NavigationProperty Name="Users" Relationship="TrailMeModel.UserSkill" FromRole="Skill" ToRole="User" />
   </EntityType>
   <Association Name="EventGroup">
@@ -117,15 +123,16 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="None" />
-    <Property Name="Name" Type="String" Nullable="false" />
-    <Property Name="Zone" Type="String" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Zone" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
     <Property Name="Kilometers" Type="Int32" Nullable="false" />
-    <Property Name="Difficulty" Type="String" Nullable="false" />
-    <Property Name="Latitude" Type="Double" Nullable="false" />
-    <Property Name="Longitude" Type="Double" Nullable="false" />
+    <Property Name="Difficulty" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+    <Property Name="Latitude" Type="Double" />
+    <Property Name="Longitude" Type="Double" />
     <NavigationProperty Name="Users" Relationship="TrailMeModel.TrackUser" FromRole="Track" ToRole="User" />
     <NavigationProperty Name="Categories" Relationship="TrailMeModel.TrackCategory" FromRole="Track" ToRole="Category" />
     <NavigationProperty Name="Events" Relationship="TrailMeModel.TrackEvent" FromRole="Track" ToRole="Event" />
+    <Property Name="Rating" Type="Int32" />
   </EntityType>
   <Association Name="TrackUser">
     <End Type="TrailMeModel.Track" Role="Track" Multiplicity="*" />
