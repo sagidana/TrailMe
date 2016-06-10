@@ -48,7 +48,7 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
         Group group = mValues.get(position);
         holder.mItem = group;
         holder.mNameView.setText(group.Name);
-        holder.mGroupMembers.setText("Members:" + group.Members);
+        holder.mGroupMembers.setText("Members: " + group.Members);
 
         String allLanguages = "";
 

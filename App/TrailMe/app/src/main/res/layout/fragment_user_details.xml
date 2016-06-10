@@ -59,6 +59,7 @@
                 android:text="12/05/2022"/>
 
             <ImageView
+                android:id="@+id/userGenderImage"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_below="@id/city"

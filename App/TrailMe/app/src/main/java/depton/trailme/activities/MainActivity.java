@@ -235,16 +235,23 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+        String restAction = "";
+
         if (id == R.id.nav_tracks) {
             fragmentClass = TracksFragment.class;
-
+            restAction = "getTracks";
         } else if (id == R.id.nav_groups) {
+            restAction = "getGroups";
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
+            restAction = "getUsers";
             fragmentClass = UsersFragment.class;
         }else if (id == R.id.nav_events) {
+            restAction = "getEvents";
             fragmentClass = EventFragment.class;
         }else if (id == R.id.nav_recommended_tracks){
+            restAction = "getRcommendations";
             fragmentClass = RecommendedTracksFragment.class;
         }else if (id == R.id.nav_create_event) {
             fragmentClass= CreateEvent.class;
@@ -257,6 +264,12 @@ public class MainActivity extends AppCompatActivity
             Bundle arguments = new Bundle();
             arguments.putString("currentUser", mCurrentUser.ID);
             fragment.setArguments(arguments);
+
+            if(restAction.length() > 0 && fragment instanceof TrailMeListener){
+                RestCaller restCaller = new RestCaller();
+                restCaller.delegate = (TrailMeListener)fragment;
+                restCaller.execute(fragment.getContext(), restAction);
+            }
 
         }catch(Exception e) {}
 

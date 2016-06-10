@@ -263,6 +263,20 @@ public class TrailMeServer
         }
     }
 
+    public JSONArray getEventsByUserId(String userId){
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getEventsByUserId");
+            request.put("Id", userId);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
     public JSONArray getGroupsByEventId(String id)
     {
         JSONObject request = new JSONObject();

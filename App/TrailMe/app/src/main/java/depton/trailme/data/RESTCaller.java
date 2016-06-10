@@ -43,6 +43,8 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
                 break;
             }
 
+
+
             case ("getRecommendations"):
             {
                 JSONArray tracks = TrailMeServer.getInstance(ctx).getRcommendations((String)params[2]);
@@ -127,6 +129,14 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
                 JSONArray tracks = TrailMeServer.getInstance(ctx).getTracksByUserId((String)params[2]);
                 try {
                     response.put("tracks", tracks);
+                }catch(Exception e){ }
+                break;
+            }
+            case ("getEventsByUserId"):
+            {
+                JSONArray tracks = TrailMeServer.getInstance(ctx).getEventsByUserId((String)params[2]);
+                try {
+                    response.put("events", tracks);
                 }catch(Exception e){ }
                 break;
             }

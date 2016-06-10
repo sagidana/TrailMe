@@ -99,7 +99,7 @@ public class TracksFragment extends Fragment implements TrailMeListener{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            restCaller.execute(this.getContext(),"getTracks");
+            //restCaller.execute(this.getContext(),"getTracks");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -119,13 +119,13 @@ public class TracksFragment extends Fragment implements TrailMeListener{
 
         final MainActivity act = (MainActivity)context;
 
-        act.setFilterAction(new MenuItem.OnMenuItemClickListener() {
+        /*act.setFilterAction(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 filterFragment.show(getFragmentManager(), "filterTag");
                 return true;
             }
-        });
+        });*/
     }
 
     @Override

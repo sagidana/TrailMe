@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.json.JSONObject;
+
 /**
  * Created by ShaiMedad on 5/14/2016.
  */
@@ -41,6 +43,18 @@ public class Event implements Parcelable {
         this.Name = in.readString();
         this.EventTrack = in.readParcelable(Track.class.getClassLoader());
         this.EventGroup = in.readParcelable(Group.class.getClassLoader());
+    }
+
+    public Event(JSONObject jsonObject){
+        try {
+            this.ID = jsonObject.getString("ID");
+            this.Name = jsonObject.getString("Name");
+            /*this.EventGroup = new Group(jsonObject.getJSONObject("Group"));
+            this.EventTrack = new Track();*/
+        }
+        catch (Exception ex){
+
+        }
     }
 
     public static final Parcelable.Creator<Event> CREATOR = new Parcelable.Creator<Event>() {

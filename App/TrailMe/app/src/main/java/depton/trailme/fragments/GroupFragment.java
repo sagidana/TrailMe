@@ -41,6 +41,8 @@ public class GroupFragment extends Fragment implements TrailMeListener {
     private MyGroupRecyclerViewAdapter mAdapter = null;
     private RestCaller restCaller = new RestCaller();
 
+    private boolean isFromMainActivity = true;
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -82,8 +84,6 @@ public class GroupFragment extends Fragment implements TrailMeListener {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-
-            restCaller.execute(this.getContext(), "getGroups");
 
             recyclerView.setAdapter(mAdapter);
         }

@@ -86,7 +86,7 @@ public class EventFragment extends Fragment implements TrailMeListener {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            restCaller.execute(this.getContext(),"getEvents");
+            //restCaller.execute(this.getContext(),"getEvents");
             recyclerView.setAdapter(mAdapter);
         }
         return view;

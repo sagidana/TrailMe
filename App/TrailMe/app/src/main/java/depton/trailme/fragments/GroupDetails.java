@@ -158,11 +158,7 @@ public class GroupDetails extends Fragment implements TrailMeListener {
                     ArrayList<User> users = new ArrayList<>(jUsers.length());
 
                     for (int i = 0; i < jUsers.length(); i++) {
-                        User user = new User();
-                        user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
-                        user.SurName = jUsers.getJSONObject(i).getString("LastName");
-                        user.ID = jUsers.getJSONObject(i).getString("Id");
-
+                        User user = new User(jUsers.getJSONObject(i));
                         users.add(user);
                     }
 
