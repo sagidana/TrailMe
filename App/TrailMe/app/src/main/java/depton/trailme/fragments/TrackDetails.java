@@ -2,6 +2,7 @@ package depton.trailme.fragments;
 
 import android.content.Context;
 import android.media.Image;
+import android.media.Rating;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
@@ -103,6 +104,9 @@ public class TrackDetails extends Fragment implements TrailMeListener{
 
         TextView trackCategories = (TextView) v.findViewById(R.id.categories);
 
+        RatingBar ratingBar = (RatingBar) v.findViewById(R.id.ratingBar);
+        ratingBar.setRating(track.Rating);
+
         String allCategories = "";
 
         if(track.Categories != null){
@@ -143,14 +147,14 @@ public class TrackDetails extends Fragment implements TrailMeListener{
 
         ImageView tempImageView;
 
-        LinearLayout.LayoutParams layoutParams = new AppBarLayout.LayoutParams(40, 40);
+        LinearLayout.LayoutParams layoutParams = new AppBarLayout.LayoutParams(70, 70);
 
         final int MAX_LEVEL = 5;
 
         // Create imageView with full boot
         for(int i = 1; i < MAX_LEVEL - level; i++){
             tempImageView = new ImageView(getContext());
-            tempImageView.setImageResource(R.drawable.empty_boot);
+            tempImageView.setImageResource(R.drawable.full_boot);
             tempImageView.setLayoutParams(layoutParams);
             tempImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             bootContainer.addView(tempImageView);
@@ -158,7 +162,7 @@ public class TrackDetails extends Fragment implements TrailMeListener{
 
         for(int i = MAX_LEVEL - level; i < MAX_LEVEL + 1; i++){
             tempImageView = new ImageView(getContext());
-            tempImageView.setImageResource(R.drawable.full_boot);
+            tempImageView.setImageResource(R.drawable.empty_boot);
             tempImageView.setLayoutParams(layoutParams);
             tempImageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
             bootContainer.addView(tempImageView);

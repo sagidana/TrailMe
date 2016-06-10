@@ -44,9 +44,19 @@
                     android:layout_below="@id/event_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Start date: 12/03/2012 00:00:00"
+                    android:text="Start date: 12/03/2012"
                     android:layout_toRightOf="@id/MainPic"
                     android:textSize="16dp" />
+
+                <TextView
+                    android:id="@+id/eventHourStart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/event_name"
+                    android:layout_toRightOf="@id/eventItemStartDate"
+                    android:text=" 00:00:00"
+                    android:textSize="16dp"
+                    />
 
                 <TextView
                     android:id="@+id/eventItemEndDate"
@@ -54,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/MainPic"
-                    android:text="End date: 12/03/2012  00:00:00"
+                    android:text="End date: 12/03/2012"
                     android:textSize="16dp"/>
 
             </RelativeLayout>

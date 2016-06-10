@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import depton.trailme.models.Enums;
 
 /**
@@ -69,6 +72,40 @@ public class Track implements Parcelable {
         this.Rating = in.readInt();
         this.TrackDescription = in.readString();
         in.writeStringArray(this.Categories);
+    }
+
+    public Track(JSONObject jsonObject){
+        try {
+            this.ID = jsonObject.getString("Id");
+            this.Name = jsonObject.getString("Name");
+            this.latitude = Double.parseDouble(jsonObject.getString("Latitude"));
+            this.Length = Double.parseDouble(jsonObject.getString("Kilometers"));
+            this.longitude = Double.parseDouble(jsonObject.getString("Longitude"));
+            this.Difficulty = Enums.Difficulty.valueOf(jsonObject.getString("Difficulty"));
+            this.TrackDescription = jsonObject.getString("TrackDescription");
+            this.Zone = jsonObject.getString("Zone");
+            this.Categories = getCategoriesArr(jsonObject.getJSONArray("Categories"));
+            this.Rating = jsonObject.getInt("Rating");
+        }
+        catch (Exception ex){
+
+        }
+    }
+
+    public String[] getCategoriesArr(JSONArray jsonArray){
+        String [] list = new String[jsonArray.length()];
+        try {
+            if (jsonArray != null) {
+                int len = jsonArray.length();
+                for (int i=0;i<len;i++){
+                    list[i] = jsonArray.getJSONObject(i).getString("Name");
+                }
+            }
+        }
+        catch (Exception ex){
+        }
+
+        return list;
     }
 
     public static final Parcelable.Creator<Track> CREATOR = new Parcelable.Creator<Track>() {

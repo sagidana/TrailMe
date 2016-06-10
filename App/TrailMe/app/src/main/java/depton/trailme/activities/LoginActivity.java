@@ -28,6 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -66,10 +67,10 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
 
     // UI references.
     private String mUsername;
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private View mProgressView;
     private View mLoginFormView;
-    private AutoCompleteTextView mPasswordView;
+    private EditText mPasswordView;
     private String mPasswordUser;
     private Button mRegisterBtnView;
     private RestCaller restCaller = new RestCaller();
@@ -77,10 +78,11 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
         populateAutoComplete();
 
         restCaller.delegate=this;
@@ -95,7 +97,7 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        mPasswordView = (AutoCompleteTextView)findViewById(R.id.password_user);
+        mPasswordView = (EditText)findViewById(R.id.password_user);
         mRegisterBtnView = (Button) findViewById(R.id.register_btn);
 
         final Activity act = this;
@@ -114,6 +116,28 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
                         .setFontAttrId(R.attr.fontPath)
                         .build()
         );
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if(User.getUserFromSharedPref(this) != null){
+            openMainActivity();
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(User.getUserFromSharedPref(this) != null){
+            openMainActivity();
+        }
+    }
+
+    private void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(intent);
     }
 
     private void populateAutoComplete() {
@@ -327,7 +351,7 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        //addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -337,11 +361,11 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
+        /*ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        mEmailView.setAdapter(adapter);*/
     }
 
 

@@ -106,9 +106,6 @@ public class UserDetails extends Fragment implements TrailMeListener{
         }
         birthdate.setText(shorterDate);
 
-        final Context context = getContext();
-        final TrailMeListener fragment = this;
-
         groupClicker = (Button) v.findViewById(R.id.groupClicker);
         groupClicker.setOnClickListener(new View.OnClickListener() {
             @Override

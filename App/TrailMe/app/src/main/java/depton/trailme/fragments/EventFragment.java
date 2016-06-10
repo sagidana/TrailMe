@@ -120,10 +120,7 @@ public class EventFragment extends Fragment implements TrailMeListener {
                 ArrayList<Event> events = new ArrayList<>(jEvents.length());
 
                 for (int i = 0; i < jEvents.length(); i++) {
-                    Event eve = new Event();
-                    eve.ID = jEvents.getJSONObject(i).getString("Id");
-                    eve.Name = jEvents.getJSONObject(i).getString("Name");
-                    //t.Difficulty = Enums.Difficulty.valueOf(jEvents.getJSONObject(i).getString("Difficulty"));
+                    Event eve = new Event(jEvents.getJSONObject(i));
                     events.add(eve);
                     Log.d("Events", "EventFragment - processFinish: Added Event " + eve.Name + " in ID" + String.valueOf(i) + " ");
                 }

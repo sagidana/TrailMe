@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONObject;
 
 import depton.net.trailme.R;
+import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
@@ -91,10 +92,11 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        Bundle extras = getIntent().getExtras();
+        //Bundle extras = getIntent().getExtras();
         //String userId = extras.getString("currentUser");
 
         restCaller.delegate = this;
+        TrailMeServer.getInstance(this);
 
         mCurrentUser = User.getUserFromSharedPref(this);
 
@@ -125,8 +127,15 @@ public class MainActivity extends AppCompatActivity
 }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+        TrailMeServer.getInstance(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        TrailMeServer.getInstance(this);
 //        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
 //                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
     }
@@ -257,6 +266,12 @@ public class MainActivity extends AppCompatActivity
             fragmentClass= CreateEvent.class;
         }else if (id == R.id.nav_create_group){
             fragmentClass = CreateGroupFragment.class;
+        } else if(id == R.id.nav_logout){
+            User.userLogout(this);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
         }
 
         try {
@@ -324,6 +339,7 @@ public class MainActivity extends AppCompatActivity
     }
     public void processFinish(JSONObject response)
     {
+        int x = 5;
         /*try {
             TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
             displayedUserName.setText(mCurrentUser.Email);

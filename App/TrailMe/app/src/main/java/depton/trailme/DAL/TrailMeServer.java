@@ -228,7 +228,9 @@ public class TrailMeServer
 
             return postArray("methods", request);
         }
-        catch (Exception e) {
+        catch (Exception ex) {
+            ex.printStackTrace();
+            ex.getMessage();
             return null;
         }
     }
@@ -444,7 +446,10 @@ public class TrailMeServer
         try {
             return future.get(30, TimeUnit.SECONDS);
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+        }
 
         return null;
     }

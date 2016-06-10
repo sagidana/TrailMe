@@ -71,7 +71,7 @@
                     android:layout_marginRight="10dp"
                     style="@style/singleTrackInfoBar"
                     android:id="@+id/kilometers"
-                    android:textSize="30dp" />
+                    android:textSize="20dp" />
             </RelativeLayout>
 
         </RelativeLayout>
@@ -118,7 +118,7 @@
 
             <RelativeLayout
                 android:id="@+id/descriptionContainer"
-                android:layout_height="120dp"
+                android:layout_height="150dp"
                 android:layout_width="match_parent"
                 android:layout_below="@id/blackBorder1"
                 android:paddingTop="10dp"
@@ -146,13 +146,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingLeft="10dp"
+                android:layout_gravity="bottom|center"
                 android:paddingTop="10dp">
 
 
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="40dp"
+                    android:layout_height="50dp"
                     android:id="@+id/bootContainer"
                     android:orientation="horizontal"
                     android:layout_alignParentTop="true"
@@ -169,14 +170,14 @@
                 </LinearLayout>
 
                 <Button
-                    android:layout_below="@id/bootContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
+                    android:layout_height="40dp"
                     android:id="@+id/addUserToTrackBtn"
-                    android:layout_centerHorizontal="true"
-                    android:layout_alignParentBottom="true"
+                    android:gravity="center|bottom"
                     android:text="Done it"
-                    />
+                    android:layout_below="@+id/bootContainer"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="10dp" />
 
             </RelativeLayout>
 

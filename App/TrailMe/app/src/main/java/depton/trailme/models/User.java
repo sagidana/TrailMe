@@ -97,6 +97,13 @@ public class User implements Parcelable {
         return gson.fromJson(json, User.class);
     }
 
+    public static void userLogout(Context context){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        prefsEditor.remove("loggedInUser");
+        prefsEditor.commit();
+    }
+
     private static void saveUserNameInSharedPref(Context context, User user){
         SharedPreferences sharedPreferences = context.getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
         SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
@@ -113,6 +120,8 @@ public class User implements Parcelable {
                 Activity activity = (Activity) context;
                 activity.finish();
                 activity.startActivity(intent);
+            } else {
+
             }
         }
     }

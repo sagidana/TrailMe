@@ -1,6 +1,7 @@
 package depton.trailme.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,17 @@ public class GroupDetails extends Fragment implements TrailMeListener {
     private RestCaller restTracksCaller = new RestCaller();
     private MyHikerRecyclerViewAdapter mUsersAdapter = null;
     private MyEventRecyclerViewAdapter mEventsAdapter = null;
+    private RestCaller mRestCaller = new RestCaller();
+
+
+    private EventFragment.OnListFragmentInteractionListener mEventsListener;
+
+    private Button eventsBtn;
+    private Button userBtn;
+    final int selectedColor = Color.DKGRAY;
+
+    android.support.v4.app.FragmentManager fragmentManager;
+    private UsersFragment.OnListFragmentInteractionListener mUsersListener;
 
     public GroupDetails() {
         // Required empty public constructor
@@ -68,12 +80,17 @@ public class GroupDetails extends Fragment implements TrailMeListener {
             mCurrentUserId = getArguments().getString("currentUser");
             group = getArguments().getParcelable("group");
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //mRestCaller.delegate = this;
         View v =inflater.inflate(R.layout.fragment_group_details, container, false);
+        fragmentManager = getFragmentManager();
         TextView GroupName = (TextView)v.findViewById(R.id.groupName);
         GroupName.setText(group.Name);
 
@@ -86,11 +103,18 @@ public class GroupDetails extends Fragment implements TrailMeListener {
             }
         });
 
-        View usersList = v.findViewById(R.id.users);
-        View eventsList = v.findViewById(R.id.events);
+        TextView members = (TextView) v.findViewById(R.id.groupMembers);
+        members.setText("Members: " + group.Members);
+
+        /*View usersList = v.findViewById(R.id.users);
+        View eventsList = v.findViewById(R.id.events);*/
+
+
+
+
 
         // Set the adapter
-        if (usersList instanceof RecyclerView && eventsList instanceof RecyclerView) {
+        /*if (usersList instanceof RecyclerView && eventsList instanceof RecyclerView) {
 
             Context eventsCtx = eventsList.getContext();
             RecyclerView eventsRecyclerView = (RecyclerView) eventsList;
@@ -107,18 +131,76 @@ public class GroupDetails extends Fragment implements TrailMeListener {
 
             usersRecyclerView.setAdapter(mUsersAdapter);
             eventsRecyclerView.setAdapter(mEventsAdapter);
-        }
+        }*/
+
+        userBtn = (Button)v.findViewById(R.id.usersBtn);
+        eventsBtn = (Button)v.findViewById(R.id.eventsBtn);
+
+        userBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadUsersFragment();
+            }
+        });
+
+        eventsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadEventsFragment();
+            }
+        });
+
+        loadUsersFragment();
 
         return v;
+    }
+
+    public void loadEventsFragment(){
+        try {
+            Fragment fragment = (Fragment) EventFragment.newInstance(1);
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            userBtn.setBackgroundResource(android.R.drawable.btn_default);
+            eventsBtn.setBackgroundColor(selectedColor);
+
+            RestCaller restCaller = new RestCaller();
+            restCaller.delegate = (TrailMeListener)fragment;
+            restCaller.execute(fragment.getContext(), "getEventsByGroupId", group.Id);
+
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
+    }
+
+    public void loadUsersFragment(){
+        try {
+            Fragment fragment = (Fragment) EventFragment.newInstance(1);
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            userBtn.setBackgroundColor(selectedColor);
+            eventsBtn.setBackgroundResource(android.R.drawable.btn_default);
+
+            RestCaller restCaller = new RestCaller();
+            restCaller.delegate = (TrailMeListener)fragment;
+            restCaller.execute(fragment.getContext(), "getUsersByGroupId", group.Id);
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof UsersFragment.OnListFragmentInteractionListener && context instanceof EventFragment.OnListFragmentInteractionListener) {
+        if (context instanceof UsersFragment.OnListFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
-            mUsersAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), (UsersFragment.OnListFragmentInteractionListener) context);
-            mEventsAdapter = new MyEventRecyclerViewAdapter(new ArrayList<Event>(), (EventFragment.OnListFragmentInteractionListener) context);
+
+            mEventsListener = (EventFragment.OnListFragmentInteractionListener) context;
+            mUsersListener = (UsersFragment.OnListFragmentInteractionListener) context;
+
+            mUsersAdapter= new MyHikerRecyclerViewAdapter(new ArrayList<User>(), mUsersListener);
+            mEventsAdapter = new MyEventRecyclerViewAdapter(new ArrayList<Event>(), mEventsListener);
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -143,11 +225,7 @@ public class GroupDetails extends Fragment implements TrailMeListener {
                     ArrayList<Event> events = new ArrayList<>(jEvents.length());
 
                     for (int i = 0; i < jEvents.length(); i++) {
-                        Event event = new Event();
-
-                        event.ID = jEvents.getJSONObject(i).getString("Id");
-                        event.Name = jEvents.getJSONObject(i).getString("Name");
-
+                        Event event = new Event(jEvents.getJSONObject(i));
                         events.add(event);
                     }
 

@@ -143,16 +143,7 @@ public class TracksFragment extends Fragment implements TrailMeListener{
                 ArrayList<Track> tracks = new ArrayList<>(jTracks.length());
 
                 for (int i = 0; i < jTracks.length(); i++) {
-                    Track t = new Track();
-                    t.ID = jTracks.getJSONObject(i).getString("Id");
-                    t.Name = jTracks.getJSONObject(i).getString("Name");
-                    t.latitude = Double.parseDouble(jTracks.getJSONObject(i).getString("Latitude"));
-                    t.Length = Double.parseDouble(jTracks.getJSONObject(i).getString("Kilometers"));
-                    t.longitude = Double.parseDouble(jTracks.getJSONObject(i).getString("Longitude"));
-                    t.Difficulty = Enums.Difficulty.valueOf(jTracks.getJSONObject(i).getString("Difficulty"));
-                    t.TrackDescription = jTracks.getJSONObject(i).getString("TrackDescription");
-                    t.Zone = jTracks.getJSONObject(i).getString("Zone");
-                    t.Categories = getCategoriesArr(jTracks.getJSONObject(i).getJSONArray("Categories"));
+                    Track t = new Track(jTracks.getJSONObject(i));
                     tracks.add(t);
                     Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
                 }
@@ -164,22 +155,6 @@ public class TracksFragment extends Fragment implements TrailMeListener{
         } catch (Exception e) {
             Log.d("Sd", "processFinish: " + e.toString());
         }
-    }
-
-    public String[] getCategoriesArr(JSONArray jsonArray){
-        String [] list = new String[jsonArray.length()];
-        try {
-            if (jsonArray != null) {
-                int len = jsonArray.length();
-                for (int i=0;i<len;i++){
-                    list[i] = jsonArray.getJSONObject(i).getString("Name");
-                }
-            }
-        }
-        catch (Exception ex){
-        }
-
-        return list;
     }
 
     /**

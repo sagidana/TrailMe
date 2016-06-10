@@ -14,6 +14,8 @@ import org.json.JSONObject;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Event implements Parcelable {
 
+
+
     public Event(){}
 
     @JsonProperty("Id")
@@ -24,6 +26,14 @@ public class Event implements Parcelable {
     public Track EventTrack;
     @JsonProperty("EventGroup")
     public Group EventGroup;
+    @JsonProperty("EventStartDate")
+    public String EventStartDate;
+    @JsonProperty("EventEndDate")
+    public String EventEndDate;
+    @JsonProperty("EventDays")
+    public int EventDays;
+    @JsonProperty("HourStart")
+    public String HourStart;
 
     @Override
     public int describeContents() {
@@ -36,6 +46,10 @@ public class Event implements Parcelable {
         dest.writeString(this.Name);
         dest.writeParcelable(this.EventTrack, flags);
         dest.writeParcelable(this.EventGroup, flags);
+        dest.writeString(this.EventStartDate);
+        dest.writeString(this.EventEndDate);
+        dest.writeInt(this.EventDays);
+        dest.writeString(this.HourStart);
     }
 
     protected Event(Parcel in) {
@@ -43,12 +57,20 @@ public class Event implements Parcelable {
         this.Name = in.readString();
         this.EventTrack = in.readParcelable(Track.class.getClassLoader());
         this.EventGroup = in.readParcelable(Group.class.getClassLoader());
+        this.EventStartDate = in.readString();
+        this.EventEndDate = in.readString();
+        this.EventDays = in.readInt();
+        this.HourStart = in.readString();
     }
 
     public Event(JSONObject jsonObject){
         try {
-            this.ID = jsonObject.getString("ID");
+            this.ID = jsonObject.getString("Id");
             this.Name = jsonObject.getString("Name");
+            this.EventStartDate = jsonObject.getString("EventStartDate");
+            this.EventEndDate = jsonObject.getString("EventEndDate");
+            this.EventDays = jsonObject.getInt("EventDays");
+            this.HourStart = jsonObject.getString("HourStart");
             /*this.EventGroup = new Group(jsonObject.getJSONObject("Group"));
             this.EventTrack = new Track();*/
         }

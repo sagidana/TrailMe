@@ -80,6 +80,15 @@ public class EventDetails extends Fragment implements TrailMeListener {
         TextView EventName = (TextView)v.findViewById(R.id.event_name);
         EventName.setText(event.Name);
 
+        TextView eventStartDate = (TextView) v.findViewById(R.id.eventItemStartDate);
+        eventStartDate.setText("Start Date: " + event.EventStartDate + " ");
+
+        TextView eventHourStart = (TextView) v.findViewById(R.id.eventHourStart);
+        eventHourStart.setText(event.HourStart);
+
+        TextView eventItemEndDate = (TextView) v.findViewById(R.id.eventItemEndDate);
+        eventItemEndDate.setText("End Date: " + event.EventEndDate);
+
         return v;
     }
 
