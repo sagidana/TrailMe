@@ -34,4 +34,5 @@
     <string name="star3_checkbox_text">Star 3</string>
     <string name="star4_checkbox_text">Star 4</string>
     <string name="star5_checkbox_text">Star 5</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

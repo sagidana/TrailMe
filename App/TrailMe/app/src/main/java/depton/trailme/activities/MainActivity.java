@@ -39,6 +39,7 @@ import depton.trailme.fragments.CreateEvent;
 import depton.trailme.fragments.CreateGroupFragment;
 import depton.trailme.fragments.EventDetails;
 import depton.trailme.fragments.EventFragment;
+import depton.trailme.fragments.Gmap;
 import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.UsersFragment;
@@ -56,7 +57,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        OnMapReadyCallback,
         TrailMeListener,
         UsersFragment.OnListFragmentInteractionListener,
         TracksFragment.OnListFragmentInteractionListener,
@@ -67,7 +67,8 @@ public class MainActivity extends AppCompatActivity
         CreateEvent.OnFragmentInteractionListener,
         EventDetails.OnFragmentInteractionListener,
         UserDetails.OnFragmentInteractionListener,
-        TracksFilterFragment.OnFragmentInteractionListener
+        TracksFilterFragment.OnFragmentInteractionListener,
+        Gmap.OnFragmentInteractionListener
 {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -78,13 +79,6 @@ public class MainActivity extends AppCompatActivity
     FragmentManager fragmentManager = getSupportFragmentManager();
 
     public MenuItem menuItem;
-
-    @Override
-    public void onMapReady(GoogleMap map) {
-        map.addMarker(new MarkerOptions()
-                .position(new LatLng(0, 0))
-                .title("Marker"));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,6 +245,11 @@ public class MainActivity extends AppCompatActivity
             fragmentClass= CreateEvent.class;
         }else if (id == R.id.nav_create_group){
             fragmentClass = CreateGroupFragment.class;
+        }
+        else if (id==R.id.nav_map)
+        {
+            fragmentClass = Gmap.class;
+
         }
 
         try {
