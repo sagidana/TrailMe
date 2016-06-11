@@ -28,7 +28,10 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +44,7 @@ import depton.net.trailme.R;
 import depton.trailme.authenticator.AuthenticationManager;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.data.RestCaller;
+import depton.trailme.models.User;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -63,10 +67,10 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
 
     // UI references.
     private String mUsername;
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private View mProgressView;
     private View mLoginFormView;
-    private AutoCompleteTextView mPasswordView;
+    private EditText mPasswordView;
     private String mPasswordUser;
     private Button mRegisterBtnView;
     private RestCaller restCaller = new RestCaller();
@@ -74,10 +78,11 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
         populateAutoComplete();
 
         restCaller.delegate=this;
@@ -92,7 +97,7 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        mPasswordView = (AutoCompleteTextView)findViewById(R.id.password_user);
+        mPasswordView = (EditText)findViewById(R.id.password_user);
         mRegisterBtnView = (Button) findViewById(R.id.register_btn);
 
         final Activity act = this;
@@ -111,6 +116,28 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
                         .setFontAttrId(R.attr.fontPath)
                         .build()
         );
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        if(User.getUserFromSharedPref(this) != null){
+            openMainActivity();
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(User.getUserFromSharedPref(this) != null){
+            openMainActivity();
+        }
+    }
+
+    private void openMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        finish();
+        startActivity(intent);
     }
 
     private void populateAutoComplete() {
@@ -135,11 +162,15 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
         showProgress(false);
 
         if(isAuthorzied){
-            SaveUserName(mUsername);
-            Intent intent = new Intent(this, MainActivity.class);
-            finish();
-            startActivity(intent);
-
+            try {
+                User user = new User(response.getJSONObject("user"));
+                SaveUserName(user);
+                Intent intent = new Intent(this, MainActivity.class);
+                finish();
+                startActivity(intent);
+            } catch (Exception ex){
+                ex.printStackTrace();
+            }
         } else {
             TextView textView = (TextView)findViewById(R.id.loginErrorMessages);
             textView.setText("Username or password incorrect");
@@ -163,12 +194,16 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
         catch (Exception e) {}*/
     }
 
-    private void SaveUserName(String user){
-        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        editor.putString("userName", user);
+    private void SaveUserName(User user){
+        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
+        SharedPreferences.Editor prefsEditor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        prefsEditor.putString("loggedInUser", json);
+        prefsEditor.commit();
     }
+
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -316,7 +351,7 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+        //addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -326,11 +361,11 @@ public class LoginActivity extends Activity implements TrailMeListener,LoaderCal
 
     private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
+        /*ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(LoginActivity.this,
                         android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
 
-        mEmailView.setAdapter(adapter);
+        mEmailView.setAdapter(adapter);*/
     }
 
 

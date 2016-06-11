@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import depton.net.trailme.R;
 import depton.trailme.fragments.GroupFragment.OnListFragmentInteractionListener;
 import depton.trailme.fragments.dummy.DummyContent.DummyItem;
@@ -43,8 +45,24 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mNameView.setText(mValues.get(position).Name);
+        Group group = mValues.get(position);
+        holder.mItem = group;
+        holder.mNameView.setText(group.Name);
+        holder.mGroupMembers.setText("Members: " + group.Members);
+
+        String allLanguages = "";
+
+        if(group.Languages != null){
+            for(int i = 0; i < group.Languages.length; i++) {
+                if (i != 0)
+                    allLanguages += ", ";
+                allLanguages += group.Languages[i];
+            }
+        } else {
+            allLanguages = "No Languages";
+        }
+
+        holder.mLanguages.setText(allLanguages);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,11 +85,15 @@ public class MyGroupRecyclerViewAdapter extends RecyclerView.Adapter<MyGroupRecy
         public final View mView;
         public final TextView mNameView;
         public Group mItem;
+        public final TextView mLanguages;
+        public final TextView mGroupMembers;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mNameView = (TextView) view.findViewById(R.id.genderAndAge);
+            mNameView = (TextView) view.findViewById(R.id.groupName);
+            mGroupMembers = (TextView) view.findViewById(R.id.groupMembers);
+            mLanguages = (TextView) view.findViewById(R.id.groupLanguages);
         }
 
         @Override

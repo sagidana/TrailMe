@@ -47,7 +47,7 @@
 
         </LinearLayout>
 
-        <AutoCompleteTextView
+        <EditText
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -57,8 +57,13 @@
             android:singleLine="true"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
+            android:nextFocusForward="@+id/password_user"
+            android:nextFocusDown="@+id/password_user"
+            android:nextFocusLeft="@+id/password_user"
+            android:nextFocusRight="@+id/password_user"
+            android:nextFocusUp="@+id/password_user"
             style="@style/TarilMeLoginField" />
-        <AutoCompleteTextView
+        <EditText
             android:id="@+id/password_user"
             android:hint="@string/prompt_password"
             android:layout_width="match_parent"
@@ -68,6 +73,7 @@
             android:singleLine="true"
             android:layout_below="@+id/email"
             android:layout_alignParentStart="true"
+            android:imeOptions="actionDone"
             style="@style/TarilMeLoginField"
             />
 

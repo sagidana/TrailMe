@@ -37,9 +37,12 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).Name);
-        holder.mContentView.setText(mValues.get(position).Name);
+        Event event = mValues.get(position);
+        holder.mItem = event;
+        //holder.mIdView.setText(mValues.get(position).Name);
+        holder.mContentView.setText(event.Name);
+        holder.eventDays.setText("Days: " + event.EventDays);
+        holder.eventItemStartDate.setText("Start Date: " + event.EventStartDate);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,15 +63,19 @@ public class MyEventRecyclerViewAdapter extends RecyclerView.Adapter<MyEventRecy
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final TextView mIdView;
+        //public final TextView mIdView;
         public final TextView mContentView;
+        public final TextView eventItemStartDate;
+        public final TextView eventDays;
         public Event mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
+            //mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
+            eventItemStartDate = (TextView) view.findViewById(R.id.eventItemStartDate);
+            eventDays = (TextView) view.findViewById(R.id.eventItemEndDays);
         }
 
         @Override

@@ -68,4 +68,21 @@
         <item name="android:textColor">#fff</item>
     </style>
 
+    <style name="emptyBoot">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:src">@drawable/empty_boot</item>
+    </style>
+
+    <style name="fullBoot">
+        <item name="android:layout_width">35dp</item>
+        <item name="android:layout_height">35dp</item>
+        <item name="android:src">@drawable/full_boot</item>
+    </style>
+
+    <style name="uiMargin">
+        <item name="android:layout_marginLeft">15dp</item>
+        <item name="android:layout_marginRight">15dp</item>
+    </style>
+
 </resources>

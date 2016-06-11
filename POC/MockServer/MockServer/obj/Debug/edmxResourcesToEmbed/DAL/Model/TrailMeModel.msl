@@ -4,6 +4,9 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.User)">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
+          <ScalarProperty Name="PasswordUser" ColumnName="PasswordUser" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="LastName" ColumnName="LastName" />
@@ -25,6 +28,9 @@
     <EntitySetMapping Name="Events">
       <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.Event)">
         <MappingFragment StoreEntitySet="Events">
+          <ScalarProperty Name="HourStart" ColumnName="HourStart" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="TrackId" ColumnName="TrackId" />
@@ -58,6 +64,7 @@
     <EntitySetMapping Name="Tracks">
       <EntityTypeMapping TypeName="IsTypeOf(TrailMeModel.Track)">
         <MappingFragment StoreEntitySet="Tracks">
+          <ScalarProperty Name="Rating" ColumnName="Rating" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Name" ColumnName="Name" />
           <ScalarProperty Name="Zone" ColumnName="Zone" />

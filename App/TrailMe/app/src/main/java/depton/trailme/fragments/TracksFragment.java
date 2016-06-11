@@ -99,7 +99,7 @@ public class TracksFragment extends Fragment implements TrailMeListener{
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            restCaller.execute(this.getContext(),"getTracks");
+            //restCaller.execute(this.getContext(),"getTracks");
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -119,13 +119,13 @@ public class TracksFragment extends Fragment implements TrailMeListener{
 
         final MainActivity act = (MainActivity)context;
 
-        act.setFilterAction(new MenuItem.OnMenuItemClickListener() {
+        /*act.setFilterAction(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 filterFragment.show(getFragmentManager(), "filterTag");
                 return true;
             }
-        });
+        });*/
     }
 
     @Override
@@ -136,32 +136,23 @@ public class TracksFragment extends Fragment implements TrailMeListener{
 
     @Override
     public void processFinish(JSONObject response) {
-        try{
-            if(response != null) {
+        try {
+            if (response != null) {
                 JSONArray jTracks = response.getJSONArray("tracks");
 
                 ArrayList<Track> tracks = new ArrayList<>(jTracks.length());
 
                 for (int i = 0; i < jTracks.length(); i++) {
-                    Track t = new Track();
-                    t.ID = jTracks.getJSONObject(i).getString("Id");
-                    t.Name = jTracks.getJSONObject(i).getString("Name");
-                    t.latitude = Double.parseDouble(jTracks.getJSONObject(i).getString("Latitude"));
-                    t.Length = Double.parseDouble(jTracks.getJSONObject(i).getString("Kilometers"));
-                    t.longitude = Double.parseDouble(jTracks.getJSONObject(i).getString("Longitude"));
-                    t.Difficulty = Enums.Difficulty.valueOf(jTracks.getJSONObject(i).getString("Difficulty"));
-                    t.Zone = jTracks.getJSONObject(i).getString("Zone");
+                    Track t = new Track(jTracks.getJSONObject(i));
                     tracks.add(t);
                     Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
                 }
                 mAdapter.updateList(tracks);
-            }
-            else {
+            } else {
                 Log.d("ERROR", "processFinish: Issues Connecting to the server");
             }
 
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Log.d("Sd", "processFinish: " + e.toString());
         }
     }

@@ -31,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.json.JSONObject;
 
 import depton.net.trailme.R;
+import depton.trailme.DAL.TrailMeServer;
 import depton.trailme.GoogleCloudMessaging.QuickstartPreferences;
 import depton.trailme.GoogleCloudMessaging.RegistrationIntentService;
 import depton.trailme.data.RestCaller;
@@ -39,7 +40,8 @@ import depton.trailme.fragments.CreateEvent;
 import depton.trailme.fragments.CreateGroupFragment;
 import depton.trailme.fragments.EventDetails;
 import depton.trailme.fragments.EventFragment;
-import depton.trailme.fragments.Gmap;
+import depton.trailme.fragments.GmapFragment;
+import depton.trailme.fragments.GmapFragment;
 import depton.trailme.fragments.GroupDetails;
 import depton.trailme.fragments.GroupFragment;
 import depton.trailme.fragments.UsersFragment;
@@ -68,13 +70,13 @@ public class MainActivity extends AppCompatActivity
         EventDetails.OnFragmentInteractionListener,
         UserDetails.OnFragmentInteractionListener,
         TracksFilterFragment.OnFragmentInteractionListener,
-        Gmap.OnFragmentInteractionListener
+        GmapFragment.OnFragmentInteractionListener
 {
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private static final String TAG = "TrailMe";
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private JSONObject mCurrentUser;
+    private User mCurrentUser;
     public RestCaller restCaller = new RestCaller();
     FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -85,14 +87,13 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
-        Bundle extras = getIntent().getExtras();
+        //Bundle extras = getIntent().getExtras();
         //String userId = extras.getString("currentUser");
 
         restCaller.delegate = this;
+        TrailMeServer.getInstance(this);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("TrailMe", Context.MODE_PRIVATE);
-
-        String userName = sharedPreferences.getString("TrailMe","userName");
+        mCurrentUser = User.getUserFromSharedPref(this);
 
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.nav_header);
 
@@ -121,8 +122,15 @@ public class MainActivity extends AppCompatActivity
 }
 
     @Override
+    protected void onStart(){
+        super.onStart();
+        TrailMeServer.getInstance(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        TrailMeServer.getInstance(this);
 //        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
 //                new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
     }
@@ -160,17 +168,18 @@ public class MainActivity extends AppCompatActivity
     public void onListFragmentInteraction(Track item)
     {
         try {
-            Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.getString("Id"));
+            Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.ID);
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
         {
+            Log.e("MainActivity", "cant get tracks details fragment");
         }
     }
     public void onListFragmentInteraction(Group item)
     {
         try {
-            Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.getString("Id"));
+            Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.ID);
 
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
         }
@@ -196,7 +205,7 @@ public class MainActivity extends AppCompatActivity
         TextView userExtendedName = (TextView)findViewById(R.id.userExtendedName);
 
         try{
-            userExtendedName.setText(mCurrentUser.getString("MailAddress"));
+            userExtendedName.setText(mCurrentUser.FirstName + " " + mCurrentUser.SurName);
         }
         catch (Exception e){ }
 
@@ -230,33 +239,50 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+
+        String restAction = "";
+
         if (id == R.id.nav_tracks) {
             fragmentClass = TracksFragment.class;
-
+            restAction = "getTracks";
         } else if (id == R.id.nav_groups) {
+            restAction = "getGroups";
             fragmentClass = GroupFragment.class;
         } else if (id == R.id.nav_hikers) {
+            restAction = "getUsers";
             fragmentClass = UsersFragment.class;
         }else if (id == R.id.nav_events) {
+            restAction = "getEvents";
             fragmentClass = EventFragment.class;
         }else if (id == R.id.nav_recommended_tracks){
+            restAction = "getRcommendations";
             fragmentClass = RecommendedTracksFragment.class;
         }else if (id == R.id.nav_create_event) {
             fragmentClass= CreateEvent.class;
         }else if (id == R.id.nav_create_group){
             fragmentClass = CreateGroupFragment.class;
+        } else if(id == R.id.nav_logout){
+            User.userLogout(this);
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
         }
-        else if (id==R.id.nav_map)
-        {
-            fragmentClass = Gmap.class;
-
+        else if (id==R.id.nav_map){
+            fragmentClass = GmapFragment.class;
         }
 
         try {
             fragment = (Fragment) fragmentClass.newInstance();
             Bundle arguments = new Bundle();
-            arguments.putString("currentUser", mCurrentUser.getString("Id"));
+            arguments.putString("currentUser", mCurrentUser.ID);
             fragment.setArguments(arguments);
+
+            if(restAction.length() > 0 && fragment instanceof TrailMeListener){
+                RestCaller restCaller = new RestCaller();
+                restCaller.delegate = (TrailMeListener)fragment;
+                restCaller.execute(fragment.getContext(), restAction);
+            }
 
         }catch(Exception e) {}
 
@@ -311,10 +337,10 @@ public class MainActivity extends AppCompatActivity
     }
     public void processFinish(JSONObject response)
     {
-        mCurrentUser = response;
-        try {
+        int x = 5;
+        /*try {
             TextView displayedUserName = (TextView) findViewById(R.id.userExtendedName);
-            displayedUserName.setText(mCurrentUser.getString("MailAddress"));
+            displayedUserName.setText(mCurrentUser.Email);
 
             Fragment fragment = TracksFragment.class.newInstance();
             Bundle arguments = new Bundle();
@@ -325,7 +351,7 @@ public class MainActivity extends AppCompatActivity
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
 
-        }catch (Exception e){}
+        }catch (Exception e){}*/
     }
 
     @Override

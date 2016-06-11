@@ -100,10 +100,7 @@ public class RecommendedTracksFragment extends Fragment implements TrailMeListen
                 ArrayList<Track> tracks = new ArrayList<>(jTracks.length());
 
                 for (int i = 0; i < jTracks.length(); i++) {
-                    Track t = new Track();
-                    t.ID = jTracks.getJSONObject(i).getString("Id");
-                    t.Name = jTracks.getJSONObject(i).getString("Name");
-                    t.Difficulty = Enums.Difficulty.valueOf(jTracks.getJSONObject(i).getString("Difficulty"));
+                    Track t = new Track(jTracks.getJSONObject(i));
                     tracks.add(t);
                     Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
                 }
@@ -118,4 +115,6 @@ public class RecommendedTracksFragment extends Fragment implements TrailMeListen
             Log.d("Sd", "processFinish: " + e.toString());
         }
     }
+
+
 }

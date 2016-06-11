@@ -89,6 +89,29 @@ namespace TrailMe.DAL
             }
         }
 
+        public static int getEventDurationByEventID(Guid id)
+        {
+            int eventDuration = 0;
+            DateTime? startDate;
+            DateTime? endDate;
+
+            using (var dbContext = new TrailMeModelContainer())
+            {
+                Event currentEvent = dbContext.Events.SingleOrDefault(eventItem => eventItem.Id == id);
+                startDate = currentEvent.StartDate;
+                endDate = currentEvent.EndDate;
+                
+                if ((startDate != null) && (endDate != null))
+                {
+                    DateTime newStartDate = startDate.Value;
+                    DateTime newEndDate = endDate.Value;
+                    eventDuration = Convert.ToInt32((newEndDate - newStartDate).TotalDays);
+                }
+            }
+
+            return eventDuration;
+        }
+
         #endregion
     }
 }

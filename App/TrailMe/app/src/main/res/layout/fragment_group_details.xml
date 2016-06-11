@@ -10,39 +10,75 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
-        <LinearLayout
+        <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1.25">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_weight="1.25">
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="125dp"
+                    android:layout_height="125dp"
                     android:src="@drawable/track_holder"
                     android:adjustViewBounds="true"
                     android:scaleType="fitXY"
+                    android:layout_marginRight="15dp"
                     android:id="@+id/MainPic" />
 
                 <TextView
                     android:id="@+id/groupName"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="100dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:text="SagisGroup"
                     android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                    android:textSize="40sp"/>
+                    android:textSize="40sp"
+                    android:layout_toEndOf="@+id/MainPic" />
+
+                <TextView
+                    android:id="@+id/groupMembers"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/groupName"
+                    android:text="Members: 30"
+                    android:textSize="30sp"
+                    android:layout_toEndOf="@+id/MainPic"/>
 
             </RelativeLayout>
 
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/usersBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Users"
+                android:layout_weight="0.5"/>
+            <Button
+                android:id="@+id/eventsBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Events"
+                android:layout_weight="0.5"/>
         </LinearLayout>
 
-        <TextView
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:background="@color/colorAccent"
+            android:layout_height="270dp">
+
+        </FrameLayout>
+
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1.4"
@@ -72,13 +108,12 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            tools:listitem="@layout/fragment_event_item"/>
+            tools:listitem="@layout/fragment_event_item"/>-->
 
         <Button
             android:id="@+id/joinGroup"
             android:layout_width="match_parent"
-            android:layout_height="fill_parent"
-            android:layout_weight="1.3"
+            android:layout_height="wrap_content"
             android:text="Join"
             />
 

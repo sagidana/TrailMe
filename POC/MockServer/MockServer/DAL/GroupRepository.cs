@@ -100,7 +100,7 @@ namespace TrailMe.DAL
                 return dbContext.Groups.Where(group => group.Events.Where(dbEvent => dbEvent.Id == id).Any()).ToList();
             }
         }
-
+        
         #endregion
     }
 }

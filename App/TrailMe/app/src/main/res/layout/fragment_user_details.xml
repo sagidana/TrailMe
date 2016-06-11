@@ -2,166 +2,115 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="depton.trailme.fragments.UserDetails">
+    tools:context="depton.trailme.fragments.UserDetails"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <ImageView
+                android:layout_width="125dp"
+                android:layout_height="125dp"
+                android:scaleType="centerInside"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/profilePicture"
+                android:src="@drawable/male_profile"
+                android:layout_marginRight="20dp"
+                android:layout_marginLeft="15dp"
+                android:layout_alignParentTop="true">
+
+            </ImageView>
+
+
+
+            <TextView
+                android:layout_marginTop="15dp"
+                android:textSize="30dp"
+                android:id="@+id/fullName"
+                android:layout_toRightOf="@id/profilePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="No User"/>
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:textSize="22dp"
+                android:id="@+id/city"
+                android:layout_toRightOf="@id/profilePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/fullName"
+                android:text="Petach Tiqva"/>
+
+            <TextView
+                android:layout_marginTop="5dp"
+                android:textSize="18dp"
+                android:id="@+id/birthdate"
+                android:layout_toRightOf="@id/profilePicture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/city"
+                android:text="12/05/2022"/>
+
+            <ImageView
+                android:id="@+id/userGenderImage"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_below="@id/city"
+                android:scaleType="centerInside"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/male"/>
+
+        </RelativeLayout>
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content" >
-
-                <ImageView
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/empty_profile"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitXY"
-                    android:id="@+id/MainPic" />
-
-                <TextView
-                    android:id="@+id/userName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="100dp"
-                    android:text="User Name"
-                    android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                    android:textSize="25sp"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-        <RelativeLayout
             android:layout_marginTop="15dp"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
+            android:orientation="horizontal"
+            android:layout_height="wrap_content">
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="First name:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/firstname"
+                android:text="Tracks"
+                android:id="@+id/trackClicker"
+                android:layout_weight=".33"/>
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
+                android:text="Groups"
+                android:id="@+id/groupClicker"
+                android:layout_weight=".33"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Events"
+                android:id="@+id/eventsClicker"
+                android:layout_weight=".33"/>
+        </LinearLayout>
 
-        </RelativeLayout>
-
-        <RelativeLayout
+        <FrameLayout
+            android:id="@+id/container"
             android:layout_width="match_parent"
-            android:layout_height="40dp">
+            android:background="@color/colorAccent"
+            android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Last name:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/lastname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
+        </FrameLayout>
 
-        </RelativeLayout>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
+</FrameLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="City"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/zone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Email:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/email"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="40dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:text="Birthdate:"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-            <TextView
-                android:id="@+id/birthdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="120dp"
-                android:text="10"
-                android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-                android:textSize="20sp"/>
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tracks:"
-            android:textColor="@color/common_plus_signin_btn_text_light_pressed"
-            android:textSize="20sp"/>
-        <android.support.v7.widget.RecyclerView
+<!--<android.support.v7.widget.RecyclerView
             android:id="@+id/tracks"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            tools:listitem="@layout/fragment_track_item"/>
-
-    </LinearLayout>
-</FrameLayout>
+            tools:listitem="@layout/fragment_track_item"/>-->

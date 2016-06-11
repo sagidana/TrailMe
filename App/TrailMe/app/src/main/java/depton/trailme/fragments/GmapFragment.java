@@ -3,10 +3,12 @@ package depton.trailme.fragments;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsMessage;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,15 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
 import depton.net.trailme.R;
+import depton.trailme.data.RestCaller;
+import depton.trailme.data.TrailMeListener;
+import depton.trailme.models.Track;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,20 +40,13 @@ import depton.net.trailme.R;
  * Use the {@link Gmap#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class Gmap extends Fragment implements OnMapReadyCallback {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class GmapFragment extends Fragment implements OnMapReadyCallback,TrailMeListener {
+
     private GoogleMap mMap;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private RestCaller restCaller = new RestCaller();
     private OnFragmentInteractionListener mListener;
 
-    public Gmap() {
+    public GmapFragment() {
         // Required empty public constructor
     }
 
@@ -56,11 +59,9 @@ public class Gmap extends Fragment implements OnMapReadyCallback {
      * @return A new instance of fragment Gmap.
      */
     // TODO: Rename and change types and number of parameters
-    public static Gmap newInstance(String param1, String param2) {
-        Gmap fragment = new Gmap();
+    public static GmapFragment newInstance() {
+        GmapFragment fragment = new GmapFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,9 +70,9 @@ public class Gmap extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
+        restCaller.delegate = this;
 
     }
 
@@ -94,21 +95,8 @@ public class Gmap extends Fragment implements OnMapReadyCallback {
         }
         if(mSupportMapFragment != null)
         {
-            mSupportMapFragment.getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    if (googleMap != null) {
-
-                        googleMap.getUiSettings().setAllGesturesEnabled(true);
-
-                        LatLng sydney = new LatLng(-34, 151);
-                        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-                }
-            }});
+            mSupportMapFragment.getMapAsync(this);
         }
-
-
 
         //SupportMapFragment mapFragment = (SupportMapFragment) v.findViewById(R.id.gomap);
         //mapFragment.getMapAsync(this);
@@ -147,6 +135,32 @@ public class Gmap extends Fragment implements OnMapReadyCallback {
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        restCaller.execute(this.getContext(), "getTracks");
+    }
+
+    @Override
+    public void processFinish(JSONObject response) {
+        try {
+            if (response != null) {
+                JSONArray jTracks = response.getJSONArray("tracks");
+
+                ArrayList<Track> tracks = new ArrayList<>(jTracks.length());
+
+                for (int i = 0; i < jTracks.length(); i++) {
+                    Track t = new Track(jTracks.getJSONObject(i));
+                    float[] results = new float[1];
+                    Location.distanceBetween(32.181281, 34.934381,t.latitude,t.longitude,results);
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(t.latitude, t.longitude)).title(t.Name + ", Distance:" + Float.toString((results[0]/1000) )));
+                        tracks.add(t);
+                    Log.d("Tracks", "TrackFragment - processFinish: Added track " + t.Name + " in ID" + String.valueOf(i) + " ");
+                }
+            } else {
+                Log.d("ERROR", "processFinish: Issues Connecting to the server");
+            }
+
+        } catch (Exception e) {
+            Log.d("Sd", "processFinish: " + e.toString());
+        }
     }
 
     /**

@@ -4,6 +4,10 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
 
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
+
     defaultConfig {
         applicationId "depton.net.trailme"
         minSdkVersion 19
@@ -49,4 +53,5 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-databind:2.3.2'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.google.code.gson:gson:2.5'
 }

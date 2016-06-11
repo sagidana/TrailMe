@@ -228,7 +228,9 @@ public class TrailMeServer
 
             return postArray("methods", request);
         }
-        catch (Exception e) {
+        catch (Exception ex) {
+            ex.printStackTrace();
+            ex.getMessage();
             return null;
         }
     }
@@ -255,6 +257,20 @@ public class TrailMeServer
         try {
             request.put("Method", "getGroupsByUserId");
             request.put("Id", id);
+
+            return postArray("methods", request);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
+    public JSONArray getEventsByUserId(String userId){
+        JSONObject request = new JSONObject();
+
+        try {
+            request.put("Method", "getEventsByUserId");
+            request.put("Id", userId);
 
             return postArray("methods", request);
         }
@@ -430,7 +446,10 @@ public class TrailMeServer
         try {
             return future.get(30, TimeUnit.SECONDS);
         }
-        catch (Exception e) {}
+        catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+        }
 
         return null;
     }

@@ -94,16 +94,7 @@ public class UsersFragment extends Fragment implements TrailMeListener {
 
                 for (int i = 0; i < jUsers.length(); i++)
                 {
-                    User user = new User();
-                    user.FirstName = jUsers.getJSONObject(i).getString("FirstName");
-                    user.SurName = jUsers.getJSONObject(i).getString("LastName");
-                    user.ID = jUsers.getJSONObject(i).getString("Id");
-                    user.Email = jUsers.getJSONObject(i).getString("MailAddress");
-                    user.City = jUsers.getJSONObject(i).getString("City");
-                    user.Birthdate = jUsers.getJSONObject(i).getString("BirthDate");
-                    user.Gender = jUsers.getJSONObject(i).getString("Gender");
-                    user.Languages = getLanguagesArr(jUsers.getJSONObject(i).getJSONArray("Languages"));
-
+                    User user = new User(jUsers.getJSONObject(i));
                     users.add(user);
                 }
 
@@ -116,22 +107,6 @@ public class UsersFragment extends Fragment implements TrailMeListener {
         catch (Exception e){
             Log.d("Sd", "processFinish: " + e.toString());
         }
-    }
-
-    public String[] getLanguagesArr(JSONArray jsonArray){
-        String [] list = new String[jsonArray.length()];
-        try {
-            if (jsonArray != null) {
-                int len = jsonArray.length();
-                for (int i=0;i<len;i++){
-                    list[i] = jsonArray.getJSONObject(i).getString("Name");
-                }
-            }
-        }
-        catch (Exception ex){
-        }
-
-        return list;
     }
 
     @Override

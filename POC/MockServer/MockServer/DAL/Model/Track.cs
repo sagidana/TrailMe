@@ -26,8 +26,9 @@ namespace TrailMe.DAL.Model
         public string Zone { get; set; }
         public int Kilometers { get; set; }
         public string Difficulty { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
+        public Nullable<int> Rating { get; set; }
     
         public virtual ICollection<User> Users { get; set; }
         public virtual ICollection<Category> Categories { get; set; }

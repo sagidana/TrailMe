@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,6 +41,8 @@ public class GroupFragment extends Fragment implements TrailMeListener {
     private OnListFragmentInteractionListener mListener;
     private MyGroupRecyclerViewAdapter mAdapter = null;
     private RestCaller restCaller = new RestCaller();
+
+    private boolean isFromMainActivity = true;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -83,8 +86,6 @@ public class GroupFragment extends Fragment implements TrailMeListener {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
 
-            restCaller.execute(this.getContext(), "getGroups");
-
             recyclerView.setAdapter(mAdapter);
         }
         return view;
@@ -117,11 +118,9 @@ public class GroupFragment extends Fragment implements TrailMeListener {
                 ArrayList<Group> groups = new ArrayList<>(jGroups.length());
 
                 for (int i = 0; i < jGroups.length(); i++) {
-                    Group g = new Group();
-                    g.Id = jGroups.getJSONObject(i).getString("Id");
-                    g.Name = jGroups.getJSONObject(i).getString("Name");
+                    Group g = new Group(jGroups.getJSONObject(i));
                     groups.add(g);
-                    Log.d("Tracks", "TrackFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
+                    Log.d("Group", "GroupFragment - processFinish: Added group " + g.Name + " in ID" + String.valueOf(i) + " ");
                 }
                 mAdapter.updateList(groups);
             }
@@ -134,6 +133,8 @@ public class GroupFragment extends Fragment implements TrailMeListener {
             Log.d("Sd", "processFinish: " + e.toString());
         }
     }
+
+
 
     /**
      * This interface must be implemented by activities that contain this
