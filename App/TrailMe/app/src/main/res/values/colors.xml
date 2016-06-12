@@ -8,4 +8,5 @@
     <color name="registerTextColor">#fff</color>
     <color name="loginTextColor">#3c812d</color>
     <color name="opacityBlack">#99000000</color>
+    <color name="ratingBarEmpty">#a5bc99</color>
 </resources>

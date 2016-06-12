@@ -79,7 +79,7 @@ public class UsersFragment extends Fragment implements TrailMeListener {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            restCaller.execute(this.getContext(), "getUsers");
+            //restCaller.execute(this.getContext(), "getUsers");
             recyclerView.setAdapter(mAdapter);
         }
         return view;

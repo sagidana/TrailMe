@@ -31,7 +31,6 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
 
         @Override
     protected JSONObject doInBackground(Object... params) {
-
         Context ctx = (Context)params[0];
         JSONObject response = new JSONObject();
 
@@ -66,7 +65,10 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
                 JSONArray users = TrailMeServer.getInstance(ctx).getUsers();
                 try {
                     response.put("users", users);
-                }catch(Exception e){ }
+                }catch(Exception e){
+                    e.printStackTrace();
+
+                }
                 break;
             }
             case ("getGroups"):
@@ -169,7 +171,9 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
                 JSONArray users = TrailMeServer.getInstance(ctx).getUsersByGroupId((String)params[2]);
                 try {
                     response.put("users", users);
-                }catch(Exception e){ }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
                 break;
             }
             case ("getGroupsByUserId"):
@@ -295,7 +299,9 @@ public class RestCaller extends AsyncTask<Object, Void, JSONObject>  {
 
     @Override
     protected void onPostExecute(JSONObject jsonResponse) {
-        if (jsonResponse != null && jsonResponse.length() != 0 && delegate != null)
+        if(jsonResponse == null || delegate == null)
+            return;
+        if (jsonResponse.length() != 0)
             delegate.processFinish(jsonResponse);
     }
 }

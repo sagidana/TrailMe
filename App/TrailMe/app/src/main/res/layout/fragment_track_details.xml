@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="depton.trailme.fragments.TrackDetails">
 
     <RelativeLayout
@@ -27,8 +28,8 @@
                 android:numStars="5"
                 android:stepSize="1"
                 android:rating="2.0"
-                style="?android:attr/ratingBarStyleIndicator"
                 android:layout_alignParentRight="true"
+                style="?android:attr/ratingBarStyleIndicator"
                 android:background="#A6ffffff"
                 android:padding="2dp"
                 android:layout_alignParentTop="true"/>

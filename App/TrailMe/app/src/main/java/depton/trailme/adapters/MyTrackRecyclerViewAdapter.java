@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -71,8 +72,9 @@ public class MyTrackRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Drawable d = holder.mRatingBar.getProgressDrawable();
-        d.setColorFilter(Color.parseColor("#3a802f"), PorterDuff.Mode.SRC_ATOP);
+        LayerDrawable stars = (LayerDrawable) holder.mRatingBar.getProgressDrawable();
+        stars.getDrawable(1).setColorFilter(Color.parseColor("#a5bc99"), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(Color.parseColor("#3b802f"), PorterDuff.Mode.SRC_ATOP);
 
         Track currentTrack = mValues.get(position);
 

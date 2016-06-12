@@ -133,7 +133,7 @@ public class GroupDetails extends Fragment implements TrailMeListener {
             eventsRecyclerView.setAdapter(mEventsAdapter);
         }*/
 
-        userBtn = (Button)v.findViewById(R.id.usersBtn);
+        userBtn = (Button)v.findViewById(R.id.showUsersBtn);
         eventsBtn = (Button)v.findViewById(R.id.eventsBtn);
 
         userBtn.setOnClickListener(new View.OnClickListener() {
@@ -175,14 +175,14 @@ public class GroupDetails extends Fragment implements TrailMeListener {
 
     public void loadUsersFragment(){
         try {
-            Fragment fragment = (Fragment) EventFragment.newInstance(1);
+            Fragment fragment = (Fragment) UsersFragment.newInstance(1);
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
             userBtn.setBackgroundColor(selectedColor);
             eventsBtn.setBackgroundResource(android.R.drawable.btn_default);
 
             RestCaller restCaller = new RestCaller();
             restCaller.delegate = (TrailMeListener)fragment;
-            restCaller.execute(fragment.getContext(), "getUsersByGroupId", group.Id);
+            restCaller.execute(getContext(), "getUsersByGroupId", group.Id);
         }
         catch (Exception ex)
         {

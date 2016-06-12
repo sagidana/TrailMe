@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -252,6 +253,9 @@ public class UserDetails extends Fragment implements TrailMeListener{
     }
 
     public void populateGroupsToFragment(JSONObject response){
+
+        Log.e("E","Groups were populated");
+
         try {
             ArrayList<Group> groupArrayList = new ArrayList<>();
             JSONArray jGroups = response.getJSONArray("groups");

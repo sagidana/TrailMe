@@ -159,7 +159,10 @@ public class MainActivity extends AppCompatActivity
     {
         try {
             Fragment fragment = (Fragment) UserDetails.newInstance(item);
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction()
+                    .add(fragment, fragment.getClass().getName())
+                    .addToBackStack(fragment.getClass().getName())
+                    .replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
         {
@@ -169,7 +172,10 @@ public class MainActivity extends AppCompatActivity
     {
         try {
             Fragment fragment = (Fragment) TrackDetails.newInstance(item, mCurrentUser.ID);
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction()
+                    .add(fragment, fragment.getClass().getName())
+                    .addToBackStack(fragment.getClass().getName())
+                    .replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
         {
@@ -181,7 +187,10 @@ public class MainActivity extends AppCompatActivity
         try {
             Fragment fragment = (Fragment) GroupDetails.newInstance(item, mCurrentUser.ID);
 
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction()
+                    .add(fragment, fragment.getClass().getName())
+                    .addToBackStack(fragment.getClass().getName())
+                    .replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
         {
@@ -192,7 +201,10 @@ public class MainActivity extends AppCompatActivity
     {
         try {
             Fragment fragment = (Fragment) EventDetails.newInstance(item);
-            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+            fragmentManager.beginTransaction()
+                    .add(fragment, fragment.getClass().getName())
+                    .addToBackStack(fragment.getClass().getName())
+                    .replace(R.id.flContent, fragment).commit();
         }
         catch (Exception ex)
         {
@@ -286,7 +298,10 @@ public class MainActivity extends AppCompatActivity
 
         }catch(Exception e) {}
 
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+        fragmentManager.beginTransaction()
+                .add(fragment, fragmentClass.getName())
+                .addToBackStack(fragmentClass.getName())
+                .replace(R.id.flContent, fragment).commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

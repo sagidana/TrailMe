@@ -1,6 +1,9 @@
 package depton.trailme.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.media.Image;
 import android.media.Rating;
 import android.net.Uri;
@@ -105,6 +108,9 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         TextView trackCategories = (TextView) v.findViewById(R.id.categories);
 
         RatingBar ratingBar = (RatingBar) v.findViewById(R.id.ratingBar);
+        LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+        stars.getDrawable(1).setColorFilter(Color.parseColor("#a5bc99"), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(Color.parseColor("#3b802f"), PorterDuff.Mode.SRC_ATOP);
         ratingBar.setRating(track.Rating);
 
         String allCategories = "";
