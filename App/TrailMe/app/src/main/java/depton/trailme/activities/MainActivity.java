@@ -4,6 +4,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -27,6 +36,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
@@ -98,6 +109,8 @@ public class MainActivity extends AppCompatActivity
         LinearLayout linearLayout = (LinearLayout) findViewById(R.id.nav_header);
 
 
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -125,6 +138,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart(){
         super.onStart();
         TrailMeServer.getInstance(this);
+
     }
 
     @Override
@@ -211,15 +225,59 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int pixels) {
+        Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap
+                .getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+
+        final int color = 0xff424242;
+        final Paint paint = new Paint();
+        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+        final RectF rectF = new RectF(rect);
+        final float roundPx = pixels;
+
+        paint.setAntiAlias(true);
+        canvas.drawARGB(0, 0, 0, 0);
+        paint.setColor(color);
+        canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(bitmap, rect, rect, paint);
+
+        return output;
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         TextView userExtendedName = (TextView)findViewById(R.id.userExtendedName);
+        final ImageView imageView = (ImageView) findViewById(R.id.profileCircle);
 
-        try{
-            userExtendedName.setText(mCurrentUser.FirstName + " " + mCurrentUser.SurName);
-        }
-        catch (Exception e){ }
+
+        Target target = new Target() {
+            @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                Bitmap bitmap1 = getRoundedCornerBitmap(bitmap, 300);
+                imageView.setImageBitmap(bitmap1);
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {
+
+            }
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+            }
+        };
+
+        if(imageView != null && mCurrentUser.ImageUrl.length() > 0)
+            Picasso.with(this).load(mCurrentUser.ImageUrl).into(target);
+
+        userExtendedName.setText(mCurrentUser.FirstName + " " + mCurrentUser.SurName);
+
+
 
         getMenuInflater().inflate(R.menu.map, menu);
         menuItem = menu.findItem(R.id.filter);

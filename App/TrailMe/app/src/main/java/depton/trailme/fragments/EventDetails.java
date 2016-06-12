@@ -1,6 +1,9 @@
 package depton.trailme.fragments;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,7 +11,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +24,7 @@ import depton.net.trailme.R;
 import depton.trailme.data.RestCaller;
 import depton.trailme.data.TrailMeListener;
 import depton.trailme.models.Event;
+import depton.trailme.models.Track;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -130,9 +138,22 @@ public class EventDetails extends Fragment implements TrailMeListener {
                     JSONArray jTracks = response.getJSONArray("tracks");
                     JSONObject jTrack = jTracks.getJSONObject(0);
 
-                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.genderAndAge);
-                    trackName.setText(jTrack.getString("Name"));
+                    Track track = new Track(jTrack);
 
+                    TextView trackName = (TextView)mTrackItem.findViewById(R.id.genderAndAge);
+                    trackName.setText(track.Name);
+
+                    RatingBar ratingBar = (RatingBar) mTrackItem.findViewById(R.id.ratingBar);
+                    ratingBar.setRating(track.Rating);
+                    LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+                    stars.getDrawable(1).setColorFilter(Color.parseColor("#a5bc99"), PorterDuff.Mode.SRC_ATOP);
+                    stars.getDrawable(2).setColorFilter(Color.parseColor("#3b802f"), PorterDuff.Mode.SRC_ATOP);
+
+                    TextView zone = (TextView)mTrackItem.findViewById(R.id.zone);
+                    zone.setText(track.Zone);
+
+                    ImageView trackImage = (ImageView)mTrackItem.findViewById(R.id.trackImage);
+                    Picasso.with(getContext()).load(track.ImageUrl).into(trackImage);
                 }
             }
         }

@@ -54,6 +54,7 @@ public class MyTrackRecyclerViewAdapter
     public MyTrackRecyclerViewAdapter(List<Track> items, OnListFragmentInteractionListener listener) {
         mValues = items;
         mListener = listener;
+        setHasStableIds(true);
     }
 
     public void updateList(List<Track> newlist) {
@@ -72,12 +73,8 @@ public class MyTrackRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        LayerDrawable stars = (LayerDrawable) holder.mRatingBar.getProgressDrawable();
-        stars.getDrawable(1).setColorFilter(Color.parseColor("#a5bc99"), PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(2).setColorFilter(Color.parseColor("#3b802f"), PorterDuff.Mode.SRC_ATOP);
 
-        Track currentTrack = mValues.get(position);
-
+        Track currentTrack = mValues.get(holder.getAdapterPosition());
         holder.mContainer.setAlpha(0.75f);
         holder.mItem = currentTrack;
         holder.mIdView.setText(currentTrack.Name);
@@ -86,7 +83,7 @@ public class MyTrackRecyclerViewAdapter
 
         /* TODO: get the url from the db */
         String url = "https://lh5.ggpht.com/wytWRnRbbGxX7aI1U8w3tQM1PRdLOZ3LO7ZfdUtwIyCG44nYiWdmvthaXkzUQJ7Cg7Q=w300";
-        Picasso.with(context).load(url).into(holder.mTrackImg);
+        Picasso.with(context).load(currentTrack.ImageUrl).into(holder.mTrackImg);
 
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -99,12 +96,17 @@ public class MyTrackRecyclerViewAdapter
                 }
             }
         });
+
+        LayerDrawable stars = (LayerDrawable) holder.mRatingBar.getProgressDrawable();
+        stars.getDrawable(1).setColorFilter(Color.parseColor("#a5bc99"), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2).setColorFilter(Color.parseColor("#3b802f"), PorterDuff.Mode.SRC_ATOP);
     }
 
     @Override
     public int getItemCount() {
         return mValues.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;

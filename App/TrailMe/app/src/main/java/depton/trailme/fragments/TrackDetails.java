@@ -1,13 +1,18 @@
 package depton.trailme.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.media.Image;
 import android.media.Rating;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,10 +26,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -94,7 +104,7 @@ public class TrackDetails extends Fragment implements TrailMeListener{
 
         addUserToTrack.delegate = mCtx;
 
-        View v = inflater.inflate(R.layout.fragment_track_details, container, false);
+        final View v = inflater.inflate(R.layout.fragment_track_details, container, false);
 
         TextView TrackName = (TextView) v.findViewById(R.id.trackName);
         TrackName.setText(track.Name);
@@ -106,6 +116,25 @@ public class TrackDetails extends Fragment implements TrailMeListener{
         kilometers.setText(Double.toString(track.Length) + " KM");
 
         TextView trackCategories = (TextView) v.findViewById(R.id.categories);
+
+        final RelativeLayout info_container = (RelativeLayout) v.findViewById(R.id.info_container);
+
+        Target target = new Target() {
+                @Override
+            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                ImageView dummy = new ImageView(getContext());
+                dummy.setImageBitmap(bitmap);
+                info_container.setBackground(dummy.getDrawable());
+            }
+
+            @Override
+            public void onBitmapFailed(Drawable errorDrawable) {}
+
+            @Override
+            public void onPrepareLoad(Drawable placeHolderDrawable) {}
+        };
+
+        Picasso.with(getContext()).load(track.ImageUrl).into(target);
 
         RatingBar ratingBar = (RatingBar) v.findViewById(R.id.ratingBar);
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();

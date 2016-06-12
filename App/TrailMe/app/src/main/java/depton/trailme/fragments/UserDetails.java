@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -92,6 +94,10 @@ public class UserDetails extends Fragment implements TrailMeListener{
         SimpleDateFormat destFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH );
 
         ImageView genderImage = (ImageView)v.findViewById(R.id.userGenderImage);
+
+        ImageView profilePicture = (ImageView)v.findViewById(R.id.profilePicture);
+
+        Picasso.with(getContext()).load(user.ImageUrl).into(profilePicture);
 
         if(user.Gender.toLowerCase().equals("female")){
             genderImage.setImageResource(R.drawable.female);

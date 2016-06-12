@@ -1,11 +1,14 @@
 package depton.trailme.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import depton.net.trailme.R;
 import depton.trailme.fragments.UsersFragment.OnListFragmentInteractionListener;
@@ -30,6 +33,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
 
     private final List<User> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private Context context;
 
     public MyHikerRecyclerViewAdapter(List<User> items, OnListFragmentInteractionListener listener) {
         mValues = items;
@@ -40,6 +44,7 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_hiker_item, parent, false);
+        context = view.getContext();
         return new ViewHolder(view);
     }
 
@@ -63,6 +68,8 @@ public class MyHikerRecyclerViewAdapter extends RecyclerView.Adapter<MyHikerRecy
         holder.mNameView.setText(currentUser.FirstName + " " + currentUser.SurName);
         holder.mLanguages.setText(allLangs);
         holder.mGenderAndAge.setText(currentUser.Gender + ", " + currentUser.Age);
+
+        Picasso.with(context).load(currentUser.ImageUrl).into(holder.mProfilePic);
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

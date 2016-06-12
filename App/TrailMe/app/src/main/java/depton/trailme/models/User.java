@@ -31,6 +31,7 @@ public class User implements Parcelable {
     public String[] Languages;
     public String Gender;
     public int Age;
+    public String ImageUrl;
 
     @Override
     public int describeContents() {
@@ -48,6 +49,7 @@ public class User implements Parcelable {
         dest.writeString(this.Gender);
         dest.writeInt(this.Age);
         dest.writeStringArray(this.Languages);
+        dest.writeString(this.ImageUrl);
         //dest.writeParcelable(this.Images, flags);
         //dest.writeParcelable(this.Skills, flags);
         //dest.writeParcelable(this.Languages, flags);
@@ -69,6 +71,7 @@ public class User implements Parcelable {
             this.City = jsonUser.getString("City");
             this.Age = Integer.parseInt(jsonUser.getString("Age"));
             this.Languages = getLanguagesArr(jsonUser.getJSONArray("Languages"));
+            this.ImageUrl = jsonUser.getString("ImageUrl");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -136,6 +139,7 @@ public class User implements Parcelable {
         this.Gender = in.readString();
         this.Age = in.readInt();
         in.readStringArray(this.Languages);
+        this.ImageUrl = in.readString();
 
         //this.Images = in.readParcelable(Image[].class.getClassLoader());
         //this.Skills = in.readParcelable(Skill[].class.getClassLoader());

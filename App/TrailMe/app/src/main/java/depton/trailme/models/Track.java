@@ -37,6 +37,8 @@ public class Track implements Parcelable {
     public int Rating;
     @JsonProperty("Categories")
     public String [] Categories;
+    @JsonProperty("ImageUrl")
+    public String ImageUrl;
 
     @JsonProperty("TrackDescription")
     public String TrackDescription;
@@ -58,6 +60,7 @@ public class Track implements Parcelable {
         dest.writeInt(this.Rating);
         dest.writeString(this.TrackDescription);
         dest.writeStringArray(this.Categories);
+        dest.writeString(this.ImageUrl);
     }
 
     protected Track(Parcel in) {
@@ -72,6 +75,7 @@ public class Track implements Parcelable {
         this.Rating = in.readInt();
         this.TrackDescription = in.readString();
         in.writeStringArray(this.Categories);
+        this.ImageUrl = in.readString();
     }
 
     public Track(JSONObject jsonObject){
@@ -86,6 +90,7 @@ public class Track implements Parcelable {
             this.Zone = jsonObject.getString("Zone");
             this.Categories = getCategoriesArr(jsonObject.getJSONArray("Categories"));
             this.Rating = jsonObject.getInt("Rating");
+            this.ImageUrl = jsonObject.getString("ImageUrl");
         }
         catch (Exception ex){
 

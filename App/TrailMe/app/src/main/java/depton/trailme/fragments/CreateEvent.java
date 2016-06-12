@@ -94,7 +94,7 @@ public class CreateEvent extends Fragment implements TrailMeListener,AdapterView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_create_event, container, false);
-        restUsersCaller.execute(this.getContext(), "getGroupsByUserId",mCurrentUserId);
+        restUsersCaller.execute(this.getContext(), "getGroups",mCurrentUserId);
         restTracksCaller.execute(this.getContext(), "getTracks");
 
         Button joinGroup = (Button) v.findViewById(R.id.btnCreateEvent);
@@ -171,7 +171,8 @@ public class CreateEvent extends Fragment implements TrailMeListener,AdapterView
                     dataGroupAdapter.addAll(GroupNameList);
                     dataGroupAdapter.notifyDataSetChanged();
 
-                } else if (response.has("tracks")) {
+                }
+                if (response.has("tracks")) {
                     JSONArray jTracks = response.getJSONArray("tracks");
 
                     TrackIdList= new ArrayList<>(jTracks.length());
